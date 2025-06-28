@@ -3,13 +3,89 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
-
+import java.sql.Date;
 /**
  *
  * @author ADMIN
  */
 public class Tai_Khoan {
-    private  int Tennv;
-    private int name;
-    // He llo World Bảo 
+    private String Ma_TK;
+    private String Ten_TK;
+    private String SDT_TK;
+    private String Email_TK;
+    private String VaiTro_TK;
+    private Date Ngay_DK_TK;
+    private boolean TrangThai_TK;
+
+    public Tai_Khoan() {
+    }
+
+    public Tai_Khoan(String Ma_TK, String Ten_TK, String SDT_TK, String Email_TK, String VaiTro_TK, Date Ngay_DK_TK, boolean TrangThai_TK) {
+        this.Ma_TK = Ma_TK;
+        this.Ten_TK = Ten_TK;
+        this.SDT_TK = SDT_TK;
+        this.Email_TK = Email_TK;
+        this.VaiTro_TK = VaiTro_TK;
+        this.Ngay_DK_TK = Ngay_DK_TK;
+        this.TrangThai_TK = TrangThai_TK;
+    }
+
+    public String getMa_TK() {
+        return Ma_TK;
+    }
+
+    public void setMa_TK(String Ma_TK) {
+        this.Ma_TK = Ma_TK;
+    }
+
+    public String getTen_TK() {
+        return Ten_TK;
+    }
+
+    public void setTen_TK(String Ten_TK) {
+        this.Ten_TK = Ten_TK;
+    }
+
+    public String getSDT_TK() {
+        return SDT_TK;
+    }
+
+    public void setSDT_TK(String SDT_TK) {
+        this.SDT_TK = SDT_TK;
+    }
+
+    public String getEmail_TK() {
+        return Email_TK;
+    }
+
+    public void setEmail_TK(String Email_TK) {
+        this.Email_TK = Email_TK;
+    }
+
+    public String getVaiTro_TK() {
+        return VaiTro_TK;
+    }
+
+    public void setVaiTro_TK(String VaiTro_TK) {
+        this.VaiTro_TK = VaiTro_TK;
+    }
+
+    public Date getNgay_DK_TK() {
+        return Ngay_DK_TK;
+    }
+
+    public void setNgay_DK_TK(Date Ngay_DK_TK) {
+        this.Ngay_DK_TK = Ngay_DK_TK;
+    }
+
+    public boolean isTrangThai_TK() {
+        return TrangThai_TK;
+    }
+
+    public void setTrangThai_TK(boolean TrangThai_TK) {
+        this.TrangThai_TK = TrangThai_TK;
+    }
+    
+    
+    
 }
