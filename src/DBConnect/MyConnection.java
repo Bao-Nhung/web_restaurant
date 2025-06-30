@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Controller;
+package DBConnect;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -23,7 +23,7 @@ public MyConnection() {
     
     public Connection DBConnect() throws ClassNotFoundException, SQLException{
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String url = "jdbc:sqlserver://localhost\\SQLEXPRESS01:1433;databaseName=DuAnMau;trustServerCertificate=true";
+        String url = "jdbc:sqlserver://localhost\\SQLEXPRESS01:1433;databaseName= HOC_TAT_CA;trustServerCertificate=true";
         String user = "sa";
         String pass = "123456789"; // Tự Đổi Mật Khẩu Nếu Muốn Chạy DBConnect 
         return DriverManager.getConnection(url, user, pass);

@@ -3,30 +3,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
+
 import java.sql.Date;
+
 /**
  *
  * @author ADMIN
  */
 public class Tai_Khoan {
+
     private String Ma_TK;
     private String Ten_TK;
     private String SDT_TK;
     private String Email_TK;
+    private String DiaChi_TK;
     private String VaiTro_TK;
     private Date Ngay_DK_TK;
+    private String Anh_TK;
     private boolean TrangThai_TK;
 
     public Tai_Khoan() {
     }
 
-    public Tai_Khoan(String Ma_TK, String Ten_TK, String SDT_TK, String Email_TK, String VaiTro_TK, Date Ngay_DK_TK, boolean TrangThai_TK) {
+    public Tai_Khoan(String Ma_TK, String Ten_TK, String SDT_TK, String Email_TK, String DiaChi_TK, String VaiTro_TK, Date Ngay_DK_TK, String Anh_TK, boolean TrangThai_TK) {
         this.Ma_TK = Ma_TK;
         this.Ten_TK = Ten_TK;
         this.SDT_TK = SDT_TK;
         this.Email_TK = Email_TK;
+        this.DiaChi_TK = DiaChi_TK;
         this.VaiTro_TK = VaiTro_TK;
         this.Ngay_DK_TK = Ngay_DK_TK;
+        this.Anh_TK = Anh_TK;
         this.TrangThai_TK = TrangThai_TK;
     }
 
@@ -62,6 +69,14 @@ public class Tai_Khoan {
         this.Email_TK = Email_TK;
     }
 
+    public String getDiaChi_TK() {
+        return DiaChi_TK;
+    }
+
+    public void setDiaChi_TK(String DiaChi_TK) {
+        this.DiaChi_TK = DiaChi_TK;
+    }
+
     public String getVaiTro_TK() {
         return VaiTro_TK;
     }
@@ -78,6 +93,14 @@ public class Tai_Khoan {
         this.Ngay_DK_TK = Ngay_DK_TK;
     }
 
+    public String getAnh_TK() {
+        return Anh_TK;
+    }
+
+    public void setAnh_TK(String Anh_TK) {
+        this.Anh_TK = Anh_TK;
+    }
+
     public boolean isTrangThai_TK() {
         return TrangThai_TK;
     }
@@ -85,7 +108,5 @@ public class Tai_Khoan {
     public void setTrangThai_TK(boolean TrangThai_TK) {
         this.TrangThai_TK = TrangThai_TK;
     }
-    
-    
-    
+
 }
