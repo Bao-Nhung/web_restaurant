@@ -38,8 +38,8 @@ public class QL_TaiKhoan {
                 String VaiTro_TK = rs.getString(6);
                 Date Ngay_DK_TK = rs.getDate(7);
                 String Anh_TK = rs.getString(8);
-                    boolean TrangThai_TK = rs.getBoolean(9);
-                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK,Anh_TK, TrangThai_TK);
+                boolean TrangThai_TK = rs.getBoolean(9);
+                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK);
                 List_TK.add(tk);
             }
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class QL_TaiKhoan {
         return List_TK;
     }
 
-    public Object[] GetRow(Tai_Khoan tk) { // Hàm GetRow Dùng Để Đẩy Dữ Liệu Lên Bảng Trong Giao Diện
+    public Object[] GetRow(Tai_Khoan tk) {
         String Ma_TK = tk.getMa_TK();
         String Ten_TK = tk.getTen_TK();
         String SDT_TK = tk.getSDT_TK();
@@ -57,15 +57,18 @@ public class QL_TaiKhoan {
         String VaiTro_TK = tk.getVaiTro_TK();
         Date Ngay_DK_TK = tk.getNgay_DK_TK();
         String Anh_TK = tk.getAnh_TK();
-        boolean TrangThai_TK = tk.isTrangThai_TK();
-        Object[] obj = new Object[] {Ma_TK , Ten_TK , SDT_TK , Email_TK , DiaChi_TK , VaiTro_TK , Ngay_DK_TK , Anh_TK , TrangThai_TK};
+
+        // Chuyển boolean sang chuỗi mô tả
+        String TrangThai_TK = tk.getTrangThai_TK() ? "Đang Hoạt Động" : "Không Hoạt Động";
+
+        Object[] obj = new Object[]{Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK};
         return obj;
     }
-    
+
     // Hàm Thêm Dữ Liệu Vào Tài Khoản
-    public int Them_TK(Tai_Khoan tk){
-        String SQL = "    INSERT INTO TAIKHOAN VALUES \n" +
-                     "(' ? ', N' ? ' , ' ? ', ' ? ',N' ? ' , N' ? ', ? ,  '?'  , ? ),"; 
+    public int Them_TK(Tai_Khoan tk) {
+        String SQL = "INSERT INTO TAIKHOAN  "
+                + "VALUES (  ?  ,   ?  ,   ?  ,   ?  ,   ?  ,   ?  ,   ?  ,   ?  ,   ?   )";
         // Có Hai Cách Giải Quyết Vấn Đề Về Thời Gian Tạo Này
         // Thứ Nhất Là Dùng Luôn Câu Lệnh SQL Là GETDATE() Còn Cái Này Thì Khả Năng Là Không Nhìn Thấy
         // Hai Là Dùng Code Java Thì Dài Ròng Hơn Nhưng Lại Có Lợi Là Nhìn Thấy Được Ở Ô Thời Gian
@@ -80,7 +83,7 @@ public class QL_TaiKhoan {
             pstm.setString(6, tk.getVaiTro_TK());
             pstm.setDate(7, tk.getNgay_DK_TK());
             pstm.setString(8, tk.getAnh_TK());
-            pstm.setBoolean(9, tk.isTrangThai_TK());
+            pstm.setBoolean(9, tk.getTrangThai_TK());
             if (pstm.executeUpdate() > 0) {
                 System.out.println("Them Tai Khoan. Connect");
                 return 1;
@@ -89,14 +92,15 @@ public class QL_TaiKhoan {
         }
         return 0;
     }
+
     // Hàm Xoá Tài Khoản
-    public int Xoa_TK(String TheoMa){
-        String SQL = "DELETE FROM TAIKHOAN WHERE MA_TK = '?'";
+    public int Xoa_TK(String TheoMa) {
+        String SQL = "DELETE FROM TAIKHOAN WHERE MA_TK = ?";
         try {
             Connection Connect = conn.DBConnect();
             PreparedStatement pstm = Connect.prepareStatement(SQL);
             pstm.setString(1, TheoMa);
-            if(pstm.executeUpdate() > 0) {
+            if (pstm.executeUpdate() > 0) {
                 System.out.println("Xoa Tai Khoan. Connect");
                 return 1;
             }
@@ -104,18 +108,19 @@ public class QL_TaiKhoan {
         }
         return 0;
     }
+
     // Hàm Sửa Dữ Liệu Tài Khoản
-    public int Sua_TK(Tai_Khoan tk , String TheoMa){ 
-        String SQL = "UPDATE TAIKHOAN SET MA_TK = '  ?  ',\n" +
-"                                       TENTAIKHOAN = N'  ?  ',\n" +
-"					SDT = '  ?  ',\n" +
-"					EMAIL = '  ? ',\n" +
-"					DIACHI = N'  ?  ',\n" +
-"					VAITRO = N'  ?  ',\n" +
-"					NGAYDANGKY = '  ?  ',\n" +
-"					ANH_TK = N'  ?  ',\n" +
-"					TRANGTHAI =  ?  \n" +
-"					WHERE MA_TK = '  ?  '";
+    public int Sua_TK(Tai_Khoan tk, String TheoMa) {
+        String SQL = "UPDATE TAIKHOAN SET MA_TK =   ?  ,\n"
+                + "                       TENTAIKHOAN =  ?  ,\n"
+                + "			  SDT =   ?  ,\n"
+                + "			  EMAIL =   ? ,\n"
+                + "			  DIACHI =   ?  ,\n"
+                + "			  VAITRO =   ?  ,\n"
+                + "			  NGAYDANGKY =   ?  ,\n"
+                + "			  ANH_TK =   ?  ,\n"
+                + "			  TRANGTHAI =  ?  \n"
+                + "			  WHERE MA_TK =   ?  ";
         try {
             Connection Connect = conn.DBConnect();
             PreparedStatement pstm = Connect.prepareStatement(SQL);
@@ -127,7 +132,7 @@ public class QL_TaiKhoan {
             pstm.setString(6, tk.getVaiTro_TK());
             pstm.setDate(7, tk.getNgay_DK_TK());
             pstm.setString(8, tk.getAnh_TK());
-            pstm.setBoolean(9, tk.isTrangThai_TK());
+            pstm.setBoolean(9, tk.getTrangThai_TK());
             pstm.setString(10, TheoMa);
             if (pstm.executeUpdate() > 0) {
                 System.out.println("Sua Du Lieu Tai Khoan. Connect");
@@ -137,10 +142,10 @@ public class QL_TaiKhoan {
         }
         return 0;
     }
-    
+
     // Hàm Tìm Kiếm Tài Khoản Theo SDT
     public List<Tai_Khoan> TimKiem_Theo_SDT(String Theo_SDT) {
-        List<Tai_Khoan> List_TK = new ArrayList<>(); 
+        List<Tai_Khoan> List_TK = new ArrayList<>();
         String SQL = "SELECT * FROM TAIKHOAN";
         try {
             Connection connect = conn.DBConnect(); // 
@@ -156,7 +161,7 @@ public class QL_TaiKhoan {
                 Date Ngay_DK_TK = rs.getDate(6);
                 String Anh_TK = rs.getString(7);
                 boolean TrangThai_TK = rs.getBoolean(8);
-                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK,Anh_TK, TrangThai_TK);
+                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK);
                 if (SDT_TK.equalsIgnoreCase(Theo_SDT)) {
                     System.out.println("Tim Kiem Tai Khoan Theo SDT. Connect");
                     List_TK.add(tk);
@@ -166,11 +171,11 @@ public class QL_TaiKhoan {
         }
         return List_TK;
     }
-    
+
     // Hàm Tìm Kiếm Tài KHoản Theo  Tên
     public List<Tai_Khoan> TimKiem_Theo_Ten(String TheoTen) {
-        List<Tai_Khoan> List_TK = new ArrayList<>(); 
-        String SQL = "SELECT * FROM TAIKHOAN"; 
+        List<Tai_Khoan> List_TK = new ArrayList<>();
+        String SQL = "SELECT * FROM TAIKHOAN";
         try {
             Connection connect = conn.DBConnect(); // 
             Statement stm = connect.createStatement();
@@ -185,21 +190,21 @@ public class QL_TaiKhoan {
                 Date Ngay_DK_TK = rs.getDate(6);
                 String Anh_TK = rs.getString(7);
                 boolean TrangThai_TK = rs.getBoolean(8);
-                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK,Anh_TK, TrangThai_TK);
+                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK);
                 if (Ten_TK.equalsIgnoreCase(TheoTen)) {
                     System.out.println("Tim Kiem Tai Khoan Theo Ten Tai Khoan. Connect");
                     List_TK.add(tk);
-                }              
+                }
             }
         } catch (Exception e) {
         }
         return List_TK;
     }
-    
+
     // Hàm Tìm Kiếm Số Điện Thoại Theo Mã Tài Khoản
     public List<Tai_Khoan> TimKiem_Theo_MaTK(String TheoMa) {
         List<Tai_Khoan> List_TK = new ArrayList<>();
-        String SQL = "SELECT * FROM TAIKHOAN"; 
+        String SQL = "SELECT * FROM TAIKHOAN";
         try {
             Connection connect = conn.DBConnect(); // 
             Statement stm = connect.createStatement();
@@ -214,11 +219,11 @@ public class QL_TaiKhoan {
                 Date Ngay_DK_TK = rs.getDate(6);
                 String Anh_TK = rs.getString(7);
                 boolean TrangThai_TK = rs.getBoolean(8);
-                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK,Anh_TK, TrangThai_TK);
+                Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, VaiTro_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK);
                 if (Ma_TK.equals(TheoMa)) {
                     System.out.println("Tim Kiem Tai Khoan Theo Ma Tai Khoan. Connect");
                     List_TK.add(tk);
-                }  
+                }
             }
         } catch (Exception e) {
         }

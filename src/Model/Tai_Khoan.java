@@ -101,7 +101,7 @@ public class Tai_Khoan {
         this.Anh_TK = Anh_TK;
     }
 
-    public boolean isTrangThai_TK() {
+    public boolean getTrangThai_TK() {
         return TrangThai_TK;
     }
 
