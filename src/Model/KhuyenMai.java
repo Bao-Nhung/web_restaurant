@@ -108,7 +108,7 @@ public class KhuyenMai {
         this.DieuKien_KM = DieuKien_KM;
     }
 
-    public boolean isTrangThai() {
+    public boolean getTrangThai() {
         return TrangThai;
     }
 

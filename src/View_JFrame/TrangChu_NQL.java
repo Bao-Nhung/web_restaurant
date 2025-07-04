@@ -5,7 +5,7 @@
 package View_JFrame;
 
 import View_JPanel.QL_TaiKhoan_CNP_Panel;
-import View_JPanel.QL_TaiKhoan_Panel;
+import View_JPanel.QL_TaiKhoan_TatCaPanel;
 import java.awt.BorderLayout;
 
 /**
@@ -56,6 +56,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Logochinh.jpg"))); // NOI18N
 
+        btn_BanHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/BanHang.png"))); // NOI18N
         btn_BanHang.setText("Bán Hàng");
         btn_BanHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -63,6 +64,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/NguyenLieu.png"))); // NOI18N
         jButton5.setText("Nhập Hàng");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,6 +72,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             }
         });
 
+        btn_SanPham.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/SanPham.png"))); // NOI18N
         btn_SanPham.setText("Sản Phẩm");
         btn_SanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,6 +80,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             }
         });
 
+        btn_TaiKhoan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/TaiKhoan.png"))); // NOI18N
         btn_TaiKhoan.setText("Quản Lý Tài Khoản");
         btn_TaiKhoan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,6 +88,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             }
         });
 
+        btn_KhachHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/KhachHang.png"))); // NOI18N
         btn_KhachHang.setText("Khách Hàng");
         btn_KhachHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,6 +96,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             }
         });
 
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Thong_Ke_Doanh_Thu.png"))); // NOI18N
         jButton8.setText("Thống Kê Doanh Thu");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -302,7 +308,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
 //        TrangChungChuyen.add(qltk_panel, BorderLayout.CENTER);//add them panel moi, hien thi o giua
 //        TrangChungChuyen.repaint();
 //        TrangChungChuyen.revalidate();
-        QL_TaiKhoan_Panel qltk_panel = new QL_TaiKhoan_Panel();
+        QL_TaiKhoan_TatCaPanel qltk_panel = new QL_TaiKhoan_TatCaPanel();
         TrangChungChuyen.removeAll();
         TrangChungChuyen.setLayout(new BorderLayout());
         TrangChungChuyen.add(qltk_panel, BorderLayout.CENTER);

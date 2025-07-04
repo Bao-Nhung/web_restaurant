@@ -11,7 +11,7 @@ package Model;
 public class SanPham {
     private String Ma_SP;
     private String Ten_SP;
-    private String MaTa_SP;
+    private String MoTa_SP;
     private float DonGia_SP;
     private String Ma_LSP;
     private String HinhAnh_SP;
@@ -19,10 +19,10 @@ public class SanPham {
     public SanPham() {
     }
 
-    public SanPham(String Ma_SP, String Ten_SP, String MaTa_SP, float DonGia_SP, String Ma_LSP, String HinhAnh_SP) {
+    public SanPham(String Ma_SP, String Ten_SP, String MoTa_SP, float DonGia_SP, String Ma_LSP, String HinhAnh_SP) {
         this.Ma_SP = Ma_SP;
         this.Ten_SP = Ten_SP;
-        this.MaTa_SP = MaTa_SP;
+        this.MoTa_SP = MoTa_SP;
         this.DonGia_SP = DonGia_SP;
         this.Ma_LSP = Ma_LSP;
         this.HinhAnh_SP = HinhAnh_SP;
@@ -44,12 +44,12 @@ public class SanPham {
         this.Ten_SP = Ten_SP;
     }
 
-    public String getMaTa_SP() {
-        return MaTa_SP;
+    public String getMoTa_SP() {
+        return MoTa_SP;
     }
 
-    public void setMaTa_SP(String MaTa_SP) {
-        this.MaTa_SP = MaTa_SP;
+    public void setMoTa_SP(String MoTa_SP) {
+        this.MoTa_SP = MoTa_SP;
     }
 
     public float getDonGia_SP() {

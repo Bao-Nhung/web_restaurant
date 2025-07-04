@@ -8,7 +8,7 @@ package View_JPanel;
  *
  * @author ADMIN
  */
-public class QL_TaiKhoan_CNP_Panel extends QL_TaiKhoan_Panel {
+public class QL_TaiKhoan_CNP_Panel extends QL_TaiKhoan_TatCaPanel {
 
     /**
      * Creates new form QL_TaiKhoan_CNP_Panel
@@ -92,7 +92,8 @@ public class QL_TaiKhoan_CNP_Panel extends QL_TaiKhoan_Panel {
 
     private void btn_FilltoNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_FilltoNhanVienActionPerformed
         // TODO add your handling code here:
-        FillToTableTheoVaiTro("Nhân Viên");
+        String VaiTro = "Nhân Viên";
+        FillToTableTheoVaiTro(VaiTro);
     }//GEN-LAST:event_btn_FilltoNhanVienActionPerformed
 
     private void btn_FilltoTatCaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_FilltoTatCaActionPerformed
@@ -102,7 +103,8 @@ public class QL_TaiKhoan_CNP_Panel extends QL_TaiKhoan_Panel {
 
     private void btn_FilltoQuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_FilltoQuanLyActionPerformed
         // TODO add your handling code here:
-        FillToTableTheoVaiTro("Quản Lý");
+        String VaiTro = "Quản Lý";
+        FillToTableTheoVaiTro(VaiTro);
     }//GEN-LAST:event_btn_FilltoQuanLyActionPerformed
 
 

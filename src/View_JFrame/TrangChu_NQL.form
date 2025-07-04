@@ -142,6 +142,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_BanHang">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Icon/BanHang.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="B&#xe1;n H&#xe0;ng"/>
           </Properties>
           <Events>
@@ -150,6 +153,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButton5">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Icon/NguyenLieu.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Nh&#x1ead;p H&#xe0;ng"/>
           </Properties>
           <Events>
@@ -158,6 +164,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_SanPham">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Icon/SanPham.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="S&#x1ea3;n Ph&#x1ea9;m"/>
           </Properties>
           <Events>
@@ -166,6 +175,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_TaiKhoan">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Icon/TaiKhoan.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n L&#xfd; T&#xe0;i Kho&#x1ea3;n"/>
           </Properties>
           <Events>
@@ -174,6 +186,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_KhachHang">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Icon/KhachHang.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Kh&#xe1;ch H&#xe0;ng"/>
           </Properties>
           <Events>
@@ -182,6 +197,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButton8">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Icon/Thong_Ke_Doanh_Thu.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Th&#x1ed1;ng K&#xea; Doanh Thu"/>
           </Properties>
           <Events>

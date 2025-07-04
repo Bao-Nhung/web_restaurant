@@ -87,7 +87,7 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        btn_DangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Login.png"))); // NOI18N
+        btn_DangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Dang_Nhap_TK.png"))); // NOI18N
         btn_DangNhap.setText("Đăng Nhập");
         btn_DangNhap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,7 +95,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        bt_Cannel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/icons8-cancel-24.png"))); // NOI18N
+        bt_Cannel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Cannel_Login.png"))); // NOI18N
         bt_Cannel.setText("Cannel");
         bt_Cannel.setPreferredSize(new java.awt.Dimension(113, 46));
         bt_Cannel.addActionListener(new java.awt.event.ActionListener() {
@@ -147,6 +147,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btn_DangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DangNhapActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_btn_DangNhapActionPerformed
 
     /**
