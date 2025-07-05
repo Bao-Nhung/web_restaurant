@@ -8,12 +8,12 @@ package View_JPanel;
  *
  * @author ADMIN
  */
-public class QLKM extends javax.swing.JPanel {
+public class QL_TimKiem_SP_Panel extends javax.swing.JPanel {
 
     /**
-     * Creates new form QLKM
+     * Creates new form QL_TimKiem_SP_Panel
      */
-    public QLKM() {
+    public QL_TimKiem_SP_Panel() {
         initComponents();
     }
 
