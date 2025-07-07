@@ -9,6 +9,8 @@ import Model.KhachHang;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -29,26 +31,43 @@ public class QL_KhachHang {
 //    private Date NgayTao_KH;
 //    private String Loai_KH;
     public List<KhachHang> Get_All() {
-        List<KhachHang> List_KH = new ArrayList<>(); //  Tạo một danh sách rỗng kiểu Nguyên Liệu để chứa tất cả tài khoản đọc từ database.
-        String SQL = "SELECT * FROM KHACHHANG"; //  Lấy toàn bộ dòng dữ liệu từ bảng NGUYENLIEU
+        List<KhachHang> List_KH = new ArrayList<>();
+        String SQL = "SELECT * FROM KHACHHANG";
+
         try {
-            Connection connect = conn.DBConnect(); // 
+            Connection connect = conn.DBConnect();
             Statement stm = connect.createStatement();
             ResultSet rs = stm.executeQuery(SQL);
+
+            DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // dùng định dạng Việt Nam
+
             while (rs.next()) {
                 String Ma_KH = rs.getString(1);
                 String Ten_KH = rs.getString(2);
                 String SDT_KH = rs.getString(3);
                 String Email_KH = rs.getString(4);
-                Date NgayTao_KH = rs.getDate(5);
+
+                // Đọc ngày dưới dạng chuỗi
+                String ngayTaoStr = rs.getString(5);
+                Date NgayTao_KH = null;
+                try {
+                    LocalDate localDate = LocalDate.parse(ngayTaoStr, DinhDang);
+                    NgayTao_KH = Date.valueOf(localDate);
+                } catch (Exception ex) {
+                    System.out.println("⚠️ Ngày sai định dạng tại mã KH = " + Ma_KH + ": " + ngayTaoStr);
+                    NgayTao_KH = Date.valueOf(LocalDate.now());
+                }
+
                 String Loai_KH = rs.getString(6);
-                int DiemTichLuy = rs.getInt(7);
+                int DiemTichLuy = rs.getInt(6);
+
                 KhachHang kh = new KhachHang(Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, Loai_KH, DiemTichLuy);
                 List_KH.add(kh);
             }
         } catch (Exception e) {
-            e.printStackTrace(); // hoặc log ra file/log view
+            e.printStackTrace();
         }
+
         return List_KH;
     }
 

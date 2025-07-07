@@ -4,6 +4,7 @@
  */
 package View_JFrame;
 
+import View_JPanel.QL_KhachHang_Panel;
 import View_JPanel.ChucNang_PhuDoanhThu;
 import View_JPanel.QL_TaiKhoan_CNP_Panel;
 import View_JPanel.QL_TaiKhoan_TatCaPanel;
@@ -286,10 +287,10 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private void btn_KhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_KhachHangActionPerformed
         // TODO add your handling code here:
         lb_DanhMuc.setText("Quán Lý Khách Hàng");
-        QL_ThongKe_DoanhThu_Panel tkdt_Panel = new QL_ThongKe_DoanhThu_Panel();
+        QL_KhachHang_Panel qlkh_Panel = new QL_KhachHang_Panel();
         TrangChungChuyen.removeAll();
         TrangChungChuyen.setLayout(new BorderLayout());
-        TrangChungChuyen.add(tkdt_Panel, BorderLayout.CENTER);
+        TrangChungChuyen.add(qlkh_Panel, BorderLayout.CENTER);
         TrangChungChuyen.revalidate();
         TrangChungChuyen.repaint();
     }//GEN-LAST:event_btn_KhachHangActionPerformed
