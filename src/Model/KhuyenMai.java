@@ -13,6 +13,7 @@ public class KhuyenMai {
     private String Ten_KM;
     private String MoTa_KM;
     private String HinhThuc_KM;
+    private int DiemYeuCau_KM;
     private float GiaTri_KM;
     private Date Ngay_BD;
     private Date Ngay_KT;
@@ -23,11 +24,12 @@ public class KhuyenMai {
     public KhuyenMai() {
     }
 
-    public KhuyenMai(String Ma_KM, String Ten_KM, String MoTa_KM, String HinhThuc_KM, float GiaTri_KM, Date Ngay_BD, Date Ngay_KT, String NgayTrongThang_KM, String DieuKien_KM, boolean TrangThai) {
+    public KhuyenMai(String Ma_KM, String Ten_KM, String MoTa_KM, String HinhThuc_KM, int DiemYeuCau_KM, float GiaTri_KM, Date Ngay_BD, Date Ngay_KT, String NgayTrongThang_KM, String DieuKien_KM, boolean TrangThai) {
         this.Ma_KM = Ma_KM;
         this.Ten_KM = Ten_KM;
         this.MoTa_KM = MoTa_KM;
         this.HinhThuc_KM = HinhThuc_KM;
+        this.DiemYeuCau_KM = DiemYeuCau_KM;
         this.GiaTri_KM = GiaTri_KM;
         this.Ngay_BD = Ngay_BD;
         this.Ngay_KT = Ngay_KT;
@@ -115,6 +117,13 @@ public class KhuyenMai {
     public void setTrangThai(boolean TrangThai) {
         this.TrangThai = TrangThai;
     }
-    
+
+    public int getDiemYeuCau_KM() {
+        return DiemYeuCau_KM;
+    }
+
+    public void setDiemYeuCau_KM(int DiemYeuCau_KM) {
+        this.DiemYeuCau_KM = DiemYeuCau_KM;
+    }
     
 }

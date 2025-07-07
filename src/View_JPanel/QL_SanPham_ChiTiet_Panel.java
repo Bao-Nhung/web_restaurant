@@ -8,12 +8,12 @@ package View_JPanel;
  *
  * @author ADMIN
  */
-public class QL_SanPham_Panel extends javax.swing.JPanel {
+public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
 
     /**
      * Creates new form QLSP
      */
-    public QL_SanPham_Panel() {
+    public QL_SanPham_ChiTiet_Panel() {
         initComponents();
     }
 

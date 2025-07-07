@@ -15,18 +15,22 @@ public class KhachHang {
     private String Email_KH;
     private Date NgayTao_KH;
     private String Loai_KH;
-
+    private int DiemTichLuy;
+    
     public KhachHang() {
     }
 
-    public KhachHang(String Ma_KH, String Ten_KH, String SDT_KH, String Email_KH, Date NgayTao_KH, String Loai_KH) {
+    public KhachHang(String Ma_KH, String Ten_KH, String SDT_KH, String Email_KH, Date NgayTao_KH, String Loai_KH, int DiemTichLuy) {
         this.Ma_KH = Ma_KH;
         this.Ten_KH = Ten_KH;
         this.SDT_KH = SDT_KH;
         this.Email_KH = Email_KH;
         this.NgayTao_KH = NgayTao_KH;
         this.Loai_KH = Loai_KH;
+        this.DiemTichLuy = DiemTichLuy;
     }
+
+    
 
     public String getMa_KH() {
         return Ma_KH;
@@ -75,5 +79,13 @@ public class KhachHang {
     public void setLoai_KH(String Loai_KH) {
         this.Loai_KH = Loai_KH;
     }
-    
+
+    public int getDiemTichLuy() {
+        return DiemTichLuy;
+    }
+
+    public void setDiemTichLuy(int DiemTichLuy) {
+        this.DiemTichLuy = DiemTichLuy;
+    }
+      
 }
