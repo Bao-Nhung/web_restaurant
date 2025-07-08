@@ -4,6 +4,8 @@
  */
 package View_JFrame;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author ADMIN
@@ -15,11 +17,17 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        tbtn_An_Hien.setIcon(iconHide);
+        txt_NhapMK.setEchoChar('*'); // Ẩn mật khẩu
+    }
+    // Icon từ file
+    ImageIcon iconHide = new ImageIcon(getClass().getResource("/Icon/Close_Eye.png"));
+    ImageIcon iconShow = new ImageIcon(getClass().getResource("/Icon/Opend_Eye.png"));
+
+    public void Icon() {
+
     }
 
-    public void DangNhap() {
-        
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,8 +42,8 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txt_NhapEmail = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        txt_NhapMK = new javax.swing.JPasswordField();
+        tbtn_An_Hien = new javax.swing.JToggleButton();
         btn_DangNhap = new javax.swing.JButton();
         bt_Cannel = new javax.swing.JButton();
 
@@ -55,9 +63,13 @@ public class Login extends javax.swing.JFrame {
 
         txt_NhapEmail.setBackground(new java.awt.Color(204, 204, 255));
 
-        jPasswordField1.setBackground(new java.awt.Color(204, 204, 255));
+        txt_NhapMK.setBackground(new java.awt.Color(204, 204, 255));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ẩn", "Hiện" }));
+        tbtn_An_Hien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbtn_An_HienActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -71,11 +83,11 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, 0, 1, Short.MAX_VALUE))
-                    .addComponent(txt_NhapEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                        .addComponent(txt_NhapMK, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(tbtn_An_Hien, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_NhapEmail))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,11 +97,12 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_NhapEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_NhapMK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tbtn_An_Hien, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         btn_DangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Dang_Nhap_TK.png"))); // NOI18N
@@ -122,11 +135,10 @@ public class Login extends javax.swing.JFrame {
                         .addComponent(bt_Cannel, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(11, 11, 11)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -153,8 +165,19 @@ public class Login extends javax.swing.JFrame {
 
     private void btn_DangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DangNhapActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btn_DangNhapActionPerformed
+
+    private void tbtn_An_HienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtn_An_HienActionPerformed
+        // TODO add your handling code here:
+        if (tbtn_An_Hien.isSelected()) {
+            tbtn_An_Hien.setIcon(iconShow); // hiện icon mắt mở
+            txt_NhapMK.setEchoChar((char) 0); // hiện mật khẩu
+        } else {
+            tbtn_An_Hien.setIcon(iconHide); // hiện icon mắt đóng
+            txt_NhapMK.setEchoChar('*'); // ẩn mật khẩu
+        }
+    }//GEN-LAST:event_tbtn_An_HienActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,12 +217,12 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_Cannel;
     private javax.swing.JButton btn_DangNhap;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JToggleButton tbtn_An_Hien;
     private javax.swing.JTextField txt_NhapEmail;
+    private javax.swing.JPasswordField txt_NhapMK;
     // End of variables declaration//GEN-END:variables
 }
