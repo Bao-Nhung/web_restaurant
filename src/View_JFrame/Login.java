@@ -5,13 +5,16 @@
 package View_JFrame;
 
 import javax.swing.ImageIcon;
-
+import Service.QL_Login;
+import javax.swing.JOptionPane;
+import View_JFrame.TrangChu_NQL;
+import View_JFrame.TrangChu_NV;
 /**
  *
  * @author ADMIN
  */
 public class Login extends javax.swing.JFrame {
-
+    QL_Login qllg = new QL_Login();
     /**
      * Creates new form Login
      */
@@ -24,9 +27,32 @@ public class Login extends javax.swing.JFrame {
     ImageIcon iconHide = new ImageIcon(getClass().getResource("/Icon/Close_Eye.png"));
     ImageIcon iconShow = new ImageIcon(getClass().getResource("/Icon/Opend_Eye.png"));
 
-    public void Icon() {
+    public void DangNhap(){
+    String Email = txt_NhapEmail.getText().trim();
+    String Ma_TK = txt_NhapMK.getText().trim();
 
+    String vaiTro = qllg.login(Email, Ma_TK);
+
+    if (vaiTro != null) {
+        JOptionPane.showMessageDialog(this, 
+            "Đăng nhập thành công!" + 
+            "\nTài khoản: " + Email + 
+            "\nVai trò: " + vaiTro);
+        
+        // Chuyển giao diện theo vai trò
+        switch (vaiTro) {
+            case "Quản Lý": new TrangChu_NQL().setVisible(true); break;
+            case "Nhân Viên": new TrangChu_NV().setVisible(true); break;
+//            case "KH": new GiaoDienKhachHang().setVisible(true); break;
+            default: JOptionPane.showMessageDialog(this, "Vai trò không xác định!");
+        }
+
+        this.dispose(); // Đóng form đăng nhập
+    } else {
+        JOptionPane.showMessageDialog(this, "Đăng nhập thất bại! Email hoặc mã không đúng.");
+        return;
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -165,7 +191,7 @@ public class Login extends javax.swing.JFrame {
 
     private void btn_DangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DangNhapActionPerformed
         // TODO add your handling code here:
-
+        DangNhap();
     }//GEN-LAST:event_btn_DangNhapActionPerformed
 
     private void tbtn_An_HienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtn_An_HienActionPerformed
