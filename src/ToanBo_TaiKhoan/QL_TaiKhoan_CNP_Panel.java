@@ -82,7 +82,7 @@ public class QL_TaiKhoan_CNP_Panel extends QL_TaiKhoan_TatCaPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 157, Short.MAX_VALUE))
+                .addGap(0, 117, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,14 +92,19 @@ public class QL_TaiKhoan_CNP_Panel extends QL_TaiKhoan_TatCaPanel {
 
     private void btn_FilltoNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_FilltoNhanVienActionPerformed
         // TODO add your handling code here:
+//        String VaiTro = "Nhân Viên";
+//        FillToTableTheoVaiTro(VaiTro);
     }//GEN-LAST:event_btn_FilltoNhanVienActionPerformed
 
     private void btn_FilltoTatCaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_FilltoTatCaActionPerformed
         // TODO add your handling code here:
+//        FillToTable();
     }//GEN-LAST:event_btn_FilltoTatCaActionPerformed
 
     private void btn_FilltoQuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_FilltoQuanLyActionPerformed
         // TODO add your handling code here:
+//        String VaiTro = "Quản Lý";
+//        FillToTableTheoVaiTro(VaiTro);
     }//GEN-LAST:event_btn_FilltoQuanLyActionPerformed
 
 

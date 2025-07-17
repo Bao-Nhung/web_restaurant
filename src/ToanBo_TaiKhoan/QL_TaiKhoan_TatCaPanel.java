@@ -44,8 +44,6 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
         txt_Ngay_DK.setText(ngayHienTai.format(dinhDang));
     }
 
-  
-
     public void Initable() {
         TableModel = new DefaultTableModel();
         String[] cols = {"Mã Tài Khoản", "Tên Tài Khoản", "SĐT", "Email", "Địa Chỉ", "Vai Trò", "Ngày Đăng Ký", "Ảnh", "Trạng Thái"};
@@ -66,12 +64,17 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
         txt_Ma_TK.setText("");
         txt_Ten_TK.setText("");
         txt_SDT_TK.setText("");
-//        txt_Ngay_DK.setText("");
+        LocalDate ngayHienTai = LocalDate.now();
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // Hiển thị vào textField
+        txt_Ngay_DK.setText(ngayHienTai.format(dinhDang));
         txt_Email.setText("");
         txt_DiaChi.setText("");
         txt_TimKiem.setText("");
         btg_KieuTimKiem.clearSelection();
         btg_TrangThai.clearSelection();
+        btg_VaiTro.clearSelection();
         lb_UpAnh.setIcon(null);      // Xóa hình ảnh đang hiển thị
         lb_UpAnh.setText("Null");    // Ghi lại chữ nếu muốn
         PathAnh = null;              // Đặt lại biến ảnh (tránh lưu nhầm)
@@ -149,46 +152,32 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
     // Thêm Dữ Liệu Tai Khoản
     public void ThemDL_TaiKhoan() {
         if (!Check_ThongTin_TK()) {
-            return; // Dừng lại nếu chưa nhập đủ thông tin
+            return;
         }
+
         String Ma_TK = txt_Ma_TK.getText();
         String Ten_TK = txt_Ten_TK.getText();
         String SDT = txt_SDT_TK.getText();
-        String Email = txt_Email.getText(); // Sửa chỗ này, bạn gán nhầm Email = SDT
+        String Email = txt_Email.getText();
         String DiaChi = txt_DiaChi.getText();
-        String VaiTro = "Nhân Viên";
+        String Anh_TK = PathAnh;
 
-        // Chuyển ngày đăng ký từ chuỗi sang java.sql.Date
+        // Vai trò là chuỗi: "Nhân Viên" hoặc "Quản Lý"
+        String VaiTro = rdo_NhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
+
+        // Trạng thái boolean từ radio
+        boolean TrangThai = rdo_HoatDong.isSelected();
+
         try {
             DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate localDate = LocalDate.parse(txt_Ngay_DK.getText(), DinhDang);
             Date NgayDK = Date.valueOf(localDate);
 
-            // Trạng thái: true (1) = Đang hoạt động, false (0) = Không hoạt động
-            boolean TrangThai; // Vì Vai Trò Lưu Ở Nhân Viên Là Biến Boolean Nên Thêm Dữ Liệu Phải Thay Đổi
-            if (VaiTro.equalsIgnoreCase("Đang Hoạt Động")) {
-                TrangThai = true; // Nếu Vai Trò Ở Dao Diện Chọn Là Admin Thì Vai Trò Sẽ Là True
-            } else {
-                TrangThai = false; // Ngược Lại Dao Diện Là Nhân Viên Thì Vai Trf Sẽ Thành False
-            }
-
-            String Anh_TK = PathAnh;
-
-            // Tạo đối tượng tài khoản
             Tai_Khoan tk = new Tai_Khoan(Ma_TK, Ten_TK, SDT, Email, DiaChi, VaiTro, NgayDK, Anh_TK, TrangThai);
-
             int Result = qltk.Them_TK(tk);
-
-            if (Result == 1) {
-                JOptionPane.showMessageDialog(this, "Thêm Dữ Liệu Tài Khoản Thành Công.");
-
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm Dữ Liệu Tài Khoản Thất Bại.");
-                return;
-            }
-
+            JOptionPane.showMessageDialog(this, Result == 1 ? "Thêm thành công!" : "Thêm thất bại!");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi xử lý ngày đăng ký: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Lỗi ngày đăng ký: " + e.getMessage());
         }
     }
 
@@ -225,7 +214,7 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
             String SDT = txt_SDT_TK.getText();
             String Email = txt_Email.getText(); // Sửa chỗ này, bạn gán nhầm Email = SDT
             String DiaChi = txt_DiaChi.getText();
-            String VaiTro = "Nhân Viên";
+            String VaiTro = rdo_NhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
 
             // Chuyển ngày đăng ký từ chuỗi sang java.sql.Date
             try {
@@ -236,7 +225,8 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
                 // Trạng thái: true (1) = Đang hoạt động, false (0) = Không hoạt động
                 String TrangThai = rdo_HoatDong.isSelected() ? "Đang Hoạt Động" : "Không Hoạt Động"; // Khi Muốn Đổi Thì Phải Chọn Một Trong Hai Là Hoạt Động Hay Không Hoạt Động
                 boolean trangthai;
-                if (VaiTro.equalsIgnoreCase("Đang Hoạt Động")) {
+                String vaitro = "";
+                if (vaitro.equalsIgnoreCase("Đang Hoạt Động")) {
                     trangthai = true;
                 } else {
                     trangthai = false;
@@ -265,40 +255,45 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
 
     public void ShowDetail_Tk() {
         index = tbl_NhanVien.getSelectedRow();
-        if (index >= 0) {
-            Tai_Khoan tk = qltk.Get_All().get(index);
+        if (index < 0) {
+            return;
+        }
 
-            txt_Ma_TK.setText(tk.getMa_TK());
-            txt_Ten_TK.setText(tk.getTen_TK());
-            txt_SDT_TK.setText(tk.getSDT_TK());
-            txt_Email.setText(tk.getEmail_TK());
-            txt_DiaChi.setText(tk.getDiaChi_TK());
+        Tai_Khoan tk = qltk.Get_All().get(index);
+        txt_Ma_TK.setText(tk.getMa_TK());
+        txt_Ten_TK.setText(tk.getTen_TK());
+        txt_SDT_TK.setText(tk.getSDT_TK());
+        txt_Email.setText(tk.getEmail_TK());
+        txt_DiaChi.setText(tk.getDiaChi_TK());
 
-            // Định dạng ngày để hiển thị
-            Date ngayDK = tk.getNgay_DK_TK(); // java.sql.Date
-            DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String ngayDK_format = ngayDK.toLocalDate().format(dinhDang);
-            txt_Ngay_DK.setText(ngayDK_format);
+        // Định dạng ngày
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        txt_Ngay_DK.setText(tk.getNgay_DK_TK().toLocalDate().format(dinhDang));
 
-            // Hiển thị trạng thái
-            boolean TrangThai = tk.getTrangThai_TK();
-            if (TrangThai == true) {
-                rdo_HoatDong.setSelected(true);
-            } else {
-                rdo_KhongHoatDong.setSelected(true);
-            }
+        // Trạng thái
+        if (tk.getTrangThai_TK()) {
+            rdo_HoatDong.setSelected(true);
+        } else {
+            rdo_KhongHoatDong.setSelected(true);
+        }
 
-            // Hiển thị ảnh (nếu ảnh là đường dẫn lưu từ DB)
-            PathAnh = tk.getAnh_TK();
-            if (PathAnh != null && !PathAnh.equals("")) {
-                ImageIcon icon = new ImageIcon(PathAnh);
-                Image img = icon.getImage().getScaledInstance(lb_UpAnh.getWidth(), lb_UpAnh.getHeight(), Image.SCALE_SMOOTH);
-                lb_UpAnh.setIcon(new ImageIcon(img));
-                lb_UpAnh.setText("");
-            } else {
-                lb_UpAnh.setIcon(null);
-                lb_UpAnh.setText("Null");
-            }
+        // Hiển thị VaiTrò
+        if (tk.getVaiTro_TK().equalsIgnoreCase("Quản Lý")) {
+            rdo_QuanLy.setSelected(true);
+        } else {
+            rdo_NhanVien.setSelected(true);
+        }
+
+        // Ảnh đại diện
+        PathAnh = tk.getAnh_TK();
+        if (PathAnh != null && !PathAnh.isEmpty()) {
+            ImageIcon icon = new ImageIcon(PathAnh);
+            Image img = icon.getImage().getScaledInstance(lb_UpAnh.getWidth(), lb_UpAnh.getHeight(), Image.SCALE_SMOOTH);
+            lb_UpAnh.setIcon(new ImageIcon(img));
+            lb_UpAnh.setText("");
+        } else {
+            lb_UpAnh.setIcon(null);
+            lb_UpAnh.setText("Null");
         }
     }
 
@@ -433,8 +428,10 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Vai Trò:");
 
+        btg_VaiTro.add(rdo_NhanVien);
         rdo_NhanVien.setText("Nhân Viên");
 
+        btg_VaiTro.add(rdo_QuanLy);
         rdo_QuanLy.setText("Quản Lý");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -508,14 +505,14 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
                             .addComponent(txt_Email, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(8, 8, 8)
                                 .addComponent(rdo_NhanVien)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rdo_QuanLy)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -681,7 +678,7 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        Panel_DSTK.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Danh Sách Tài Khoản"));
+        Panel_DSTK.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Danh Sách Tất Cả Tài Khoản"));
 
         tbl_NhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -705,7 +702,7 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
         Panel_DSTK.setLayout(Panel_DSTKLayout);
         Panel_DSTKLayout.setHorizontalGroup(
             Panel_DSTKLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE)
         );
         Panel_DSTKLayout.setVerticalGroup(
             Panel_DSTKLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -718,14 +715,15 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(59, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Panel_DSTK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(Panel_DSTK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

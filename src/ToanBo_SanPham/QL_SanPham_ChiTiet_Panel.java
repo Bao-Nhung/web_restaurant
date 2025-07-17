@@ -48,7 +48,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
 
     public void Initable_SP() {
         TableModel = new DefaultTableModel();
-        String[] cols = {"Mã SP", "Tên SP", "Mô Tả SP", "Đơn Giá", "Mã Loại SP", "Hình Ảnh"};
+        String[] cols = {"Mã SP", "Tên SP", "Mô Tả SP", "Số Lượng " , "Đơn Giá", "Mã Loại SP", "Hình Ảnh"};
         TableModel.setColumnIdentifiers(cols);
         tbl_SanPham.setModel(TableModel);
     }

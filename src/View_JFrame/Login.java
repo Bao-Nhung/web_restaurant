@@ -5,7 +5,7 @@
 package View_JFrame;
 
 import javax.swing.ImageIcon;
-import Service.QL_Login;
+import ToanBo_TaiKhoan.QL_Login;
 import javax.swing.JOptionPane;
 import View_JFrame.TrangChu_NQL;
 import View_JFrame.TrangChu_NV;
