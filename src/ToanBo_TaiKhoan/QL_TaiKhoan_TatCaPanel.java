@@ -24,13 +24,10 @@ import java.time.format.DateTimeFormatter;
  */
 public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
 
-    String MaKhauThuc = "";
     DefaultTableModel TableModel;
     QL_TaiKhoan qltk = new QL_TaiKhoan();
     int index = -1;
     String PathAnh = null;
-    ImageIcon iconHide = new ImageIcon(getClass().getResource("/Icon/Close_Eye.png"));
-    ImageIcon iconShow = new ImageIcon(getClass().getResource("/Icon/Opend_Eye.png"));
 
     /**
      * Creates new form QLNV
@@ -45,20 +42,9 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
 
         // Hiển thị vào textField
         txt_Ngay_DK.setText(ngayHienTai.format(dinhDang));
-        btn_An_Hien.setIcon(iconHide);
     }
 
-    public void keyTyped(KeyEvent e) {
-        char c = e.getKeyChar();
-        MaKhauThuc += c;
-
-        if (!btn_An_Hien.isSelected()) {
-            txt_Ma_TK.setText("*".repeat(MaKhauThuc.length()));
-            e.consume(); // chặn hiển thị ký tự gốc
-        } else {
-            txt_Ma_TK.setText(MaKhauThuc); // Hiện lại mật khẩu nếu nút bật
-        }
-    }
+  
 
     public void Initable() {
         TableModel = new DefaultTableModel();
@@ -349,7 +335,6 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txt_Email = new javax.swing.JTextField();
         btn_Chon_Anh = new javax.swing.JButton();
-        btn_An_Hien = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         rdo_NhanVien = new javax.swing.JRadioButton();
         rdo_QuanLy = new javax.swing.JRadioButton();
@@ -446,13 +431,6 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
             }
         });
 
-        btn_An_Hien.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btn_An_Hien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_An_HienActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("Vai Trò:");
 
         rdo_NhanVien.setText("Nhân Viên");
@@ -469,9 +447,7 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txt_Ma_TK, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_An_Hien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(txt_Ma_TK))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -516,11 +492,9 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel2)
-                                .addComponent(txt_Ma_TK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btn_An_Hien, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txt_Ma_TK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
@@ -818,15 +792,6 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
         ShowDetail_Tk();
     }//GEN-LAST:event_tbl_NhanVienMouseClicked
 
-    private void btn_An_HienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_An_HienActionPerformed
-        // TODO add your handling code here:
-        if (btn_An_Hien.isSelected()) {
-            txt_Ma_TK.setText(MaKhauThuc); // Hiện mật khẩu thật
-        } else {
-            txt_Ma_TK.setText("*".repeat(MaKhauThuc.length())); // Ẩn bằng dấu *
-        }
-    }//GEN-LAST:event_btn_An_HienActionPerformed
-
     private void txt_Ma_TKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_Ma_TKActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_Ma_TKActionPerformed
@@ -837,7 +802,6 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
     private javax.swing.ButtonGroup btg_KieuTimKiem;
     private javax.swing.ButtonGroup btg_TrangThai;
     private javax.swing.ButtonGroup btg_VaiTro;
-    private javax.swing.JToggleButton btn_An_Hien;
     private javax.swing.JButton btn_Chon_Anh;
     private javax.swing.JButton btn_LamMoi;
     private javax.swing.JButton btn_SuaDL;

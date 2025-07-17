@@ -29,6 +29,7 @@ public class QL_TaiKhoan_QuanLy_Panel extends javax.swing.JPanel {
     String PathAnh = null;
     ImageIcon iconHide = new ImageIcon(getClass().getResource("/Icon/Close_Eye.png"));
     ImageIcon iconShow = new ImageIcon(getClass().getResource("/Icon/Opend_Eye.png"));
+
     /**
      * Creates new form QLNV
      */
@@ -42,9 +43,6 @@ public class QL_TaiKhoan_QuanLy_Panel extends javax.swing.JPanel {
 
         // Hiển thị vào textField
         txt_Ngay_DK.setText(ngayHienTai.format(dinhDang));
-        
-        tbtn_An_Hien.setIcon(iconHide);
-        txt_Ma_TK.setEchoChar('*'); // Ẩn mật khẩu
     }
 
     public void Initable() {
@@ -64,6 +62,7 @@ public class QL_TaiKhoan_QuanLy_Panel extends javax.swing.JPanel {
         }
     }
 // Làm Mới Tài Khoản
+
     public void LamMoi() {
         txt_Ma_TK.setText("");
         txt_Ten_TK.setText("");
