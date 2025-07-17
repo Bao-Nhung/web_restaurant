@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package View_JPanel;
+import Model.Tai_Khoan;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,6 +19,9 @@ public class QLNV extends javax.swing.JPanel {
     public QLNV() {
         initComponents();
     }
+    
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,11 +36,11 @@ public class QLNV extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 934, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 584, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
