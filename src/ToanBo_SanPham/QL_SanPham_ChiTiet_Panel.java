@@ -9,7 +9,7 @@ import ToanBo_SanPham.QL_ChiTiet_SanPham;
 import ToanBo_SanPham.QL_Tao_SanPham;
 import ToanBo_SanPham.LoaiSanPham;
 import ToanBo_SanPham.SanPham;
-
+import java.util.List;
 /**
  *
  * @author ADMIN
@@ -45,11 +45,10 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
             TableModel.addRow(qllsp.GetRow_LSP(lsp));
         }
     }
-    
-    
+
     public void Initable_SP() {
         TableModel = new DefaultTableModel();
-        String[] cols = {"Mã SP", "Tên SP" , "Mô Tả SP" , "Đơn Giá" , "Mã Loại SP" , "Hình Ảnh"};
+        String[] cols = {"Mã SP", "Tên SP", "Mô Tả SP", "Đơn Giá", "Mã Loại SP", "Hình Ảnh"};
         TableModel.setColumnIdentifiers(cols);
         tbl_SanPham.setModel(TableModel);
     }
@@ -61,6 +60,17 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
             TableModel.addRow(qlsp.GetRow_SP(sp));
         }
     }
+    
+    public void loadSanPhamTheoLoai(String maLSP) {
+    DefaultTableModel model = (DefaultTableModel) tbl_SanPham.getModel();
+    model.setRowCount(0); // Xóa dữ liệu cũ
+
+    List<SanPham> ds = qlsp.getSanPhamTheoLoai(maLSP);
+    for (SanPham sp : ds) {
+        model.addRow(qlsp.GetRow_SP(sp));
+    }
+}
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -200,6 +210,11 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbl_LoaiSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_LoaiSanPhamMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_LoaiSanPham);
 
         jButton4.setText("Tạo Loại Sản Phẩm");
@@ -276,6 +291,18 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tbl_LoaiSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_LoaiSanPhamMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = tbl_LoaiSanPham.getSelectedRow();
+        if (selectedRow >= 0) {
+            // Giả sử cột 0 là MA_LSP
+            String maLSP = tbl_LoaiSanPham.getValueAt(selectedRow, 0).toString();
+
+            // Gọi hàm load sản phẩm theo loại
+            loadSanPhamTheoLoai(maLSP);
+        }
+    }//GEN-LAST:event_tbl_LoaiSanPhamMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

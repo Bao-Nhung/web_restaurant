@@ -130,4 +130,34 @@ public class QL_Tao_SanPham {
         }
         return 0;
     }
+    
+    
+    public List<SanPham> getSanPhamTheoLoai(String TheoMa_LSP) {
+        List<SanPham> List_SP = new ArrayList<>();
+        String sql = "SELECT * FROM SANPHAM WHERE MA_LOAI = ?";
+
+        try {
+            Connection con = conn.DBConnect();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, TheoMa_LSP); // 🔥 Gán tham số tại đây
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String Ma_SP = rs.getString(1);
+                String Ten_SP = rs.getString(2);
+                String MoTa_SP = rs.getString(3);
+                int SoLuong_SP = rs.getInt(4);
+                float DonGia_SP = rs.getFloat(5);
+                String Ma_LSP = rs.getString(6);
+                String HinhAnh_SP = rs.getString(7);
+
+                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, SoLuong_SP, DonGia_SP, Ma_LSP, HinhAnh_SP);
+                List_SP.add(sp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return List_SP;
+    }
 }

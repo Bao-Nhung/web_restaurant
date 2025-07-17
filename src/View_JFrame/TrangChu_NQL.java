@@ -11,6 +11,7 @@ import ToanBo_TaiKhoan.QL_TaiKhoan_TatCaPanel;
 import View_JPanel.QL_ThongKe_DoanhThu_Panel;
 import java.awt.BorderLayout;
 import ToanBo_NguyenLieu.QL_NguyenLieu_Panel;
+import ToanBo_SanPham.QL_SanPham_ChiTiet_Panel;
 import View_JPanel.ThongKe_ChucNangDoanhThu_Panel;
 import javax.swing.JOptionPane;
 
@@ -301,12 +302,12 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private void btn_SanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SanPhamActionPerformed
         // TODO add your handling code here:
         lb_DanhMuc.setText("Quán Lý Sản Phẩm");
-//        QL_SanPham_ChiTiet_Panel qlspct_Panel = new QL_SanPham_ChiTiet_Panel();
-//        TrangChungChuyen.removeAll();
-//        TrangChungChuyen.setLayout(new BorderLayout());
-//        TrangChungChuyen.add(qlspct_Panel, BorderLayout.CENTER);
-//        TrangChungChuyen.revalidate();
-//        TrangChungChuyen.repaint();
+        QL_SanPham_ChiTiet_Panel qlspct_Panel = new QL_SanPham_ChiTiet_Panel();
+        TrangChungChuyen.removeAll();
+        TrangChungChuyen.setLayout(new BorderLayout());
+        TrangChungChuyen.add(qlspct_Panel, BorderLayout.CENTER);
+        TrangChungChuyen.revalidate();
+        TrangChungChuyen.repaint();
     }//GEN-LAST:event_btn_SanPhamActionPerformed
 
     private void btn_NguyenLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_NguyenLieuActionPerformed
