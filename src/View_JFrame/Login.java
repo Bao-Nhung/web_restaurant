@@ -9,17 +9,21 @@ import Service.QL_Login;
 import javax.swing.JOptionPane;
 import View_JFrame.TrangChu_NQL;
 import View_JFrame.TrangChu_NV;
+
 /**
  *
  * @author ADMIN
  */
 public class Login extends javax.swing.JFrame {
+
     QL_Login qllg = new QL_Login();
+
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        this.setLocationRelativeTo(this);
         tbtn_An_Hien.setIcon(iconHide);
         txt_NhapMK.setEchoChar('*'); // Ẩn mật khẩu
     }
@@ -27,32 +31,43 @@ public class Login extends javax.swing.JFrame {
     ImageIcon iconHide = new ImageIcon(getClass().getResource("/Icon/Close_Eye.png"));
     ImageIcon iconShow = new ImageIcon(getClass().getResource("/Icon/Opend_Eye.png"));
 
-    public void DangNhap(){
-    String Email = txt_NhapEmail.getText().trim();
-    String Ma_TK = txt_NhapMK.getText().trim();
+    public void DangNhap() {
 
-    String vaiTro = qllg.login(Email, Ma_TK);
+        String Email = txt_NhapEmail.getText().trim();
+        String Ma_TK = txt_NhapMK.getText().trim();
 
-    if (vaiTro != null) {
-        JOptionPane.showMessageDialog(this, 
-            "Đăng nhập thành công!" + 
-            "\nTài khoản: " + Email + 
-            "\nVai trò: " + vaiTro);
-        
-        // Chuyển giao diện theo vai trò
-        switch (vaiTro) {
-            case "Quản Lý": new TrangChu_NQL().setVisible(true); break;
-            case "Nhân Viên": new TrangChu_NV().setVisible(true); break;
+        String vaiTro = qllg.login(Email, Ma_TK);
+        int Choice = JOptionPane.showConfirmDialog(this, "Bạn Có Xác Nhận Đăng Nhập Với:"
+                + "\n Mật Khẩu: " + Ma_TK
+                + "\n Email: " + Email 
+                + "\n Hay Không ?", "Xác Nhận Đăng Nhập." , JOptionPane.YES_NO_OPTION);
+        if (Choice == JOptionPane.YES_OPTION) {
+            if (vaiTro != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Đăng nhập thành công!"
+                        + "\nTài khoản: " + Email
+                        + "\nVai trò: " + vaiTro);
+
+                // Chuyển giao diện theo vai trò
+                switch (vaiTro) {
+                    case "Quản Lý":
+                        new TrangChu_NQL().setVisible(true);
+                        break;
+                    case "Nhân Viên":
+                        new TrangChu_NV().setVisible(true);
+                        break;
 //            case "KH": new GiaoDienKhachHang().setVisible(true); break;
-            default: JOptionPane.showMessageDialog(this, "Vai trò không xác định!");
-        }
+                    default:
+                        JOptionPane.showMessageDialog(this, "Vai trò không xác định!");
+                }
 
-        this.dispose(); // Đóng form đăng nhập
-    } else {
-        JOptionPane.showMessageDialog(this, "Đăng nhập thất bại! Email hoặc mã không đúng.");
-        return;
+                this.dispose(); // Đóng form đăng nhập
+            } else {
+                JOptionPane.showMessageDialog(this, "Đăng nhập thất bại! Email hoặc mã không đúng.");
+                return;
+            }
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.

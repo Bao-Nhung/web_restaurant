@@ -7,7 +7,7 @@ package DBConnect;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.SQLException; 
 
 /**
  *
@@ -16,16 +16,13 @@ import java.sql.SQLException;
 public class MyConnection {
     
 public MyConnection() {
-        
-    
-    
     }
     
     public Connection DBConnect() throws ClassNotFoundException, SQLException{
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String url = "jdbc:sqlserver://localhost\\SQLEXPRESS01:1433;databaseName= HOC_TAT_CA;trustServerCertificate=true";
+        String url = "jdbc:sqlserver://DESKTOP-CU474KP:1433;databaseName=HOC_TAT_CA;trustServerCertificate=true";
         String user = "sa";
-        String pass = "123456789"; // Tự Đổi Mật Khẩu Nếu Muốn Chạy DBConnect 
+        String pass = "1234567890"; // Tự Đổi Mật Khẩu Nếu Muốn Chạy DBConnect 
         return DriverManager.getConnection(url, user, pass);
     }
     
