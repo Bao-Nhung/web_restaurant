@@ -64,7 +64,7 @@ public class QL_KhuyenMai {
         String DieuKien_KM = km.getNgayTrongThang_KM();
         boolean TrangThai_KM = km.getTrangThai();
 
-        Object[] obj = new Object[]{Ma_KM, Ten_KM, HinhThuc_KM, MoTa_KM, DiemYeuCau_KM,  GiaTri_KM, Ngay_BD_KM, Ngay_KT_KM, NgayTrongThang_KM, DieuKien_KM, TrangThai_KM};
+        Object[] obj = new Object[]{Ma_KM, Ten_KM, HinhThuc_KM, MoTa_KM, DiemYeuCau_KM, GiaTri_KM, Ngay_BD_KM, Ngay_KT_KM, NgayTrongThang_KM, DieuKien_KM, TrangThai_KM};
         return obj;
     }
 
@@ -150,5 +150,99 @@ public class QL_KhuyenMai {
         } catch (Exception e) {
         }
         return 0;
+    }
+    
+    // Lọc Sản Phẩm Theo Thời Gian Bắt Đầu Thời Gian Kết Thúc
+    public List<KhuyenMai> Loc_KM(Date ThoiGianBT, Date ThoiGianKT) {
+        List<KhuyenMai> List_KM = new ArrayList<>(); 
+        String SQL = "SELECT * FROM KHUYENMAI WHERE NGAYBATDAU >= ? AND NGAYKETTHUC <= ? ";
+        try {
+            Connection connect = conn.DBConnect(); // 
+            PreparedStatement pstm = connect.prepareStatement(SQL);
+            pstm.setDate(1, ThoiGianBT);
+            pstm.setDate(2, ThoiGianKT);
+
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                String Ma_KM = rs.getString(1);
+                String Ten_KM = rs.getString(2);
+                String HinhThuc_KM = rs.getString(3);
+                String MoTa_KM = rs.getString(4);
+                int DiemYeuCau_KM = rs.getInt(5);
+                float GiaTri_KM = rs.getFloat(6);
+                Date Ngay_BD_KM = rs.getDate(7);
+                Date Ngay_KT_KM = rs.getDate(8);
+                String NgayTrongThang_KM = rs.getString(9);
+                String DieuKien_KM = rs.getString(10);
+                boolean TrangThai_KM = rs.getBoolean(11);
+
+                KhuyenMai km = new KhuyenMai(Ma_KM, Ten_KM, HinhThuc_KM, MoTa_KM, DiemYeuCau_KM, GiaTri_KM, Ngay_BD_KM, Ngay_KT_KM, NgayTrongThang_KM, DieuKien_KM, TrangThai_KM);
+
+                List_KM.add(km);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // hoặc log ra file/log view
+        }
+        return List_KM;
+    }
+    
+    // Tìm Kiếm Theo Mã Khuyến Mãi
+    public List<KhuyenMai> TimKiem_TheoMa(String TheoMa) {
+        List<KhuyenMai> List_TheoMa_KM = new ArrayList<>(); //  
+        String SQL = "SELECT * FROM KHUYENMAI WHERE MA_GIAM LIKE ? "; 
+        try {
+            Connection connect = conn.DBConnect(); // 
+            PreparedStatement pstm = connect.prepareStatement(SQL);
+            pstm.setString(1, "%" + TheoMa + "%");
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                String Ma_KM = rs.getString(1);
+                String Ten_KM = rs.getString(2);
+                String HinhThuc_KM = rs.getString(3);
+                String MoTa_KM = rs.getString(4);
+                int DiemYeuCau_KM = rs.getInt(5);
+                float GiaTri_KM = rs.getFloat(6);
+                Date Ngay_BD_KM = rs.getDate(7);
+                Date Ngay_KT_KM = rs.getDate(8);
+                String NgayTrongThang_KM = rs.getString(9);
+                String DieuKien_KM = rs.getString(10);
+                boolean TrangThai_KM = rs.getBoolean(11);
+                KhuyenMai km = new KhuyenMai(Ma_KM, Ten_KM, HinhThuc_KM, MoTa_KM, DiemYeuCau_KM, GiaTri_KM, Ngay_BD_KM, Ngay_KT_KM, NgayTrongThang_KM, DieuKien_KM, TrangThai_KM);
+                List_TheoMa_KM.add(km);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // hoặc log ra file/log view
+        }
+        return List_TheoMa_KM;
+    }
+    
+    // Tìm Kiếm Theo Tên Khuyến Mãi
+    public List<KhuyenMai> TimKiem_TheoTen(String TheoTen) {
+        List<KhuyenMai> List_TheoTen_KM = new ArrayList<>(); //  
+        String SQL = "SELECT * FROM KHUYENMAI WHERE TENKM LIKE UPPER(  ?  )"; //  
+        try {
+            Connection connect = conn.DBConnect(); // 
+            PreparedStatement pstm = connect.prepareStatement(SQL);
+            pstm.setString(1, "%" + TheoTen + "%");
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                String Ma_KM = rs.getString(1);
+                String Ten_KM = rs.getString(2);
+                String HinhThuc_KM = rs.getString(3);
+                String MoTa_KM = rs.getString(4);
+                int DiemYeuCau_KM = rs.getInt(5);
+                float GiaTri_KM = rs.getFloat(6);
+                Date Ngay_BD_KM = rs.getDate(7);
+                Date Ngay_KT_KM = rs.getDate(8);
+                String NgayTrongThang_KM = rs.getString(9);
+                String DieuKien_KM = rs.getString(10);
+                boolean TrangThai_KM = rs.getBoolean(11);
+                KhuyenMai km = new KhuyenMai(Ma_KM, Ten_KM, HinhThuc_KM, MoTa_KM, DiemYeuCau_KM, GiaTri_KM, Ngay_BD_KM, Ngay_KT_KM, NgayTrongThang_KM, DieuKien_KM, TrangThai_KM);
+                List_TheoTen_KM.add(km);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // hoặc log ra file/log view
+        }
+        return List_TheoTen_KM;
     }
 }

@@ -6,9 +6,6 @@
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="ff" green="ff" red="ff" type="rgb"/>
     </Property>
-    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[1919, 979]"/>
-    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -106,6 +103,7 @@
                       <Component id="btn_TaiKhoan" alignment="0" pref="231" max="32767" attributes="0"/>
                       <Component id="btn_KhachHang" alignment="0" max="32767" attributes="0"/>
                       <Component id="btn_ThongKeDoanhThu" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btn_KhuyenMai" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -122,12 +120,14 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_SanPham" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="btn_KhuyenMai" min="-2" pref="55" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_TaiKhoan" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_KhachHang" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btn_ThongKeDoanhThu" min="-2" pref="55" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="162" max="32767" attributes="0"/>
+                  <EmptySpace pref="95" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -204,6 +204,17 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_ThongKeDoanhThuActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btn_KhuyenMai">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Icon/KhuyenMai.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Khuy&#x1ebf;n M&#xe3;i"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_KhuyenMaiActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
