@@ -58,8 +58,8 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
             TableModel.addRow(qltk.GetRow(tk));
         }
     }
-//    Hiển Thị Theo Vai Trò
-
+    
+    // Làm Mới Dữ Liệu Tai Khoản
     public void LamMoi() {
         txt_Ma_TK.setText("");
         txt_Ten_TK.setText("");
@@ -81,92 +81,81 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
         FillToTable();
     }
 
-    // Check Tài Khoản Khi Thêm
-    public void Check_Form() {
-        // Mã Tài Khoản 
-        if (txt_Ma_TK.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã Tài Khoản Không Được Để Trống.");
-            return;
-        }
-//        if (txt_Ma_TK.getText().trim().length() <= 15) {
-//            JOptionPane.showMessageDialog(this, "Mã Tài Khoản Không Được Vượt Quá 15 Ký Tự.");
-//            return;
-//        }
-        // Tên Tài Khoản
-        if (txt_Ten_TK.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Tên Tài Khoản Không Được Để Trống.");
-            return;
-        }
-        // Số Điện Thoại Tài Khoản
-        if (txt_SDT_TK.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Số Điện Thoại Của Tài Khoản Không Được Để Trống.");
-            return;
-        }
-
-        if (txt_SDT_TK.getText().trim().length() != 10) {
-            JOptionPane.showMessageDialog(this, "Chỉ Được Nhập Số Điện Thoại Có 10 Ký Tự.");
-            return;
-        }
-
-        // Địa Chỉ Tài Khoản
-        if (txt_DiaChi.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Địa Chỉ Không Được Để Trống.");
-            return;
-        }
-
-        // Trạng Thái     
-        if (!rdo_HoatDong.isSelected() && !rdo_KhongHoatDong.isSelected()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn Trạng Thái Tài Khoản.");
-            return; // Thoát không cho thêm nếu chưa chọn
-        }
-    }
-
-    public boolean Check_ThongTin_TK() {
-        if (txt_Ma_TK.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã Tài Khoản không được để trống.");
-            return false;
-        }
-        if (txt_Ten_TK.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Tên Tài Khoản không được để trống.");
-            return false;
-        }
-        if (txt_SDT_TK.getText().trim().isEmpty() || txt_SDT_TK.getText().length() != 10) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại phải gồm đúng 10 chữ số.");
-            return false;
-        }
-        if (txt_Email.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Email không được để trống.");
-            return false;
-        }
-        if (txt_DiaChi.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Địa chỉ không được để trống.");
-            return false;
-        }
-        if (!rdo_HoatDong.isSelected() && !rdo_KhongHoatDong.isSelected()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn trạng thái.");
-            return false;
-        }
-        return true;
-    }
-
     // Thêm Dữ Liệu Tai Khoản
     public void ThemDL_TaiKhoan() {
-        if (!Check_ThongTin_TK()) {
+        // Mã Tài Khoản
+        String Ma_TK = txt_Ma_TK.getText();
+        if (txt_Ma_TK.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⚠ Mã Tài Khoản không được để trống.");
+            return;
+        }
+        // ✅ Kiểm tra độ dài
+        if (Ma_TK.length() < 3) {
+            JOptionPane.showMessageDialog(this, "⚠️ Mã Tài Khoản phải có ít nhất 3 ký tự!");
+            return;
+        }
+        if (Ma_TK.length() > 15) {
+            JOptionPane.showMessageDialog(this, "⚠️ Mã Tài Khoản không được vượt quá 15 ký tự!");
             return;
         }
 
-        String Ma_TK = txt_Ma_TK.getText();
+        // ❌ Kiểm tra trùng mã
+        for (Tai_Khoan tk : qltk.Get_All()) {
+            if (tk.getMa_TK().equalsIgnoreCase(Ma_TK)) {
+                JOptionPane.showMessageDialog(this,
+                        "❌ Mã Tài Khoản Này Đã Tồn Tại! Xin Vui Lòng Nhập Mã Tài Khoản Khác Nhé.",
+                        "Trùng Mã",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+        
+        // Tên Tài Khoản
         String Ten_TK = txt_Ten_TK.getText();
+        if (txt_Ten_TK.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên Tài Khoản không được để trống.");
+            return;
+        }
+        // ✅ Kiểm tra độ dài
+        if (Ten_TK.length() < 5) {
+            JOptionPane.showMessageDialog(this, "⚠️ Tên Tài Khoản phải có ít nhất 5 ký tự!");
+            return;
+        }
+        
+        // Số Điện Thoại Tài Khoản
         String SDT = txt_SDT_TK.getText();
+        if (txt_SDT_TK.getText().trim().isEmpty() || txt_SDT_TK.getText().length() != 10) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải gồm đúng 10 chữ số.");
+            return;
+        }
+        // Email Tài Khoản
         String Email = txt_Email.getText();
+        if (txt_Email.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Email không được để trống.");
+            return;
+        }
+        // Địa Chỉ Của Tài Khoản
         String DiaChi = txt_DiaChi.getText();
+        if (txt_DiaChi.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Địa chỉ không được để trống.");
+            return;
+        }
+        // Ảnh Của Tài Khoản
         String Anh_TK = PathAnh;
 
         // Vai trò là chuỗi: "Nhân Viên" hoặc "Quản Lý"
         String VaiTro = rdo_NhanVien.isSelected() ? "Nhân Viên" : "Quản Lý";
+        if ((!rdo_NhanVien.isSelected() && !rdo_QuanLy.isSelected())) {
+            JOptionPane.showMessageDialog(this, "Vai Trò Của Tài Khoản Không Được Để Trống.");
+            return;
+        }
 
         // Trạng thái boolean từ radio
         boolean TrangThai = rdo_HoatDong.isSelected();
+        if (!rdo_HoatDong.isSelected() && !rdo_KhongHoatDong.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn trạng thái.");
+            return;
+        }
 
         try {
             DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -738,7 +727,6 @@ public class QL_TaiKhoan_TatCaPanel extends javax.swing.JPanel {
 
     private void btn_ThemDLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemDLActionPerformed
         // TODO add your handling code here:
-        Check_Form();
         ThemDL_TaiKhoan();
         FillToTable();
     }//GEN-LAST:event_btn_ThemDLActionPerformed

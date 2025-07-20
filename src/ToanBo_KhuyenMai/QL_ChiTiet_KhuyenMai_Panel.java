@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
 
+    int InDex = -1;
     DefaultTableModel TableMoDel;
     QL_KhuyenMai qlkm = new QL_KhuyenMai();
 
@@ -69,38 +70,65 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
     }
 
     public void TimKiem_KhuyenMai() {
-    String TuKhoa_TK = txt_VuiLongNhap.getText().trim();
-    if (TuKhoa_TK.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập từ khoá tìm kiếm!");
-        return;
-    }
+        String TuKhoa_TK = txt_VuiLongNhap.getText().trim();
+        if (TuKhoa_TK.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập từ khoá tìm kiếm!");
+            return;
+        }
         if ((!rdo_TheoMa.isSelected() && !rdo_TheoTen.isSelected())) {
             JOptionPane.showMessageDialog(this, "Vui Lòng Chọn Kiểu Tìm Kiếm Trước Khi Tìm Kiếm Khuyến Mãi.");
             return;
         }
 
-    List<KhuyenMai> danhSachTim = new ArrayList<>();
+        List<KhuyenMai> danhSachTim = new ArrayList<>();
 
-    if (rdo_TheoMa.isSelected()) {
-        danhSachTim = qlkm.TimKiem_TheoMa(TuKhoa_TK);
-    } else if (rdo_TheoTen.isSelected()) {
-        danhSachTim = qlkm.TimKiem_TheoTen(TuKhoa_TK);
-    } else {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn kiểu tìm kiếm (Mã hoặc Tên).");
-        return;
+        if (rdo_TheoMa.isSelected()) {
+            danhSachTim = qlkm.TimKiem_TheoMa(TuKhoa_TK);
+        } else if (rdo_TheoTen.isSelected()) {
+            danhSachTim = qlkm.TimKiem_TheoTen(TuKhoa_TK);
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn kiểu tìm kiếm (Mã hoặc Tên).");
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tbl_DanhSachKM.getModel();
+        model.setRowCount(0); // Xoá bảng cũ
+
+        for (KhuyenMai km : danhSachTim) {
+            model.addRow(qlkm.GetRow(km));
+        }
+
+        if (danhSachTim.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy khuyến mãi nào phù hợp.");
+        }
     }
 
-    DefaultTableModel model = (DefaultTableModel) tbl_DanhSachKM.getModel();
-    model.setRowCount(0); // Xoá bảng cũ
+    public void ShowDetail() {
+        InDex = tbl_DanhSachKM.getSelectedRow();
+        if (InDex >= 0) {
+            KhuyenMai km = qlkm.Get_All().get(InDex);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    for (KhuyenMai km : danhSachTim) {
-        model.addRow(qlkm.GetRow(km));
+            String info = "🔔 Thông Tin Khuyến Mãi:\n"
+                    + "───────────────────────────────\n"
+                    + "🆔 Mã khuyến mãi: " + km.getMa_KM() + "\n"
+                    + "📛 Tên khuyến mãi: " + km.getTen_KM() + "\n"
+                    + "📦 Hình thức: " + km.getHinhThuc_KM() + "\n"
+                    + "📝 Mô tả: " + km.getMoTa_KM() + "\n"
+                    + "🏆 Điểm yêu cầu: " + km.getDiemYeuCau_KM() + "\n"
+                    + "💸 Giá trị: " + km.getGiaTri_KM() + "\n"
+                    + "📅 Ngày bắt đầu: " + km.getNgay_BD().toLocalDate().format(formatter) + "\n"
+                    + "📅 Ngày kết thúc: " + km.getNgay_KT().toLocalDate().format(formatter) + "\n"
+                    + "📆 Ngày trong tháng: " + km.getNgayTrongThang_KM() + "\n"
+                    + "📋 Điều kiện: " + km.getDieuKien_KM() + "\n"
+                    + "🚦 Trạng thái: " + (km.getTrangThai() ? "Đang hoạt động" : "Không hoạt động");
+
+            JOptionPane.showMessageDialog(this, info, "Chi tiết khuyến mãi", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng dữ liệu!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
-    if (danhSachTim.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Không tìm thấy khuyến mãi nào phù hợp.");
-    }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -287,6 +315,11 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbl_DanhSachKM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_DanhSachKMMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_DanhSachKM);
 
         javax.swing.GroupLayout Panel_DanhSachKMLayout = new javax.swing.GroupLayout(Panel_DanhSachKM);
@@ -297,9 +330,7 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
         );
         Panel_DanhSachKMLayout.setVerticalGroup(
             Panel_DanhSachKMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Panel_DanhSachKMLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -350,6 +381,11 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
         txt_ThoiGian_BD.setText("");
         txt_ThoiGian_KT.setText("");
     }//GEN-LAST:event_btn_LamMoi_LocActionPerformed
+
+    private void tbl_DanhSachKMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_DanhSachKMMouseClicked
+        // TODO add your handling code here:
+        ShowDetail();
+    }//GEN-LAST:event_tbl_DanhSachKMMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -124,7 +124,7 @@
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="txt_NgayBatDau_KM" max="32767" attributes="0"/>
-                      <Component id="txt_NgạyKetThuc_KM" alignment="0" max="32767" attributes="0"/>
+                      <Component id="txt_NgayKetThuc_KM" alignment="0" max="32767" attributes="0"/>
                       <Component id="txt_DieuKien_KM" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -166,7 +166,7 @@
                                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txt_DiemYeuCau_KM" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
@@ -176,7 +176,7 @@
                               <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txt_GiaTri_KM" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txt_NgayTrongThang_KM" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
@@ -196,7 +196,7 @@
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="txt_NgạyKetThuc_KM" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="txt_NgayKetThuc_KM" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -302,7 +302,7 @@
             <Property name="text" type="java.lang.String" value="Ng&#xe0;y K&#x1ebf;t Th&#xfa;c:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txt_Ng&#x1ea1;yKetThuc_KM">
+        <Component class="javax.swing.JTextField" name="txt_NgayKetThuc_KM">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">

@@ -5,10 +5,16 @@
 package ToanBo_NguyenLieu;
 
 import DBConnect.MyConnection;
-import ToanBo_NguyenLieu.NguyenLieu;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
+import javax.swing.JOptionPane;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 /**
  *
@@ -129,5 +135,47 @@ public class QL_NguyenLieu {
         } catch (Exception e) {
         }
         return 0;
+    }
+
+    public List<NguyenLieu> importTuExcel(File fileExcel) {
+        List<NguyenLieu> danhSach = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(fileExcel); Workbook workbook = WorkbookFactory.create(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+                if (row.getRowNum() <= 1) {
+                    continue; // Bỏ dòng tiêu đề
+                }
+                try {
+                    // ✅ Đọc dữ liệu từng ô
+                    String ma = row.getCell(0).getStringCellValue().trim();
+                    String ten = row.getCell(1).getStringCellValue().trim();
+                    int sl = (int) row.getCell(2).getNumericCellValue();
+                    String dvt = row.getCell(3).getStringCellValue().trim();
+                    float gia = (float) row.getCell(4).getNumericCellValue();
+                    String anh = row.getCell(6).getStringCellValue().trim();
+
+                    // ✅ Gán ngày nhập là ngày hệ thống
+                    Date ngayNhap = new java.sql.Date(System.currentTimeMillis());
+
+                    // ✅ Tạo đối tượng & thêm vào CSDL
+                    NguyenLieu nl = new NguyenLieu(ma, ten, dvt, sl, gia, ngayNhap, anh);
+                    Them_NL(nl);
+                    danhSach.add(nl);
+
+                } catch (Exception dongLoi) {
+                    System.out.println("⚠️ Dòng " + (row.getRowNum() + 1) + " lỗi, bỏ qua: " + dongLoi.getMessage());
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "❌ Lỗi khi đọc Excel: " + e.getMessage(),
+                    "Lỗi nhập", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+        return danhSach;
     }
 }

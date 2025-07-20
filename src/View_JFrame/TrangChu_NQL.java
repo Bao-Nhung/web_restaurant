@@ -356,12 +356,12 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private void btn_NguyenLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_NguyenLieuActionPerformed
         // TODO add your handling code here:
         lb_DanhMuc.setText("Quán Lý Nhập Hàng");
-//        QL_NguyenLieu_Panel qlnl_Panel = new QL_NguyenLieu_Panel();
-//        TrangChungChuyen.removeAll();
-//        TrangChungChuyen.setLayout(new BorderLayout());
-//        TrangChungChuyen.add(qlnl_Panel, BorderLayout.CENTER);
-//        TrangChungChuyen.revalidate();
-//        TrangChungChuyen.repaint();
+        QL_NguyenLieu_Panel qlnl_Panel = new QL_NguyenLieu_Panel();
+        TrangChungChuyen.removeAll();
+        TrangChungChuyen.setLayout(new BorderLayout());
+        TrangChungChuyen.add(qlnl_Panel, BorderLayout.CENTER);
+        TrangChungChuyen.revalidate();
+        TrangChungChuyen.repaint();
     }//GEN-LAST:event_btn_NguyenLieuActionPerformed
 
     private void btn_KhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_KhachHangActionPerformed

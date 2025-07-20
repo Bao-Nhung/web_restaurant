@@ -4,12 +4,17 @@
  */
 package ToanBo_KhuyenMai;
 
-import javax.swing.table.DefaultTableModel;
-import ToanBo_KhuyenMai.QL_KhuyenMai;
-import java.sql.Date;
+// 📅 Xử lý ngày tháng
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+// 🗓️ Tương tác với SQL kiểu DATE
+import java.sql.Date;
+
+// 🖥️ Giao diện Swing
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -28,12 +33,6 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
         initComponents();
         Initable();
         FillToTable();
-        txt_NgayBatDau_KM.setEditable(false);
-        LocalDate ngayHienTai = LocalDate.now();
-        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        // Hiển thị vào textField
-        txt_NgayBatDau_KM.setText(ngayHienTai.format(dinhDang));
     }
 
     public void Initable() {
@@ -58,55 +57,218 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
         txt_HinhThuc_KM.setText("");
         txt_DiemYeuCau_KM.setText("");
         txt_GiaTri_KM.setText("");
-
-        LocalDate ngayHienTai = LocalDate.now();
-        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        // Hiển thị vào textField
-        txt_NgayBatDau_KM.setText(ngayHienTai.format(dinhDang));
-
-        txt_NgạyKetThuc_KM.setText("");
+        txt_NgayBatDau_KM.setText("");
+        txt_NgayKetThuc_KM.setText("");
         txt_NgayTrongThang_KM.setText("");
         txt_DieuKien_KM.setText("");
         btg_TrangThai.clearSelection();
     }
 
-    public boolean Check_Form(){
-        String Ma_KM = txt_Ma_KM.getText();
-        String Ten_KM = txt_Ten_KM.getText();
-        String MoTa_KM = txt_MoTa_KM.getText();
-        String HìnhThuc_KM = txt_HinhThuc_KM.getText();
-        int DiemYeuCau = Integer.valueOf(txt_DiemYeuCau_KM.getText());
-        float GiaTri_KM = Float.valueOf(txt_GiaTri_KM.getText());
-        if (txt_Ma_KM.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã Khuyến Mãi Không Được Để Trống.");
-            return false;
-        }
-        
-        return true;
-    }
     public void Them_KM() {
-        String Ma_KM = txt_Ma_KM.getText();
+        // Mã Khuyến Mãi
+        String Ma_KM = txt_Ma_KM.getText().trim();
+
+        // ❌ Không để trống
+        if (Ma_KM.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⛔ Mã Khuyến Mãi không được để trống!");
+            return;
+        }
+
+        // ✅ Kiểm tra độ dài
+        if (Ma_KM.length() < 3) {
+            JOptionPane.showMessageDialog(this, "⚠️ Mã Khuyến Mãi phải có ít nhất 3 ký tự!");
+            return;
+        }
+        if (Ma_KM.length() > 20) {
+            JOptionPane.showMessageDialog(this, "⚠️ Mã Khuyến Mãi không được vượt quá 20 ký tự!");
+            return;
+        }
+
+        // ❌ Kiểm tra trùng mã
+        for (KhuyenMai km : qlkm.Get_All()) {
+            if (km.getMa_KM().equalsIgnoreCase(Ma_KM)) {
+                JOptionPane.showMessageDialog(this,
+                        "❌ Mã Khuyến Mãi này đã tồn tại! Vui lòng chọn mã khác.",
+                        "Trùng mã",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        // Tên Khuyến Mãi
         String Ten_KM = txt_Ten_KM.getText();
+        if (Ten_KM.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên Khuyến Mãi Không Được Để Trống.");
+            return;
+        }
+        // ✅ Kiểm tra độ dài
+        if (Ten_KM.length() < 10) {
+            JOptionPane.showMessageDialog(this, "⚠️ Tên Khuyến Mãi phải có ít nhất 10 ký tự!");
+            return;
+        }
+
+        // Mô Tả Khuyến Mãi
         String MoTa_KM = txt_MoTa_KM.getText();
-        String HìnhThuc_KM = txt_HinhThuc_KM.getText();
-        int DiemYeuCau = Integer.valueOf(txt_DiemYeuCau_KM.getText());
+        if (MoTa_KM.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Mô Tả Của Khuyến Mãi Không Được Để Trống.");
+            return;
+        }
+        // ✅ Kiểm tra độ dài
+        if (MoTa_KM.length() < 15) {
+            JOptionPane.showMessageDialog(this, "⚠️ Mô Tả Khuyến Mãi phải có ít nhất 15 ký tự!");
+            return;
+        }
+
+        // Hình Thức Khuyến Mãi
+        String HinhThuc_KM = txt_HinhThuc_KM.getText();
+        if (HinhThuc_KM.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Hình Thức Khuyến Mãi Không Được Để Trống.");
+            return;
+        }
+        // ✅ Kiểm tra độ dài
+        if (MoTa_KM.length() < 15) {
+            JOptionPane.showMessageDialog(this, "⚠️ Hình Thức Khuyến Mãi phải có ít nhất 15 ký tự!");
+            return;
+        }
+
+        // Điểm Yêu Cầu
+        int DiemYeuCau;
+        if (txt_DiemYeuCau_KM.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Điểm Yêu Khuyến Mãi Không Được Để Trống.");
+            return;
+        }
+        try {
+            DiemYeuCau = Integer.valueOf(txt_DiemYeuCau_KM.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Điểm Yêu Cầu Phải Là Số Nguyên.");
+            return;
+        }
+        if (DiemYeuCau <= 0) {
+            JOptionPane.showMessageDialog(this, "Điểm Yêu Cầu Không Được Bé Hơn 0 Hoặc Bàng Không.");
+            return;
+        }
+
+        // Giá Trị Khuyến Mãi
         float GiaTri_KM = Float.valueOf(txt_GiaTri_KM.getText());
+        if (txt_GiaTri_KM.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Giá Trị Khuyến Mãi Không Được Để Trống.");
+            return;
+        }
+        if (GiaTri_KM <= 0) {
+            JOptionPane.showMessageDialog(this, "Giá Trị Khuyến Mãi Không Phải Là Số Âm.");
+            return;
+        }
 
-        DateTimeFormatter NgayBD = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate ngaybd = LocalDate.parse(txt_NgayBatDau_KM.getText(), NgayBD);
-        Date Ngay_BD_KM = Date.valueOf(ngaybd);
+        // Khai báo pattern và formatter ngay đầu
+        String datePattern = "dd/MM/yyyy";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
 
-        DateTimeFormatter NgayKT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate ngaykt = LocalDate.parse(txt_NgạyKetThuc_KM.getText(), NgayKT);
-        Date Ngay_KT_KM = Date.valueOf(ngaykt);
+        // ➤ Xử lý Ngày Bắt Đầu
+        String ngayBD = txt_NgayBatDau_KM.getText().trim();
+        Date Ngay_BD_KM;
 
-        String NgayTrongThang_KM = txt_NgayTrongThang_KM.getText();
+        if (ngayBD.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⛔ Ngày Bắt Đầu Khuyến Mãi không được để trống!");
+            return;
+        }
+
+        try {
+            LocalDate ngaybd = LocalDate.parse(ngayBD, formatter);
+            Ngay_BD_KM = Date.valueOf(ngaybd);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this,
+                    "⚠️ Vui lòng nhập đúng định dạng ngày: " + datePattern + " (VD: 21/07/2025)",
+                    "Lỗi định dạng",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // ➤ Xử lý Ngày Kết Thúc
+        String ngayKT = txt_NgayKetThuc_KM.getText().trim();
+        Date Ngay_KT_KM;
+
+        if (ngayKT.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⛔ Ngày Kết Thúc Khuyến Mãi không được để trống!");
+            return;
+        }
+
+        try {
+            LocalDate ngaykt = LocalDate.parse(ngayKT, formatter);
+            Ngay_KT_KM = Date.valueOf(ngaykt);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this,
+                    "⚠️ Vui lòng nhập đúng định dạng ngày: " + datePattern + " (VD: 25/07/2025)",
+                    "Lỗi định dạng",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // ✅ Gợi ý kiểm tra thêm: Ngày kết thúc không < ngày bắt đầu
+        if (Ngay_KT_KM.before(Ngay_BD_KM)) {
+            JOptionPane.showMessageDialog(this,
+                    "❌ Ngày Kết Thúc không được sớm hơn Ngày Bắt Đầu!",
+                    "Sai logic thời gian",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Ngày Khuyến Mãi Trong Tháng Nhàm Sẽ Có Một Số Loại Khuyến Mãi Cố Định
+        String NgayTrongThang_KM = txt_NgayTrongThang_KM.getText().trim();
+
+        if (NgayTrongThang_KM.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⛔ Ngày Trong Tháng không được để trống!");
+            return;
+        }
+
+        try {
+            int ngayTrongThang = Integer.parseInt(NgayTrongThang_KM);
+            if (ngayTrongThang < 1 || ngayTrongThang > 31) {
+                JOptionPane.showMessageDialog(this, "⚠️ Ngày Trong Tháng phải nằm trong khoảng từ 1 đến 31!");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "❌ Ngày Trong Tháng phải là số nguyên hợp lệ (VD: 10, 25)!");
+            return;
+        }
+
         String DieuKien_KM = txt_DieuKien_KM.getText();
+        String dieuKien = txt_DieuKien_KM.getText().trim();
 
-        boolean TrangThai = rdo_HoatDong.isSelected();
+        if (dieuKien.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⛔ Điều Kiện Khuyến Mãi không được để trống!");
+            return;
+        }
 
-        KhuyenMai km = new KhuyenMai(Ma_KM, Ten_KM, MoTa_KM, HìnhThuc_KM, DiemYeuCau, GiaTri_KM, Ngay_BD_KM, Ngay_KT_KM, NgayTrongThang_KM, DieuKien_KM, TrangThai);
+        if (dieuKien.length() < 5) {
+            JOptionPane.showMessageDialog(this, "⚠️ Điều Kiện phải rõ ràng hơn (ít nhất 5 ký tự)!");
+            return;
+        }
+
+        // Check Tréo Giữa Thời Gian Bắt Đầu Và Kết Thúc Của Phần Khuyến Mãi
+        LocalDate HomNay = LocalDate.now(); // Ngày hiện tại
+        LocalDate Test_BD = Ngay_BD_KM.toLocalDate();
+        LocalDate Test_KT = Ngay_KT_KM.toLocalDate();
+
+        if (Test_BD.isBefore(HomNay) && Test_KT.isBefore(HomNay)) {
+            JOptionPane.showMessageDialog(this,
+                    "❌ Ngày Bắt Đầu và Ngày Kết Thúc đều đã qua! Vui lòng chọn lại thời gian hợp lệ.",
+                    "Lỗi thời gian khuyến mãi",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Trạng Thái Khuyến Mãi 
+        LocalDate KM_HomNay = LocalDate.now(); // Lấy ngày hôm nay
+        LocalDate bd = Ngay_BD_KM.toLocalDate(); // Chuyển sang LocalDate để so sánh
+
+        boolean TrangThai_KM = !bd.isAfter(KM_HomNay); // Nếu ngày bắt đầu <= hôm nay ➜ hoạt động
+
+        // Gán cho radio button:
+        if (TrangThai_KM) {
+            rdo_HoatDong.setSelected(true);
+        } else {
+            rdo_KhongHoatDong.setSelected(true);
+        }
+
+        KhuyenMai km = new KhuyenMai(Ma_KM, Ten_KM, MoTa_KM, HinhThuc_KM, DiemYeuCau, GiaTri_KM, Ngay_BD_KM, Ngay_KT_KM, NgayTrongThang_KM, DieuKien_KM, TrangThai_KM);
         int ReSult = qlkm.Them_KM(km);
 
         if (ReSult == 1) {
@@ -162,7 +324,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
             Date Ngay_BD_KM = Date.valueOf(ngaybd);
 
             DateTimeFormatter NgayKT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate ngaykt = LocalDate.parse(txt_NgạyKetThuc_KM.getText(), NgayKT);
+            LocalDate ngaykt = LocalDate.parse(txt_NgayKetThuc_KM.getText(), NgayKT);
             Date Ngay_KT_KM = Date.valueOf(ngaykt);
 
             String NgayTrongThang_KM = txt_NgayTrongThang_KM.getText();
@@ -204,7 +366,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
             // Định dạng ngày thành chuỗi dd/MM/yyyy
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             txt_NgayBatDau_KM.setText(km.getNgay_BD().toLocalDate().format(formatter));
-            txt_NgạyKetThuc_KM.setText(km.getNgay_KT().toLocalDate().format(formatter));
+            txt_NgayKetThuc_KM.setText(km.getNgay_KT().toLocalDate().format(formatter));
 
             txt_NgayTrongThang_KM.setText(km.getNgayTrongThang_KM());
             txt_DieuKien_KM.setText(km.getDieuKien_KM());
@@ -242,7 +404,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         txt_NgayBatDau_KM = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txt_NgạyKetThuc_KM = new javax.swing.JTextField();
+        txt_NgayKetThuc_KM = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txt_NgayTrongThang_KM = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -290,7 +452,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
 
         jLabel7.setText("Ngày Kết Thúc:");
 
-        txt_NgạyKetThuc_KM.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txt_NgayKetThuc_KM.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel8.setText("Ngày Trong Tháng:");
 
@@ -363,7 +525,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(NhapThongTin_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txt_NgayBatDau_KM)
-                    .addComponent(txt_NgạyKetThuc_KM)
+                    .addComponent(txt_NgayKetThuc_KM)
                     .addComponent(txt_DieuKien_KM)
                     .addGroup(NhapThongTin_PanelLayout.createSequentialGroup()
                         .addGroup(NhapThongTin_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -395,7 +557,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NhapThongTin_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(txt_HinhThuc_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel3)))
-                        .addGap(18, 18, 18)
+                        .addGap(15, 15, 15)
                         .addGroup(NhapThongTin_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(txt_DiemYeuCau_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -403,7 +565,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
                         .addGroup(NhapThongTin_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(txt_GiaTri_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(NhapThongTin_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(txt_NgayTrongThang_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -420,7 +582,7 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txt_NgạyKetThuc_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_NgayKetThuc_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -610,8 +772,8 @@ public class QL_KhuyenMai_Panel extends javax.swing.JPanel {
     private javax.swing.JTextField txt_Ma_KM;
     private javax.swing.JTextArea txt_MoTa_KM;
     private javax.swing.JTextField txt_NgayBatDau_KM;
+    private javax.swing.JTextField txt_NgayKetThuc_KM;
     private javax.swing.JTextField txt_NgayTrongThang_KM;
-    private javax.swing.JTextField txt_NgạyKetThuc_KM;
     private javax.swing.JTextField txt_Ten_KM;
     // End of variables declaration//GEN-END:variables
 }
