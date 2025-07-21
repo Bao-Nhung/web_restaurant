@@ -83,9 +83,75 @@ public class QL_NguyenLieu_Panel extends javax.swing.JPanel {
 
     public void Them_NL() {
         String Ma_NL = txt_MaNL.getText();
+        // ❌ Không để trống
+        if (Ma_NL.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⛔ Mã Nguyên Liệu không được để trống!");
+            return;
+        }
+        // ✅ Kiểm tra độ dài
+        if (Ma_NL.length() < 3) {
+            JOptionPane.showMessageDialog(this, "⚠️ Mã Nguyên Liệu phải có ít nhất 3 ký tự!");
+            return;
+        }
+        if (Ma_NL.length() > 20) {
+            JOptionPane.showMessageDialog(this, "⚠️ Mã Nguyên Liệu không được vượt quá 20 ký tự!");
+            return;
+        }
+        for (NguyenLieu cnl : qlnl.Get_All()) {
+            if (cnl.getMa_NL().equalsIgnoreCase(Ma_NL)) {
+                JOptionPane.showMessageDialog(this,
+                        "❌ Mã Khuyến Mãi này đã tồn tại! Vui lòng chọn mã khác.",
+                        "Trùng mã",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
         String Ten_NL = txt_TenNL.getText();
-        int Soluong_NL = Integer.valueOf(txt_SoLuong.getText());
+        // Kiểm Tra Để Trống
+        if (Ten_NL.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "⛔ Tên Nguyên Liệu không được để trống!");
+            return;
+        }
+        // ✅ Kiểm tra độ dài
+        if (Ten_NL.trim().length() < 5) {
+            JOptionPane.showMessageDialog(this, "⚠️ Tên Nguyên Liệu phải có ít nhất 5 ký tự!");
+            return;
+        }
+
+        int Soluong_NL;
+        String slText = txt_SoLuong.getText().trim();
+
+        // ?️ Kiểm tra trống
+        if (slText.isEmpty()) {
+            txt_SoLuong.setBackground(java.awt.Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Số Lượng Nguyên Liệu Không Được Để Trống.");
+            return;
+        }
+
+        // 🛡️ Kiểm tra chỉ chứa số nguyên dương (không chữ, không ký tự đặc biệt, không 0)
+        if (!slText.matches("\\d+")) {
+            txt_SoLuong.setBackground(java.awt.Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Số Lượng Phải Là Số Nguyên Dương Không Chứa Ký Tự Đặc Biệt!");
+            return;
+        }
+
+        Soluong_NL = Integer.parseInt(slText);
+        if (Soluong_NL <= 0) {
+            txt_SoLuong.setBackground(java.awt.Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Số Lượng Phải Lớn Hơn 0!");
+            return;
+        }
+        if (Soluong_NL > 10000) {
+            txt_SoLuong.setBackground(java.awt.Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Bạn Đã Nhập Số Lượng Nguyên Liệu Vượt Quá 10000!");
+            return;
+        }
+
+        txt_SoLuong.setBackground(java.awt.Color.WHITE); // ✅ Đúng chuẩn ➜ reset màu
+
         String DonViTinh_NL = txt_DonViTinh.getText();
+
         float GiaNhap_NL = Float.valueOf(txt_GiaNhap.getText());
         DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.parse(txt_NgayNhap.getText(), DinhDang);

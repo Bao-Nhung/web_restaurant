@@ -9,15 +9,18 @@ package ToanBo_SanPham;
  * @author ADMIN
  */
 public class LoaiSanPham {
+
     private String Ma_LSP;
     private String Ten_LSP;
+    private String MoTa_LSP;
 
     public LoaiSanPham() {
     }
 
-    public LoaiSanPham(String Ma_LSP, String Ten_LSP) {
+    public LoaiSanPham(String Ma_LSP, String Ten_LSP, String MoTa_LSP) {
         this.Ma_LSP = Ma_LSP;
         this.Ten_LSP = Ten_LSP;
+        this.MoTa_LSP = MoTa_LSP;
     }
 
     public String getMa_LSP() {
@@ -35,6 +38,13 @@ public class LoaiSanPham {
     public void setTen_LSP(String Ten_LSP) {
         this.Ten_LSP = Ten_LSP;
     }
-    
-    
+
+    public String getMoTa_LSP() {
+        return MoTa_LSP;
+    }
+
+    public void setMoTa_LSP(String MoTa_LSP) {
+        this.MoTa_LSP = MoTa_LSP;
+    }
+
 }

@@ -4,6 +4,8 @@
  */
 package ToanBo_SanPham;
 
+import java.sql.Date;
+
 /**
  *
  * @author ADMIN
@@ -16,11 +18,11 @@ public class SanPham {
     private float DonGia_SP;
     private String Ma_LSP;
     private String HinhAnh_SP;
-
+    private Date NgayTao_SP;
     public SanPham() {
     }
 
-    public SanPham(String Ma_SP, String Ten_SP, String MoTa_SP, int SoLuong_SP, float DonGia_SP, String Ma_LSP, String HinhAnh_SP) {
+    public SanPham(String Ma_SP, String Ten_SP, String MoTa_SP, int SoLuong_SP, float DonGia_SP, String Ma_LSP, String HinhAnh_SP, Date NgayTao_SP) {
         this.Ma_SP = Ma_SP;
         this.Ten_SP = Ten_SP;
         this.MoTa_SP = MoTa_SP;
@@ -28,6 +30,7 @@ public class SanPham {
         this.DonGia_SP = DonGia_SP;
         this.Ma_LSP = Ma_LSP;
         this.HinhAnh_SP = HinhAnh_SP;
+        this.NgayTao_SP = NgayTao_SP;
     }
 
     public String getMa_SP() {
@@ -85,6 +88,13 @@ public class SanPham {
     public void setHinhAnh_SP(String HinhAnh_SP) {
         this.HinhAnh_SP = HinhAnh_SP;
     }
-    
+
+    public Date getNgayTao_SP() {
+        return NgayTao_SP;
+    }
+
+    public void setNgayTao_SP(Date NgayTao_SP) {
+        this.NgayTao_SP = NgayTao_SP;
+    }
     
 }

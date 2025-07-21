@@ -157,6 +157,8 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
         Panel_DanhSachKM = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_DanhSachKM = new javax.swing.JTable();
+        btn_Show_KM = new javax.swing.JButton();
+        btn_Tao_KM = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Nhập Thông Tin Tìm Kiếm Khuyến Mãi"));
 
@@ -326,12 +328,26 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
         Panel_DanhSachKM.setLayout(Panel_DanhSachKMLayout);
         Panel_DanhSachKMLayout.setHorizontalGroup(
             Panel_DanhSachKMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 903, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         Panel_DanhSachKMLayout.setVerticalGroup(
             Panel_DanhSachKMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
         );
+
+        btn_Show_KM.setText("Chi Tiết Khuyến Mãi");
+        btn_Show_KM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Show_KMActionPerformed(evt);
+            }
+        });
+
+        btn_Tao_KM.setText("Tạo Khuyến Mãi");
+        btn_Tao_KM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Tao_KMActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -339,13 +355,19 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Panel_DanhSachKM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Panel_DanhSachKM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btn_Show_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Tao_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,8 +375,13 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(btn_Show_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_Tao_KM, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addComponent(Panel_DanhSachKM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -387,6 +414,14 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
         ShowDetail();
     }//GEN-LAST:event_tbl_DanhSachKMMouseClicked
 
+    private void btn_Show_KMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Show_KMActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_Show_KMActionPerformed
+
+    private void btn_Tao_KMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Tao_KMActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_Tao_KMActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel_DanhSachKM;
@@ -394,6 +429,8 @@ public class QL_ChiTiet_KhuyenMai_Panel extends javax.swing.JPanel {
     private javax.swing.JButton btn_LamMoi_Loc;
     private javax.swing.JButton btn_LamMoi_TimKiem;
     private javax.swing.JButton btn_Loc_KM;
+    private javax.swing.JButton btn_Show_KM;
+    private javax.swing.JButton btn_Tao_KM;
     private javax.swing.JButton btn_TimKiem_KM;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
