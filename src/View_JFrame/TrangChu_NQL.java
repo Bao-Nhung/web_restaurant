@@ -18,20 +18,43 @@ import View_JPanel.ThongKe_ChucNangDoanhThu_Panel;
 import javax.swing.JOptionPane;
 import ToanBo_KhuyenMai.QL_KhuyenMai_Panel;
 import ToanBo_BanHang.QL_BanHang_Panel;
+import ToanBo_KhachHang.QL_KhachHang_TimKiem_Panel;
+import ToanBo_NguyenLieu.QL_ChiTiet_NguyenLieu;
+import ToanBo_TaiKhoan.TaiKhoan_4_O;
+import ToanBo_TaiKhoan.Tai_Khoan;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import ToanBo_TaiKhoan.QL_Login;
 
 /**
  *
  * @author ADMIN
  */
 public class TrangChu_NQL extends javax.swing.JFrame {
-
+//
+//    private TaiKhoan_4_O taiKhoan;
+//    public static Tai_Khoan taiKhoan_NQL;
+//    QL_Login QL_Log = new QL_Login();
     /**
      * Creates new form TrangChu_NQL
      */
-    public TrangChu_NQL() {
+   public TrangChu_NQL() { // TaiKhoan_4_O taiKhoan
+//        this.taiKhoan = taiKhoan;
         initComponents();
         this.setLocationRelativeTo(this);
+//        hienThiThongTinNguoiDung();
     }
+
+//    private void hienThiThongTinNguoiDung() {
+//        String path = taiKhoan.getAnh_TK();
+//        if (path == null || path.isEmpty()) {
+//            path = "src/images/default.png";
+//        }
+//
+//        ImageIcon icon = new ImageIcon(path);
+//        Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+//        lb_HienThiAnh.setIcon(new ImageIcon(img)); // lblAvatar là JLabel đã đặt trong giao diện
+//    }
 
     public void TatCa_VaiTro() {
         QL_TaiKhoan_TatCaPanel qltk_panel = new QL_TaiKhoan_TatCaPanel();
@@ -87,7 +110,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jToggleButton2 = new javax.swing.JToggleButton();
         jPanel4 = new javax.swing.JPanel();
-        lb_HienThiAnh1 = new javax.swing.JLabel();
+        lb_HienThiAnh = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -205,7 +228,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         );
 
         lb_DanhMuc.setFont(new java.awt.Font("Consolas", 1, 24)); // NOI18N
-        lb_DanhMuc.setText("Trang Chủ");
+        lb_DanhMuc.setText("Welcome to  Fake AL Fresco’s");
 
         ChucNangPhu_Panel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Chức Năng Phụ"));
 
@@ -213,7 +236,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         ChucNangPhu_Panel.setLayout(ChucNangPhu_PanelLayout);
         ChucNangPhu_PanelLayout.setHorizontalGroup(
             ChucNangPhu_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 733, Short.MAX_VALUE)
+            .addGap(0, 585, Short.MAX_VALUE)
         );
         ChucNangPhu_PanelLayout.setVerticalGroup(
             ChucNangPhu_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,7 +277,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Tài Khoản"));
 
-        lb_HienThiAnh1.setText("null");
+        lb_HienThiAnh.setText("null");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -262,13 +285,13 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lb_HienThiAnh1, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+                .addComponent(lb_HienThiAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(lb_HienThiAnh1, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                .addComponent(lb_HienThiAnh, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -303,9 +326,9 @@ public class TrangChu_NQL extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(ThanhChucNang_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(lb_DanhMuc, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lb_DanhMuc, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ChucNangPhu_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -358,7 +381,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private void btn_NguyenLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_NguyenLieuActionPerformed
         // TODO add your handling code here:
         lb_DanhMuc.setText("Quán Lý Nhập Hàng");
-        QL_NguyenLieu_Panel qlnl_Panel = new QL_NguyenLieu_Panel();
+        QL_ChiTiet_NguyenLieu qlnl_Panel = new QL_ChiTiet_NguyenLieu();
         TrangChungChuyen.removeAll();
         TrangChungChuyen.setLayout(new BorderLayout());
         TrangChungChuyen.add(qlnl_Panel, BorderLayout.CENTER);
@@ -369,7 +392,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private void btn_KhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_KhachHangActionPerformed
         // TODO add your handling code here:
         lb_DanhMuc.setText("Quán Lý Khách Hàng");
-        QL_KhachHang_Panel qlkh_Panel = new QL_KhachHang_Panel();
+        QL_KhachHang_TimKiem_Panel qlkh_Panel = new QL_KhachHang_TimKiem_Panel();
         TrangChungChuyen.removeAll();
         TrangChungChuyen.setLayout(new BorderLayout());
         TrangChungChuyen.add(qlkh_Panel, BorderLayout.CENTER);
@@ -403,12 +426,12 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         // TODO add your handling code here:
         lb_DanhMuc.setText("Quản Lý Tài Khoản");
 
-//        QL_CNP_TaiKhoan_Panel cnp_Panel = new QL_CNP_TaiKhoan_Panel();
-//        PhanLoai.removeAll();
-//        PhanLoai.setLayout(new BorderLayout());
-//        PhanLoai.add(cnp_Panel, BorderLayout.CENTER);
-//        PhanLoai.revalidate();
-//        PhanLoai.repaint();
+        QL_TaiKhoan_TatCaPanel QL_TK = new QL_TaiKhoan_TatCaPanel();
+        TrangChungChuyen.removeAll();
+        TrangChungChuyen.setLayout(new BorderLayout());
+        TrangChungChuyen.add(QL_TK, BorderLayout.CENTER);
+        TrangChungChuyen.revalidate();
+        TrangChungChuyen.repaint();
     }//GEN-LAST:event_btn_TaiKhoanActionPerformed
 
     private void btn_DangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DangXuatActionPerformed
@@ -460,6 +483,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(TrangChu_NQL.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+//        taiKhoan_NQL = QL_Log.getTaiKhoanTheoEmail(emailDangNhap);
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -488,6 +512,6 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JLabel lb_DanhMuc;
-    private javax.swing.JLabel lb_HienThiAnh1;
+    private javax.swing.JLabel lb_HienThiAnh;
     // End of variables declaration//GEN-END:variables
 }

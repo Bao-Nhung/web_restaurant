@@ -68,7 +68,7 @@ public class QL_NguyenLieu {
     // Hàm Thêm Dữ Liệu Vào Tài Khoản
     public int Them_NL(NguyenLieu nl) {
         String SQL = "INSERT INTO NGUYENLIEU VALUES \n"
-                + "( ?  ,  ?  ,  ?  ,  ?  , ? , ? , ?)"; // Có Hai Cách Giải Quyết Vấn Đề Về Thời Gian Tạo Này
+                + "( ?  ,  ?  ,  ?  ,  ?  , ? , ? , ? )"; // Có Hai Cách Giải Quyết Vấn Đề Về Thời Gian Tạo Này
         // Thứ Nhất Là Dùng Luôn Câu Lệnh SQL Là GETDATE() Còn Cái Này Thì Khả Năng Là Không Nhìn Thấy
         // Hai Là Dùng Code Java Thì Dài Ròng Hơn Nhưng Lại Có Lợi Là Nhìn Thấy Được Ở Ô Thời Gian
         try {
@@ -79,8 +79,8 @@ public class QL_NguyenLieu {
             pstm.setString(3, nl.getDonViTinh_NL());
             pstm.setInt(4, nl.getSoLuongTon_NL());
             pstm.setFloat(5, nl.getGiaNhap_NL());
-            pstm.setDate(7, nl.getNgayNhap_NL());
-            pstm.setString(8, nl.getAnh_NL());
+            pstm.setDate(6, nl.getNgayNhap_NL());
+            pstm.setString(7, nl.getAnh_NL());
             if (pstm.executeUpdate() > 0) {
                 System.out.println("Them Nguyen Lieu. Connect");
                 return 1;
@@ -125,9 +125,9 @@ public class QL_NguyenLieu {
             pstm.setString(3, nl.getDonViTinh_NL());
             pstm.setInt(4, nl.getSoLuongTon_NL());
             pstm.setFloat(5, nl.getGiaNhap_NL());
-            pstm.setDate(7, nl.getNgayNhap_NL());
-            pstm.setString(8, nl.getAnh_NL());
-            pstm.setString(9, TheoMa);
+            pstm.setDate(6, nl.getNgayNhap_NL());
+            pstm.setString(7, nl.getAnh_NL());
+            pstm.setString(8, TheoMa);
             if (pstm.executeUpdate() > 0) {
                 System.out.println("Sua Du Lieu Nguyen Lieu. Connect");
                 return 1;

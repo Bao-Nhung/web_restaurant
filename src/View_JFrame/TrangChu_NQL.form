@@ -30,13 +30,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="ThanhChucNang_Panel" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="lb_DanhMuc" min="-2" pref="363" max="-2" attributes="0"/>
+                      <Component id="lb_DanhMuc" min="-2" pref="425" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="ChucNangPhu_Panel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="TrangChungChuyen" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -249,7 +249,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Consolas" size="24" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Trang Ch&#x1ee7;"/>
+        <Property name="text" type="java.lang.String" value="Welcome to  Fake AL Fresco&#x2019;s"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="ChucNangPhu_Panel">
@@ -268,7 +268,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="733" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="585" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -375,7 +375,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lb_HienThiAnh1" pref="104" max="32767" attributes="0"/>
+                      <Component id="lb_HienThiAnh" pref="104" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -383,14 +383,14 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="lb_HienThiAnh1" pref="125" max="32767" attributes="0"/>
+                      <Component id="lb_HienThiAnh" pref="125" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lb_HienThiAnh1">
+            <Component class="javax.swing.JLabel" name="lb_HienThiAnh">
               <Properties>
                 <Property name="text" type="java.lang.String" value="null"/>
               </Properties>

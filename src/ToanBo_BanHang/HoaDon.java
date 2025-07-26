@@ -18,11 +18,11 @@ public class HoaDon {
     private String Ma_KM;
     private float SoTienKhachTra_HD;
     private String Ma_KH;
-
+    private int TichDiem;
     public HoaDon() {
     }
 
-    public HoaDon(String Ma_HD, String Ma_TK, Date NgayLap_HD, float TongTien, String HinhThuc_HD, String TrangThai, String Ma_KM, float SoTienKhachTra_HD, String Ma_KH) {
+    public HoaDon(String Ma_HD, String Ma_TK, Date NgayLap_HD, float TongTien, String HinhThuc_HD, String TrangThai, String Ma_KM, float SoTienKhachTra_HD, String Ma_KH, int TichDiem) {
         this.Ma_HD = Ma_HD;
         this.Ma_TK = Ma_TK;
         this.NgayLap_HD = NgayLap_HD;
@@ -32,9 +32,8 @@ public class HoaDon {
         this.Ma_KM = Ma_KM;
         this.SoTienKhachTra_HD = SoTienKhachTra_HD;
         this.Ma_KH = Ma_KH;
+        this.TichDiem = TichDiem;
     }
-
-    
 
     public String getMa_HD() {
         return Ma_HD;
@@ -106,6 +105,14 @@ public class HoaDon {
 
     public void setMa_KH(String Ma_KH) {
         this.Ma_KH = Ma_KH;
+    }
+
+    public int getTichDiem() {
+        return TichDiem;
+    }
+
+    public void setTichDiem(int TichDiem) {
+        this.TichDiem = TichDiem;
     }
     
 }

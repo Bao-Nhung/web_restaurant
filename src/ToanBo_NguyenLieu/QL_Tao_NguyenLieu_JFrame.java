@@ -19,11 +19,12 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+import java.awt.Color;
 /**
  *
  * @author ADMIN
@@ -40,6 +41,14 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
      */
     public QL_Tao_NguyenLieu_JFrame() {
         initComponents();
+        Initable();
+        FillToTable();
+        LocalDate ngayHienTai = LocalDate.now();
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Hiển thị vào textField
+        txt_NgayNhap.setText(ngayHienTai.format(dinhDang));
+        txt_NgayNhap.setEnabled(false);
     }
 
     public void Initable() {
@@ -64,7 +73,7 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
         txt_DonViTinh.setText("");
         txt_GiaNhap.setText("");
         LocalDate ngayHienTai = LocalDate.now();
-        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Hiển thị vào textField
         txt_NgayNhap.setText(ngayHienTai.format(dinhDang));
@@ -77,39 +86,53 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
         String Ma_NL = txt_MaNL.getText();
         // ❌ Không để trống
         if (Ma_NL.isEmpty()) {
+            txt_MaNL.setBackground(java.awt.Color.red);
             JOptionPane.showMessageDialog(this, "⛔ Mã Nguyên Liệu không được để trống!");
             return;
         }
         // ✅ Kiểm tra độ dài
         if (Ma_NL.length() < 3) {
+            txt_MaNL.setBackground(java.awt.Color.red);
             JOptionPane.showMessageDialog(this, "⚠️ Mã Nguyên Liệu phải có ít nhất 3 ký tự!");
             return;
         }
         if (Ma_NL.length() > 20) {
+            txt_MaNL.setBackground(java.awt.Color.red);
             JOptionPane.showMessageDialog(this, "⚠️ Mã Nguyên Liệu không được vượt quá 20 ký tự!");
             return;
         }
         for (NguyenLieu cnl : qlnl.Get_All()) {
             if (cnl.getMa_NL().equalsIgnoreCase(Ma_NL)) {
+                txt_MaNL.setBackground(java.awt.Color.red);
                 JOptionPane.showMessageDialog(this,
-                        "❌ Mã Khuyến Mãi này đã tồn tại! Vui lòng chọn mã khác.",
+                        "❌ Mã Nguyên Liệu Này Đã Tồn Tại! Vui Lòng Nhập Mã Nguyên Liệu  Khách.",
                         "Trùng mã",
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
+        txt_MaNL.setBackground(java.awt.Color.WHITE);
 
         String Ten_NL = txt_TenNL.getText();
         // Kiểm Tra Để Trống
         if (Ten_NL.isEmpty()) {
+            txt_TenNL.setBackground(java.awt.Color.red);
             JOptionPane.showMessageDialog(this, "⛔ Tên Nguyên Liệu không được để trống!");
             return;
         }
         // ✅ Kiểm tra độ dài
         if (Ten_NL.trim().length() < 5) {
+            txt_TenNL.setBackground(java.awt.Color.red);
             JOptionPane.showMessageDialog(this, "⚠️ Tên Nguyên Liệu phải có ít nhất 5 ký tự!");
             return;
         }
+
+        if (Ten_NL.length() > 100) {
+            txt_MaNL.setBackground(java.awt.Color.red);
+            JOptionPane.showMessageDialog(this, "⚠️ Tên Nguyên Liệu không được vượt quá 100 ký tự!");
+            return;
+        }
+        txt_TenNL.setBackground(java.awt.Color.WHITE);
 
         int Soluong_NL;
         String slText = txt_SoLuong.getText().trim();
@@ -131,13 +154,13 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
             Soluong_NL = Integer.parseInt(slText);
         } catch (Exception e) {
             txt_SoLuong.setBackground(java.awt.Color.red);
-            JOptionPane.showMessageDialog(this, "❌Phần Số Lượng Nguyên Liệu Vui Lòng Nhập Số Nguyên Nhé.");
+            JOptionPane.showMessageDialog(this, "❌ Số Lượng Nguyên Liệu Phải Là Số Nguyên!");
             return;
         }
 
         if (Soluong_NL <= 0) {
             txt_SoLuong.setBackground(java.awt.Color.RED);
-            JOptionPane.showMessageDialog(this, "❌ Số Lượng Phải Lớn Hơn 0!");
+            JOptionPane.showMessageDialog(this, "❌ Số Lượng Nguyên Liệu Phải Lớn Hơn 0!");
             return;
         }
         if (Soluong_NL > 10000) {
@@ -150,12 +173,15 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
 
         String DonViTinh_NL = txt_DonViTinh.getText();
         if (DonViTinh_NL.isEmpty()) {
+            txt_DonViTinh.setBackground(java.awt.Color.red);
             JOptionPane.showMessageDialog(this, "Phần Đon Vị Tính Của Nguyên Liệu Vui Lòng Không Để Trống.");
             return;
         }
+        txt_DonViTinh.setBackground(java.awt.Color.WHITE);
 
         float GiaNhap_NL = Float.valueOf(txt_GiaNhap.getText());
         if (txt_GiaNhap.getText().isEmpty()) {
+            txt_DonViTinh.setBackground(java.awt.Color.red);
             JOptionPane.showMessageDialog(this, "Phần Giá Nhập Của Nguyên Liệu Vui Lòng Không Được Để Trống.");
             return;
         }
@@ -165,10 +191,16 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "❌ Giá Nhập Nguyên Liệu Phải Lớn Hơn 0!");
             return;
         }
-        DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(txt_NgayNhap.getText(), DinhDang);
         Date NgayDK = Date.valueOf(localDate);
         String Anh_NL = PathAnh;
+        if (PathAnh.isEmpty()) {
+            lb_HienAnh.setBackground(java.awt.Color.red);
+            JOptionPane.showMessageDialog(this, "Ảnh Nguyên Liệu Không ĐƯợc Để Trống.");
+            return;
+        }
+        lb_HienAnh.setBackground(java.awt.Color.WHITE);
 
         NguyenLieu nl = new NguyenLieu(Ma_NL, Ten_NL, DonViTinh_NL, Soluong_NL, GiaNhap_NL, NgayDK, Anh_NL);
         int ReSult = qlnl.Them_NL(nl);
@@ -180,6 +212,7 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
                     + "\n Đơn Vị Tính: " + DonViTinh_NL
                     + "\n Giá Nhập Nguyên Liệu: " + GiaNhap_NL
                     + "\n Thành Công.");
+            FillToTable();
         } else {
             JOptionPane.showMessageDialog(this, "Thêm Nguyên Liệu Thất Bại.");
             return;
@@ -187,30 +220,113 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
     }
 
     public void Sua_NL() {
-        Index = tbl_NguyenLieu.getSelectedRow();
-        if (Index >= 0) {
-            String Ma_NL = txt_MaNL.getText();
-            String Ten_NL = txt_TenNL.getText();
-            int Soluong_NL = Integer.valueOf(txt_SoLuong.getText());
-            String DonViTinh_NL = txt_DonViTinh.getText();
-            float GiaNhap_NL = Float.valueOf(txt_GiaNhap.getText());
-            DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate localDate = LocalDate.parse(txt_NgayNhap.getText(), DinhDang);
-            Date NgayDK = Date.valueOf(localDate);
-            String Anh_NL = PathAnh;
+        int index = tbl_NguyenLieu.getSelectedRow();
+        if (index < 0) {
+            JOptionPane.showMessageDialog(this, "⛔ Vui lòng chọn nguyên liệu để sửa.");
+            return;
+        }
 
-            NguyenLieu nl = new NguyenLieu(Ma_NL, Ten_NL, DonViTinh_NL, Soluong_NL, GiaNhap_NL, NgayDK, Anh_NL);
+        // 🧠 Mã nguyên liệu
+        String Ma_NL = txt_MaNL.getText().trim();
+        if (Ma_NL.isEmpty() || Ma_NL.length() < 3 || Ma_NL.length() > 20) {
+            txt_MaNL.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Mã nguyên liệu phải từ 3 đến 20 ký tự.");
+            return;
+        }
+        txt_MaNL.setBackground(Color.WHITE);
 
-            String TheoMa = qlnl.Get_All().get(Index).getMa_NL();
-            int ReSult = qlnl.Sua_NL(nl, TheoMa);
-            if (ReSult == 1) {
-                JOptionPane.showMessageDialog(this, "Sửa Thông Tin Nguyên Liệu Thành Công.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Sửa Thông Tin Nguyên Liệu Thất Bại");
+        // 🧠 Tên nguyên liệu
+        String Ten_NL = txt_TenNL.getText().trim();
+        if (Ten_NL.isEmpty() || Ten_NL.length() < 5 || Ten_NL.length() > 100) {
+            txt_TenNL.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Tên nguyên liệu phải từ 5 đến 100 ký tự.");
+            return;
+        }
+        txt_TenNL.setBackground(Color.WHITE);
+
+        // 🧠 Số lượng
+        String slText = txt_SoLuong.getText().trim();
+        int SoLuong_NL;
+        if (slText.isEmpty() || !slText.matches("\\d+")) {
+            txt_SoLuong.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Số lượng phải là số nguyên dương.");
+            return;
+        }
+        SoLuong_NL = Integer.parseInt(slText);
+        if (SoLuong_NL <= 0 || SoLuong_NL > 10000) {
+            txt_SoLuong.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Số lượng phải từ 1 đến 10.000.");
+            return;
+        }
+        txt_SoLuong.setBackground(Color.WHITE);
+
+        // 🧠 Đơn vị tính
+        String DonViTinh_NL = txt_DonViTinh.getText().trim();
+        if (DonViTinh_NL.isEmpty()) {
+            txt_DonViTinh.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Đơn vị tính không được để trống.");
+            return;
+        }
+        txt_DonViTinh.setBackground(Color.WHITE);
+
+        // 🧠 Giá nhập
+        String giaNhapStr = txt_GiaNhap.getText().trim();
+        float GiaNhap_NL;
+        if (giaNhapStr.isEmpty()) {
+            txt_GiaNhap.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Giá nhập không được để trống.");
+            return;
+        }
+        try {
+            GiaNhap_NL = Float.parseFloat(giaNhapStr);
+            if (GiaNhap_NL <= 0) {
+                txt_GiaNhap.setBackground(Color.RED);
+                JOptionPane.showMessageDialog(this, "❌ Giá nhập phải lớn hơn 0.");
                 return;
             }
+        } catch (NumberFormatException e) {
+            txt_GiaNhap.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Giá nhập không hợp lệ.");
+            return;
+        }
+        txt_GiaNhap.setBackground(Color.WHITE);
+
+        // 🧠 Ngày nhập
+        String chuoiNgay = txt_NgayNhap.getText().trim();
+        Date NgayNhap_NL;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localDate = LocalDate.parse(chuoiNgay, formatter);
+            NgayNhap_NL = Date.valueOf(localDate);
+        } catch (Exception e) {
+            txt_NgayNhap.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Ngày nhập không hợp lệ. Định dạng cần là yyyy-MM-dd.");
+            return;
+        }
+        txt_NgayNhap.setBackground(Color.WHITE);
+
+        // 🧠 Ảnh nguyên liệu
+        if (PathAnh == null || PathAnh.isEmpty()) {
+            lb_HienAnh.setBackground(Color.RED);
+            JOptionPane.showMessageDialog(this, "❌ Vui lòng chọn ảnh nguyên liệu.");
+            return;
+        }
+        lb_HienAnh.setBackground(Color.WHITE);
+
+        // 🏗️ Tạo đối tượng và xử lý cập nhật
+        NguyenLieu nl = new NguyenLieu(Ma_NL, Ten_NL, DonViTinh_NL, SoLuong_NL, GiaNhap_NL, NgayNhap_NL, PathAnh);
+        String MaCu = qlnl.Get_All().get(index).getMa_NL();
+        int result = qlnl.Sua_NL(nl, MaCu);
+
+        if (result == 1) {
+            FillToTable();
+            JOptionPane.showMessageDialog(this,
+                    "✅ Sửa nguyên liệu thành công!\n"
+                    + "• Mã cũ: " + MaCu + "\n"
+                    + "• Mã mới: " + Ma_NL + "\n"
+                    + "• Tên mới: " + Ten_NL);
         } else {
-            JOptionPane.showMessageDialog(this, "Vui Lòng Chọn Nguyên Liệu Trong Bảng Để Sửa.");
+            JOptionPane.showMessageDialog(this, "❌ Sửa thất bại. Vui lòng kiểm tra lại!");
         }
     }
 
@@ -225,6 +341,7 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
             if (Choice == JOptionPane.YES_OPTION) {
                 int Result = qlnl.Xoa_NL(TheoMa);
                 if (Result == 1) {
+                    FillToTable();
                     JOptionPane.showMessageDialog(this, "Xoá Nguyên Liệu:"
                             + "\n Mã Nguyên Liệu: " + TheoMa
                             + "\n Tên Nguyên Liệu: " + Ten
@@ -241,16 +358,54 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
     }
 
     public void ShowDetail() {
-        Index = tbl_NguyenLieu.getSelectedRow();
-        if (Index >= 0) {
-            NguyenLieu nl = qlnl.Get_All().get(Index);
-            txt_MaNL.setText(nl.getMa_NL());
-            txt_TenNL.setText(nl.getTen_NL());
-            txt_SoLuong.setText(String.valueOf(nl.getSoLuongTon_NL()));
-            txt_DonViTinh.setText(nl.getDonViTinh_NL());
-            txt_GiaNhap.setText(String.valueOf(nl.getGiaNhap_NL()));
-            txt_NgayNhap.setText(String.valueOf(nl.getNgayNhap_NL()));
-            lb_HienAnh.setText(nl.getAnh_NL());
+        int Index = tbl_NguyenLieu.getSelectedRow();
+        if (Index < 0) {
+            return;
+        }
+
+        NguyenLieu nl = qlnl.Get_All().get(Index);
+
+        // ✏️ Gán dữ liệu cơ bản vào các ô
+        txt_MaNL.setText(nl.getMa_NL());
+        txt_TenNL.setText(nl.getTen_NL());
+        txt_SoLuong.setText(String.valueOf(nl.getSoLuongTon_NL()));
+        txt_DonViTinh.setText(nl.getDonViTinh_NL());
+        txt_GiaNhap.setText(String.valueOf(nl.getGiaNhap_NL()));
+
+        // 📅 Format ngày nhập
+        Date ngayNhap = nl.getNgayNhap_NL();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        txt_NgayNhap.setText(ngayNhap != null ? sdf.format(ngayNhap) : "Chưa có");
+
+        // 🖼️ Hiển thị ảnh nguyên liệu
+        String path = nl.getAnh_NL();
+        if (path != null && !path.isEmpty()) {
+            File file = new File(path);
+            if (file.exists()) {
+                ImageIcon icon = new ImageIcon(path);
+                Image img = icon.getImage().getScaledInstance(
+                        lb_HienAnh.getWidth(),
+                        lb_HienAnh.getHeight(),
+                        Image.SCALE_SMOOTH
+                );
+                lb_HienAnh.setIcon(new ImageIcon(img));
+                lb_HienAnh.setText("");
+            } else {
+                lb_HienAnh.setIcon(null);
+                lb_HienAnh.setText("Ảnh không tồn tại");
+            }
+        } else {
+            lb_HienAnh.setIcon(null);
+            lb_HienAnh.setText("Chưa có ảnh");
+        }
+
+        // ✅ Reset màu các ô nhập
+        JTextField[] fields = {
+            txt_MaNL, txt_TenNL, txt_SoLuong,
+            txt_DonViTinh, txt_GiaNhap, txt_NgayNhap
+        };
+        for (JTextField f : fields) {
+            f.setBackground(java.awt.Color.WHITE);
         }
     }
 
@@ -269,7 +424,7 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
 
             // 📋 Header (dòng 1)
             Row header = sheet.createRow(1);
-            String[] cot = {"Mã NL", "Tên NL", "Số Lượng", "Đơn Vị Tính", "Giá Nhập", "Ngày Nhập", "Ảnh NL"};
+            String[] cot = {"Mã NL", "Tên NL", "Đơn Vị Tính", "Số Lượng", "Giá Nhập", "Ngày Nhập", "Ảnh NL"};
             for (int i = 0; i < cot.length; i++) {
                 header.createCell(i).setCellValue(cot[i]);
             }
@@ -312,7 +467,7 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
         model.setRowCount(0);
 
         for (NguyenLieu nl : ds) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String ngayNhapStr = (nl.getNgayNhap_NL() != null)
                     ? sdf.format(nl.getNgayNhap_NL())
                     : "Chưa có";

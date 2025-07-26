@@ -6,6 +6,7 @@ package ToanBo_TaiKhoan;
 
 import DBConnect.MyConnection;
 import ToanBo_TaiKhoan.Tai_Khoan;
+import ToanBo_TaiKhoan.TaiKhoan_4_O;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -47,4 +48,26 @@ public class QL_Login {
             return null; // Lỗi kết nối
         }
     }
+    
+    public TaiKhoan_4_O getTaiKhoanTheoEmail(String Email) {
+        String sql = "SELECT EMAIL , MA_TK , VAITRO , ANH_TK FROM TAIKHOAN WHERE EMAIL =   ?  ";
+        TaiKhoan_4_O tk = null;
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement ps = conect.prepareStatement(sql);
+            ps.setString(1, Email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                tk = new TaiKhoan_4_O();
+                tk.setEmail_TK(rs.getString("EMAIL"));
+                tk.setMa_TK(rs.getString("MA_TK"));
+                tk.setVaiTro_TK(rs.getString("VAITRO"));
+                tk.setAnh_TK(rs.getString("ANH_TK"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tk;
+    }
+
 }

@@ -89,4 +89,8 @@ public class NguyenLieu {
         this.Anh_NL = Anh_NL;
     }
 
+    @Override
+    public String toString() {
+        return Ten_NL + " - " + Ma_NL;
+    }
 }

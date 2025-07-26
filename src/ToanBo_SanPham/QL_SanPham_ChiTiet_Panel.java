@@ -10,6 +10,7 @@ import ToanBo_SanPham.QL_Tao_SanPham;
 import ToanBo_SanPham.LoaiSanPham;
 import ToanBo_SanPham.SanPham;
 import java.util.List;
+
 /**
  *
  * @author ADMIN
@@ -33,7 +34,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
 
     public void Initable_LSP() {
         TableModel = new DefaultTableModel();
-        String[] cols = {"Mã Loại Sản Phẩm", "Tên Loại Sản Phẩm" , "Mô Tả Loại Sản Phẩm"};
+        String[] cols = {"Mã Loại Sản Phẩm", "Tên Loại Sản Phẩm", "Mô Tả Loại Sản Phẩm"};
         TableModel.setColumnIdentifiers(cols);
         tbl_LoaiSanPham.setModel(TableModel);
     }
@@ -48,7 +49,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
 
     public void Initable_SP() {
         TableModel = new DefaultTableModel();
-        String[] cols = {"Mã SP", "Tên SP", "Mô Tả SP", "Số Lượng " , "Đơn Giá", "Mã Loại SP", "Hình Ảnh"};
+        String[] cols = {"Mã SP", "Tên SP", "Mô Tả SP", "Số Lượng ", "Đơn Giá", "Mã Loại SP", "Hình Ảnh"};
         TableModel.setColumnIdentifiers(cols);
         tbl_SanPham.setModel(TableModel);
     }
@@ -60,16 +61,16 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
             TableModel.addRow(qlsp.GetRow_SP(sp));
         }
     }
-    
-    public void loadSanPhamTheoLoai(String maLSP) {
-    DefaultTableModel model = (DefaultTableModel) tbl_SanPham.getModel();
-    model.setRowCount(0); // Xóa dữ liệu cũ
 
-    List<SanPham> ds = qlsp.getSanPhamTheoLoai(maLSP);
-    for (SanPham sp : ds) {
-        model.addRow(qlsp.GetRow_SP(sp));
+    public void loadSanPhamTheoLoai(String maLSP) {
+        DefaultTableModel model = (DefaultTableModel) tbl_SanPham.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+        List<SanPham> ds = qlsp.getSanPhamTheoLoai(maLSP);
+        for (SanPham sp : ds) {
+            model.addRow(qlsp.GetRow_SP(sp));
+        }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,6 +81,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btg_LSP = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -101,13 +103,14 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tbl_SanPham = new javax.swing.JTable();
         btn_Reset = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btn_Tao_LSP = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
+        btn_Tao_SP = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Chức Năng Tìm Kiếm Sản Phẩm"));
 
@@ -171,8 +174,10 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
 
         jLabel4.setText("Kiểu Tìm Kiếm: ");
 
+        btg_LSP.add(jRadioButton3);
         jRadioButton3.setText("Theo Tên Loại Sản Phẩm");
 
+        btg_LSP.add(jRadioButton4);
         jRadioButton4.setText("Theo Mã Loại Sản Phẩm");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -279,7 +284,12 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
         btn_Reset.setText("Reset");
         btn_Reset.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jButton4.setText("Tạo Loại Sản Phẩm");
+        btn_Tao_LSP.setText("Tạo Loại Sản Phẩm");
+        btn_Tao_LSP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Tao_LSPActionPerformed(evt);
+            }
+        });
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Lọc Sản Phẩm"));
 
@@ -328,6 +338,13 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
+        btn_Tao_SP.setText("Tạo Sản Phẩm");
+        btn_Tao_SP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_Tao_SPActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -339,15 +356,16 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btn_Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btn_Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btn_Tao_LSP, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btn_Tao_SP, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -355,23 +373,23 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(22, Short.MAX_VALUE))))
+                        .addGap(0, 16, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_Reset, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Tao_LSP, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_Tao_SP, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -393,13 +411,30 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tbl_LoaiSanPhamMouseClicked
 
+    private void btn_Tao_LSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Tao_LSPActionPerformed
+        // TODO add your handling code here:
+        QL_Tao_LoaiSanPham_JFrame ql_Tao_LSP = new QL_Tao_LoaiSanPham_JFrame();
+        ql_Tao_LSP.setVisible(true);
+        ql_Tao_LSP.setLocationRelativeTo(null); // Căn giữa màn hình
+
+    }//GEN-LAST:event_btn_Tao_LSPActionPerformed
+
+    private void btn_Tao_SPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Tao_SPActionPerformed
+        // TODO add your handling code here:
+        QL_SanPham_Tao_JFrame QL_Tao_SP = new QL_SanPham_Tao_JFrame();
+        QL_Tao_SP.setVisible(true);
+        QL_Tao_SP.setLocationRelativeTo(null); // Căn giữa màn hình
+    }//GEN-LAST:event_btn_Tao_SPActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup btg_LSP;
     private javax.swing.JButton btn_Reset;
+    private javax.swing.JButton btn_Tao_LSP;
+    private javax.swing.JButton btn_Tao_SP;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

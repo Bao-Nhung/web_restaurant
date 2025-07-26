@@ -6,6 +6,8 @@ package View_JFrame;
 
 import javax.swing.ImageIcon;
 import ToanBo_TaiKhoan.QL_Login;
+import ToanBo_TaiKhoan.Tai_Khoan;
+import ToanBo_TaiKhoan.TaiKhoan_4_O;
 import javax.swing.JOptionPane;
 import View_JFrame.TrangChu_NQL;
 import View_JFrame.TrangChu_NV;
@@ -37,10 +39,11 @@ public class Login extends javax.swing.JFrame {
         String Ma_TK = txt_NhapMK.getText().trim();
 
         String vaiTro = qllg.login(Email, Ma_TK);
+//        TaiKhoan_4_O taiKhoan = qllg.getTaiKhoanTheoEmail(Email);
         int Choice = JOptionPane.showConfirmDialog(this, "Bạn Có Xác Nhận Đăng Nhập Với:"
                 + "\n Mật Khẩu: " + Ma_TK
-                + "\n Email: " + Email 
-                + "\n Hay Không ?", "Xác Nhận Đăng Nhập." , JOptionPane.YES_NO_OPTION);
+                + "\n Email: " + Email
+                + "\n Hay Không ?", "Xác Nhận Đăng Nhập.", JOptionPane.YES_NO_OPTION);
         if (Choice == JOptionPane.YES_OPTION) {
             if (vaiTro != null) {
                 JOptionPane.showMessageDialog(this,
@@ -68,6 +71,23 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }
+
+//    public void Test() {
+//        
+//        TaiKhoan_4_O taiKhoan = dao.getTaiKhoanTheoEmail(Email);
+//
+//        if (vaiTro != null) {
+//            switch (vaiTro) {
+//                case "Quản Lý":
+//                    new TrangChu_NQL(taiKhoan).setVisible(true);
+//                    break;
+//                case "Nhân Viên":
+//                    new TrangChu_NV(taiKhoan).setVisible(true);
+//                    break;
+//            }
+//            this.dispose();
+//        }
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
