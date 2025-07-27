@@ -101,6 +101,8 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         btn_KhachHang = new javax.swing.JButton();
         btn_ThongKeDoanhThu = new javax.swing.JButton();
         btn_KhuyenMai = new javax.swing.JButton();
+        btn_ThongKeDoanhThu1 = new javax.swing.JButton();
+        btn_BanHang1 = new javax.swing.JButton();
         TrangChungChuyen = new javax.swing.JPanel();
         lb_DanhMuc = new javax.swing.JLabel();
         ChucNangPhu_Panel = new javax.swing.JPanel();
@@ -113,6 +115,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         lb_HienThiAnh = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
 
         ThanhChucNang_Panel.setBackground(new java.awt.Color(255, 255, 255));
@@ -175,6 +178,22 @@ public class TrangChu_NQL extends javax.swing.JFrame {
             }
         });
 
+        btn_ThongKeDoanhThu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/History.png"))); // NOI18N
+        btn_ThongKeDoanhThu1.setText("Lịch Sử Hoạt Động");
+        btn_ThongKeDoanhThu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ThongKeDoanhThu1ActionPerformed(evt);
+            }
+        });
+
+        btn_BanHang1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Ke_Hang.png"))); // NOI18N
+        btn_BanHang1.setText("Kệ Hàng");
+        btn_BanHang1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_BanHang1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ThanhChucNang_PanelLayout = new javax.swing.GroupLayout(ThanhChucNang_Panel);
         ThanhChucNang_Panel.setLayout(ThanhChucNang_PanelLayout);
         ThanhChucNang_PanelLayout.setHorizontalGroup(
@@ -189,8 +208,10 @@ public class TrangChu_NQL extends javax.swing.JFrame {
                     .addComponent(btn_TaiKhoan, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
                     .addComponent(btn_KhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_ThongKeDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_KhuyenMai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(btn_KhuyenMai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_ThongKeDoanhThu1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_BanHang1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(9, 9, 9))
         );
         ThanhChucNang_PanelLayout.setVerticalGroup(
             ThanhChucNang_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,8 +220,10 @@ public class TrangChu_NQL extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_BanHang, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_NguyenLieu, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_BanHang1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_NguyenLieu, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btn_SanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_KhuyenMai, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -208,9 +231,11 @@ public class TrangChu_NQL extends javax.swing.JFrame {
                 .addComponent(btn_TaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_KhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_ThongKeDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_ThongKeDoanhThu1)
+                .addContainerGap())
         );
 
         TrangChungChuyen.setBackground(new java.awt.Color(255, 255, 255));
@@ -230,6 +255,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         lb_DanhMuc.setFont(new java.awt.Font("Consolas", 1, 24)); // NOI18N
         lb_DanhMuc.setText("Welcome to  Fake AL Fresco’s");
 
+        ChucNangPhu_Panel.setBackground(new java.awt.Color(255, 255, 255));
         ChucNangPhu_Panel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Chức Năng Phụ"));
 
         javax.swing.GroupLayout ChucNangPhu_PanelLayout = new javax.swing.GroupLayout(ChucNangPhu_Panel);
@@ -457,6 +483,14 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         TrangChungChuyen.repaint();
     }//GEN-LAST:event_btn_KhuyenMaiActionPerformed
 
+    private void btn_ThongKeDoanhThu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThongKeDoanhThu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ThongKeDoanhThu1ActionPerformed
+
+    private void btn_BanHang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BanHang1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_BanHang1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -499,6 +533,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private javax.swing.JPanel ThanhChucNang_Panel;
     private javax.swing.JPanel TrangChungChuyen;
     private javax.swing.JButton btn_BanHang;
+    private javax.swing.JButton btn_BanHang1;
     private javax.swing.JButton btn_DangXuat;
     private javax.swing.JButton btn_KhachHang;
     private javax.swing.JButton btn_KhuyenMai;
@@ -506,6 +541,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
     private javax.swing.JButton btn_SanPham;
     private javax.swing.JButton btn_TaiKhoan;
     private javax.swing.JButton btn_ThongKeDoanhThu;
+    private javax.swing.JButton btn_ThongKeDoanhThu1;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;

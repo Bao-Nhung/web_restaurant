@@ -6,10 +6,12 @@ package ToanBo_SanPham;
 
 import DBConnect.MyConnection;
 import ToanBo_SanPham.SanPham;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -70,10 +72,38 @@ public class QL_Tao_SanPham {
         return new Object[]{Ma_SP, Ten_SP, MoTa_SP, SoLuong_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTaoStr};
     }
 
+    public ImageIcon resizeImage(String path) {
+        ImageIcon icon = new ImageIcon(path);
+        Image img = icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        return new ImageIcon(img);
+    }
+
+    public Object[] GetRow_SP_Anh(SanPham sp) {
+        String Ma_SP = sp.getMa_SP();
+        String Ten_SP = sp.getTen_SP();
+        String MoTa_SP = sp.getMoTa_SP();
+        int SoLuong_SP = sp.getSoLuong_SP();
+        float DonGia_SP = sp.getDonGia_SP();
+        String Ma_LSP = sp.getMa_LSP();
+        String HinhAnh_SP = sp.getHinhAnh_SP();
+
+        Date NgayTao_SP = sp.getNgayTao_SP();
+        String NgayTaoStr = "NULL";
+
+        // ✅ Định dạng ngày tạo nếu có
+        if (NgayTao_SP != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            NgayTaoStr = sdf.format(NgayTao_SP);
+        }
+        ImageIcon icon = resizeImage(sp.getHinhAnh_SP());
+        // ✅ Trả về Object[] gọn gàng
+        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, SoLuong_SP, DonGia_SP, Ma_LSP, icon, NgayTaoStr};
+    }
+
     // Hàm Thêm Dữ Liệu Vào Tài Khoản
     public int Them_TK(SanPham sp) {
         String SQL = "INSERT INTO SANPHAM  VALUES\n"
-                + "(  ?  ,   ?  ,  ?  ,  ?  ,  ?  , ?  , ? , ?)"; 
+                + "(  ?  ,   ?  ,  ?  ,  ?  ,  ?  , ?  , ? , ?)";
         try {
             Connection Connect = conn.DBConnect();
             PreparedStatement pstm = Connect.prepareStatement(SQL);
@@ -143,6 +173,7 @@ public class QL_Tao_SanPham {
                 return 1;
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return 0;
     }

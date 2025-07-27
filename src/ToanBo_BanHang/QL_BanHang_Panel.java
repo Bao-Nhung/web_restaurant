@@ -15,6 +15,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
 import ToanBo_KhachHang.QL_KhachHang;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
@@ -22,9 +26,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -87,8 +96,41 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
         txt_Ten_KH.setEditable(false);
         // Phần Số Tiền Cần Trả Lại Cho Khách
         txt_SoTien_CanTraLai.setEditable(false);
-
+        // Tìm Kiếm Khách Hàng
         TK();
+        // Chỉnh Ảnh TRong Bảng Cho Đẹp
+        Chinh_Bang();
+        tbl_DanhSach_SP.setBackground(new Color(245, 245, 245));
+        tbl_DanhSach_SP.setForeground(Color.BLACK);
+        tbl_DanhSach_SP.setGridColor(new Color(200, 200, 200));
+        tbl_DanhSach_SP.setSelectionBackground(new Color(30, 144, 255));
+        tbl_DanhSach_SP.setSelectionForeground(Color.WHITE);
+        tbl_DanhSach_SP.setRowHeight(30);
+
+        JTableHeader header = tbl_DanhSach_SP.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        header.setBackground(new Color(230, 230, 230));
+        header.setForeground(Color.DARK_GRAY);
+    }
+
+    public void Chinh_Bang() {
+        TableColumn imageColumn = tbl_DanhSach_SP.getColumnModel().getColumn(2); // Index cột ảnh
+
+        imageColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel label = new JLabel();
+                if (value instanceof ImageIcon) {
+                    label.setIcon((ImageIcon) value);
+                } else {
+                    label.setText("Không có ảnh");
+                }
+                label.setHorizontalAlignment(JLabel.CENTER);
+                return label;
+            }
+        });
     }
 
     public void Initable_HD() {
@@ -123,7 +165,7 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
     public void FillToTable_SP() {
         TableModel.setRowCount(0);
         for (SanPham sp : QL_Tao_SP.GetAll_SP()) {
-            TableModel.addRow(QL_Tao_SP.GetRow_SP(sp));
+            TableModel.addRow(QL_Tao_SP.GetRow_SP_Anh(sp));
         }
     }
 

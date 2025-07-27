@@ -39,7 +39,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
         FillToTable_SP();
 
         LocalDate ngayHienTai = LocalDate.now();
-        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Hiển thị vào textField
         txt_NgayTao_SP.setText(ngayHienTai.format(dinhDang));
@@ -73,22 +73,108 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
         FillToTable_SP();
         txt_NgayTao_SP.setText("");
         LocalDate ngayHienTai = LocalDate.now();
-        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // Hiển thị vào textField
         txt_NgayTao_SP.setText(ngayHienTai.format(dinhDang));
     }
 
     public void Them_SP() {
+        // Mã Sản Phẩm
         String Ma_SP = txt_Ma_SP.getText();
+        if (Ma_SP.isEmpty()) { // Kiểm Tra Nhập Trống
+            JOptionPane.showMessageDialog(this, "Mã Sản Phẩm Không Được Để Trống.");
+            return;
+        }
+
+        if (Ma_SP.trim().length() <= 3) {
+            JOptionPane.showMessageDialog(this, "Mã Sản Phẩm Phải Nhập Trên 3 Ký Tự.");
+            return;
+        }
+        if (Ma_SP.trim().length() > 100) {
+            JOptionPane.showMessageDialog(this, "Mã Sản Phẩm Không Được Nhập Quá 100 Ký Tự.");
+            return;
+        }
+        // Tên Sản Phẩm 
         String Ten_SP = txt_Ten_SP.getText();
+        if (Ten_SP.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên Sản Phẩm Không Được Để Trống.");
+            return;
+        }
+        if (Ten_SP.trim().length() < 5) {
+            JOptionPane.showMessageDialog(this, "Tên Sản Phẩm Phải Nhập Trên 5 Ký Tự.");
+            return;
+        }
+        if (Ten_SP.trim().length() > 100) {
+            JOptionPane.showMessageDialog(this, "Tên Sản Phẩm Không Được Vượt Quá 100 Ký Tự.");
+            return;
+        }
+        // Mô Tả Sản Phẩm
         String MoTa_SP = txt_MoTa_SP.getText();
-        int SoLuong_SP = Integer.parseInt(txt_SoLuong_SP.getText());
-        float DonGia_SP = Float.valueOf(txt_DonGia_SP.getText());
+        if (MoTa_SP.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Mô Tả Sản Phẩm Không Được Để Trống");
+            return;
+        }
+        if (MoTa_SP.trim().length() < 5) {
+            JOptionPane.showMessageDialog(this, "Mô Tả Sản Phẩm Phải Nhập Ít Nhất 5 Ký Tự.");
+            return;
+        }
+        // Số Lượng Sản Phẩm Không Được Để Trống
+        int SoLuong_SP;
+        if (txt_SoLuong_SP.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Số Lượng Sản Phẩm Không Được Để Trống.");
+            return;
+        }
+        try {
+            SoLuong_SP = Integer.parseInt(txt_SoLuong_SP.getText());
+            if (SoLuong_SP <= 0) {
+                JOptionPane.showMessageDialog(this, "Số Lượng Không Được Nhập Số Âm Và Só 0.");
+                return;
+            }
+            if (SoLuong_SP > 10000) {
+                JOptionPane.showMessageDialog(this, "Số Lượng Không Được Vượt Quá 10000.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Số Lượng Phải Là Số Nguyên Dương, Không Chứa Chữ Và Ký Tự Đặc Biệt.");
+            return;
+        }
+
+        // Đơn Giá Sản Phẩm
+        float DonGia_SP;
+        if (txt_DonGia_SP.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Đơn Giá Không Được Để Trống.");
+            return;
+        }
+
+        try {
+            DonGia_SP = Float.parseFloat(txt_DonGia_SP.getText());
+            if (DonGia_SP <= 0) {
+                JOptionPane.showMessageDialog(this, "Đơn Giá Không Được Nhập Số Âm Và Số 0.");
+                return;
+            }
+            if (DonGia_SP > 1000000) {
+                JOptionPane.showMessageDialog(this, "Đơn Giá Không Được Vượt Quá 1 Triệu.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Đơn Giá Phải Là Số Hợp Lệ, Không Được Nhập Chữ Và Ký Tự Đặc Biệt.");
+            return;
+        }
+        // Mã Loại Sản Phẩm
         String Ma_LSP = txt_MaLSP.getText();
+        if (Ma_LSP.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Mã Loại Sản Phẩm Không Được Để Trống.");
+            return;
+        }
+        // Ảnh Sản Phẩm
         String Anh_SP = PathAnh;
+        if (Anh_SP.equals("NULL") || Anh_SP.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ảnh Sản Phẩm Không Được Để Trống.");
+            return;
+        }
         // Khai báo pattern và formatter ngay đầu
-        String datePattern = "dd/MM/yyyy";
+        String datePattern = "yyyy-MM-dd";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
 
         // ➤ Xử lý Ngày Bắt Đầu
@@ -105,7 +191,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
             Ngay_Tao_SP = Date.valueOf(ngaybd);
         } catch (DateTimeParseException e) {
             JOptionPane.showMessageDialog(this,
-                    "⚠️ Vui lòng nhập đúng định dạng ngày: " + datePattern + " (VD: 21/07/2025)",
+                    "⚠️ Vui lòng nhập đúng định dạng ngày: " + datePattern + " (VD: 2025-07-21)",
                     "Lỗi định dạng",
                     JOptionPane.ERROR_MESSAGE);
             return;
@@ -131,7 +217,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
             String Ma_LSP = txt_MaLSP.getText();
             String Anh_SP = PathAnh;
 
-            DateTimeFormatter NgayTao = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter NgayTao = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate ngaytao = LocalDate.parse(txt_NgayTao_SP.getText(), NgayTao);
             Date Ngay_Tao_SP = Date.valueOf(ngaytao);
 
@@ -194,7 +280,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
             // Thay phần xử lý ngày tạo bằng đoạn này:
             // Thay phần xử lý ngày tạo bằng đoạn này:
             Date ngayTao = sp.getNgayTao_SP();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String ngayTaoStr = (ngayTao != null) ? sdf.format(ngayTao) : "NULL";
             txt_NgayTao_SP.setText(ngayTaoStr);
         }
@@ -238,7 +324,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
         btn_Xoa_SP = new javax.swing.JButton();
         btn_Xoa_SP1 = new javax.swing.JButton();
         btn_Xoa_SP2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btn_DongTrang = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -510,10 +596,10 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
                 .addGap(14, 14, 14))
         );
 
-        jButton1.setText("Đóng Trang");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btn_DongTrang.setText("Đóng Trang");
+        btn_DongTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_DongTrangActionPerformed(evt);
             }
         });
 
@@ -531,7 +617,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btn_DongTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -547,7 +633,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(191, 191, 191)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btn_DongTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -605,10 +691,10 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_Xoa_SP2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btn_DongTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DongTrangActionPerformed
         // TODO add your handling code here:
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btn_DongTrangActionPerformed
 
     /**
      * @param args the command line arguments
@@ -649,13 +735,13 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
     private javax.swing.JPanel ChucNangChinh_Panel;
     private javax.swing.JPanel NhapThongTin_Panel;
     private javax.swing.JButton btn_ChonAnh;
+    private javax.swing.JButton btn_DongTrang;
     private javax.swing.JButton btn_LamMoi;
     private javax.swing.JButton btn_Sua_SP;
     private javax.swing.JButton btn_Them_SP;
     private javax.swing.JButton btn_Xoa_SP;
     private javax.swing.JButton btn_Xoa_SP1;
     private javax.swing.JButton btn_Xoa_SP2;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
