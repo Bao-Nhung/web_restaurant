@@ -178,4 +178,31 @@ public class QL_NguyenLieu {
 
         return danhSach;
     }
+
+    public List<NguyenLieu> Loc_NL(Date ThoiGian_BD, Date ThoiGian_KT) {
+        List<NguyenLieu> List_NL = new ArrayList<>();
+        String SQL = "SELECT * FROM NGUYENLIEU WHERE NGAYNHAP >= ? AND NGAYNHAP <= ?";
+        try {
+            Connection connect = conn.DBConnect(); // 
+            PreparedStatement pstm = connect.prepareStatement(SQL);
+            pstm.setDate(1, ThoiGian_BD);
+            pstm.setDate(2, ThoiGian_KT);
+
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                String Ma_NL = rs.getString(1);
+                String Ten_NL = rs.getString(2);
+                String DonViTinh_NL = rs.getString(3);
+                int SoLuongTon_NL = rs.getInt(4);
+                float GiaNhap_NL = rs.getFloat(5);
+                Date Ngay_Nhap_NL = rs.getDate(6);
+                String Anh_NL = rs.getString(7);
+                NguyenLieu nl = new NguyenLieu(Ma_NL, Ten_NL, DonViTinh_NL, SoLuongTon_NL, GiaNhap_NL, Ngay_Nhap_NL, Anh_NL);
+                List_NL.add(nl);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // hoặc log ra file/log view
+        }
+        return List_NL;
+    }
 }

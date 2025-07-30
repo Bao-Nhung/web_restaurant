@@ -306,4 +306,82 @@ public class QL_KhuyenMai {
         }
         return null;
     }
+
+    // Lấy 4 ô
+    public List<KhuyenMai_4_O> TK_KhuyenMai(String tuKhoa) {
+        List<KhuyenMai_4_O> list_KM = new ArrayList<>();
+        String SQL = "SELECT MA_KM, TENKM, DIEUKIEN, GIATRI FROM KHUYENMAI WHERE MA_KM LIKE ? OR TENKM LIKE ?";
+
+        try {
+            Connection con = conn.DBConnect();
+            PreparedStatement ps = con.prepareStatement(SQL);
+            ps.setString(1, "%" + tuKhoa + "%");
+            ps.setString(2, "%" + tuKhoa + "%");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String ma = rs.getString("MA_KM");
+                String ten = rs.getString("TENKM");
+                String dieuKien = rs.getString("DIEUKIEN");
+                float giaTri = rs.getFloat("GIATRI");
+                KhuyenMai_4_O km_4o = new KhuyenMai_4_O(ma, ten, dieuKien, giaTri);
+                list_KM.add(km_4o);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list_KM;
+    }
+
+    public List<KhuyenMai_4_O> getKhuyenMaiTheoMa(String tuKhoa) {
+        List<KhuyenMai_4_O> ds = new ArrayList<>();
+        String sql = "SELECT MA_KM, TENKM, DIEUKIEN, GIATRI "
+                + "FROM KHUYENMAI "
+                + "WHERE MA_KM LIKE ? OR TENKM LIKE ? "
+                + "ORDER BY TENKM ASC";
+
+        try (Connection con = conn.DBConnect(); PreparedStatement pst = con.prepareStatement(sql)) {
+
+            String keyword = "%" + tuKhoa + "%";
+            pst.setString(1, keyword);
+            pst.setString(2, keyword);
+
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                KhuyenMai_4_O km = new KhuyenMai_4_O(
+                        rs.getString("MA_KM"),
+                        rs.getString("TENKM"),
+                        rs.getString("DIEUKIEN"),
+                        rs.getFloat("GIATRI")
+                );
+                ds.add(km);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ds;
+    }
+
+    public List<KhuyenMai_4_O> LayThongtin_KM() {
+        List<KhuyenMai_4_O> List_ds = new ArrayList<>();
+        String SQL = "SELECT MA_KM, TEN_KM, DIEUKIEN, GIATRI FROM KHUYENMAI";
+
+        try {
+            Connection con = conn.DBConnect();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(SQL);
+            while (rs.next()) {
+                String ma = rs.getString("MA_KM");
+                String ten = rs.getString("TEN_KM");
+                String dieuKien = rs.getString("DIEUKIEN");
+                float giaTri = rs.getFloat("GIATRI");
+
+                List_ds.add(new KhuyenMai_4_O(ma, ten, dieuKien, giaTri));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return List_ds;
+    }
+
 }

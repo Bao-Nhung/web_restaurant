@@ -36,12 +36,12 @@ public class QL_Tao_SanPham {
                 String Ma_SP = rs.getString(1);
                 String Ten_SP = rs.getString(2);
                 String MoTa_SP = rs.getString(3);
-                int SoLuong_SP = rs.getInt(4);
-                float DonGia_SP = rs.getFloat(5);
-                String Ma_LSP = rs.getString(6);
-                String HinhAnh_SP = rs.getString(7);
-                Date NgayTao_SP = rs.getDate(8);
-                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, SoLuong_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP);
+                float DonGia_SP = rs.getFloat(4);
+                String Ma_LSP = rs.getString(5);
+                String HinhAnh_SP = rs.getString(6);
+                Date NgayTao_SP = rs.getDate(7);
+                String TrangThai_SP = rs.getString(8);
+                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP , TrangThai_SP);
                 List_SP.add(sp);
             }
         } catch (Exception e) {
@@ -54,7 +54,6 @@ public class QL_Tao_SanPham {
         String Ma_SP = sp.getMa_SP();
         String Ten_SP = sp.getTen_SP();
         String MoTa_SP = sp.getMoTa_SP();
-        int SoLuong_SP = sp.getSoLuong_SP();
         float DonGia_SP = sp.getDonGia_SP();
         String Ma_LSP = sp.getMa_LSP();
         String HinhAnh_SP = sp.getHinhAnh_SP();
@@ -64,12 +63,12 @@ public class QL_Tao_SanPham {
 
         // ✅ Định dạng ngày tạo nếu có
         if (NgayTao_SP != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             NgayTaoStr = sdf.format(NgayTao_SP);
         }
-
+        String TrangThai_SP = sp.getTrangThai_SP();
         // ✅ Trả về Object[] gọn gàng
-        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, SoLuong_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTaoStr};
+        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTaoStr , TrangThai_SP};
     }
 
     public ImageIcon resizeImage(String path) {
@@ -82,7 +81,6 @@ public class QL_Tao_SanPham {
         String Ma_SP = sp.getMa_SP();
         String Ten_SP = sp.getTen_SP();
         String MoTa_SP = sp.getMoTa_SP();
-        int SoLuong_SP = sp.getSoLuong_SP();
         float DonGia_SP = sp.getDonGia_SP();
         String Ma_LSP = sp.getMa_LSP();
         String HinhAnh_SP = sp.getHinhAnh_SP();
@@ -92,32 +90,33 @@ public class QL_Tao_SanPham {
 
         // ✅ Định dạng ngày tạo nếu có
         if (NgayTao_SP != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             NgayTaoStr = sdf.format(NgayTao_SP);
         }
         ImageIcon icon = resizeImage(sp.getHinhAnh_SP());
+        
+        String TrangThai_SP = sp.getTrangThai_SP();
         // ✅ Trả về Object[] gọn gàng
-        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, SoLuong_SP, DonGia_SP, Ma_LSP, icon, NgayTaoStr};
+        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, icon, NgayTaoStr , TrangThai_SP};
     }
 
     // Hàm Thêm Dữ Liệu Vào Tài Khoản
     public int Them_TK(SanPham sp) {
         String SQL = "INSERT INTO SANPHAM  VALUES\n"
-                + "(  ?  ,   ?  ,  ?  ,  ?  ,  ?  , ?  , ? , ?)";
+                + "(  ?  ,   ?  ,  ?  ,  ?  ,  ?  , ?  , ? , ? , ? )";
         try {
             Connection Connect = conn.DBConnect();
             PreparedStatement pstm = Connect.prepareStatement(SQL);
             pstm.setString(1, sp.getMa_SP());
             pstm.setString(2, sp.getTen_SP());
             pstm.setString(3, sp.getMoTa_SP());
-            pstm.setInt(4, sp.getSoLuong_SP());
-            pstm.setFloat(5, sp.getDonGia_SP());
-            pstm.setString(6, sp.getMa_LSP());
-            pstm.setString(7, sp.getHinhAnh_SP());
+            pstm.setFloat(4, sp.getDonGia_SP());
+            pstm.setString(5, sp.getMa_LSP());
+            pstm.setString(6, sp.getHinhAnh_SP());
             // ✅ Chuyển java.util.Date ➜ java.sql.Date
             java.sql.Date sqlNgayTao = new java.sql.Date(sp.getNgayTao_SP().getTime());
-            pstm.setDate(8, sqlNgayTao);
-
+            pstm.setDate(7, sqlNgayTao);
+            pstm.setString(8, sp.getTrangThai_SP());
             if (pstm.executeUpdate() > 0) {
                 System.out.println("Them San Pham. Connect");
                 return 1;
@@ -149,11 +148,11 @@ public class QL_Tao_SanPham {
         String SQL = "UPDATE SANPHAM SET MA_SP = ? ,\n"
                 + "                      TENSP =  ? ,\n"
                 + "		         MOTA = ? ,\n"
-                + "                      SOLUONG = ? ,\n"
                 + "			 DONGIA =  ? ,\n"
                 + "			 MA_LOAI =  ? ,\n"
                 + "			 HINHANH =  ? ,\n"
-                + "			 NGAYTAO =  ? \n"
+                + "			 NGAYTAO =  ? ,\n"
+                + "                      TRANGTHAI = ? \n"
                 + "			 WHERE MA_SP = ? ";
         try {
             Connection Connect = conn.DBConnect();
@@ -161,13 +160,14 @@ public class QL_Tao_SanPham {
             pstm.setString(1, sp.getMa_SP());
             pstm.setString(2, sp.getTen_SP());
             pstm.setString(3, sp.getMoTa_SP());
-            pstm.setInt(4, sp.getSoLuong_SP());
-            pstm.setFloat(5, sp.getDonGia_SP());
-            pstm.setString(6, sp.getMa_LSP());
-            pstm.setString(7, sp.getHinhAnh_SP());
+            pstm.setFloat(4, sp.getDonGia_SP());
+            pstm.setString(5, sp.getMa_LSP());
+            pstm.setString(6, sp.getHinhAnh_SP());
             java.sql.Date sqlNgayTao = new java.sql.Date(sp.getNgayTao_SP().getTime());
-            pstm.setDate(8, sqlNgayTao);
+            pstm.setDate(7, sqlNgayTao);
+            pstm.setString(8, sp.getTrangThai_SP());
             pstm.setString(9, TheoMa);
+            
             if (pstm.executeUpdate() > 0) {
                 System.out.println("Sua Du Lieu San Pham. Connect");
                 return 1;
@@ -192,12 +192,12 @@ public class QL_Tao_SanPham {
                 String Ma_SP = rs.getString(1);
                 String Ten_SP = rs.getString(2);
                 String MoTa_SP = rs.getString(3);
-                int SoLuong_SP = rs.getInt(4);
                 float DonGia_SP = rs.getFloat(5);
                 String Ma_LSP = rs.getString(6);
                 String HinhAnh_SP = rs.getString(7);
                 Date NgayTao_SP = rs.getDate(8);
-                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, SoLuong_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP);
+                String TrangThai_SP = rs.getString(9);
+                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP , TrangThai_SP);
                 List_SP.add(sp);
             }
         } catch (Exception e) {

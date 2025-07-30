@@ -5,9 +5,11 @@
 package ToanBo_SanPham;
 
 import DBConnect.MyConnection;
+import java.lang.System.Logger;
 import java.util.List;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  *
@@ -100,5 +102,52 @@ public class QL_Tao_LoaiSanPham {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public List<Loai_SP_2O> TimKiemTheo_Loai_SP(String tuKhoa) {
+        List<Loai_SP_2O> ds = new ArrayList<>();
+        String SQL = "SELECT MA_LOAI , TENLOAI  FROM LOAISANPHAM WHERE MA_LOAI LIKE ? OR TENLOAI LIKE ? ";
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement ps = conect.prepareStatement(SQL);
+            ps.setString(1, "%" + tuKhoa + "%");
+            ps.setString(2, "%" + tuKhoa + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Loai_SP_2O kh = new Loai_SP_2O(
+                        rs.getString("MA_LOAI"),
+                        rs.getString("TENLOAI")
+                );
+                ds.add(kh);
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi tìm kiếm KH: " + e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(QL_Tao_LoaiSanPham.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ds;
+    }
+    
+    public Loai_SP_2O timKHTheoMa(String Theo_Ma_LSP) {
+        String sql = "SELECT MA_LOAI , TENLOAI FROM LOAISANPHAM WHERE MA_LOAI = ?";
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement ps = conect.prepareStatement(sql);
+            ps.setString(1, Theo_Ma_LSP);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Loai_SP_2O(
+                        rs.getString("MA_LOAI"),
+                        rs.getString("TENLOAI")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi tìm KH theo mã: " + e.getMessage());
+        } catch (ClassNotFoundException ex) { 
+            java.util.logging.Logger.getLogger(QL_Tao_LoaiSanPham.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

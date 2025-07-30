@@ -158,7 +158,7 @@ public class QL_KhachHang {
         return 0;
     }
 
-    public List<KhachHang_4_O> timKiemTheoTaiKhoan(String tuKhoa) {
+    public List<KhachHang_4_O> TimKiemTheo_KhachHang(String tuKhoa) {
         List<KhachHang_4_O> ds = new ArrayList<>();
         String SQL = "SELECT MA_KH, HOTEN, SDT, DIEM_TICHLUY FROM KHACHHANG WHERE MA_KH LIKE ? OR HOTEN LIKE ? OR SDT LIKE ?";
         try {

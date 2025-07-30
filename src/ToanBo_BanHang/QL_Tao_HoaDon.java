@@ -23,15 +23,6 @@ public class QL_Tao_HoaDon {
         conn = new MyConnection();
 
     }
-//    private String Ma_HD;
-//    private String Ma_TK;
-//    private Date NgayLap_HD;
-//    private float TongTien;
-//    private String HinhThuc_HD;
-//    private String TrangThai;
-//    private String Ma_KM;
-//    private float SoTienKhachTra_HD;
-//    private String Ma_KH;
 
     public List<HoaDon> Get_All_HoaDon() {
         List<HoaDon> List_HD = new ArrayList<>();
@@ -77,7 +68,7 @@ public class QL_Tao_HoaDon {
 
     public int Tao_HD(HoaDon hd) {
         String SQL = "INSERT INTO HoaDon (MA_HD, MA_TK, NGAYLAP, TONGTIEN, HINHTHUC_HD, TRANGTHAI, MA_KM, SOTIEN_KHACHTRA, MA_KH, TICHDIEM) "
-                   + "VALUES             (  ?  ,   ?  ,    ?   ,     ?   ,     ?      ,     ?    ,   ?  ,       ?        ,    ? ,    ?     )";
+                + "VALUES             (  ?  ,   ?  ,    ?   ,     ?   ,     ?      ,     ?    ,   ?  ,       ?        ,    ? ,    ?     )";
         try {
             Connection connect = conn.DBConnect();
             PreparedStatement pstm = connect.prepareStatement(SQL);
@@ -137,5 +128,48 @@ public class QL_Tao_HoaDon {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public List<ShowDetail_BanHang> Get_SHOWCT_ByMaHD(String maHD) {
+        List<ShowDetail_BanHang> List_ShowDetail = new ArrayList<>();
+        String SQL = "SELECT hd.MA_HD, \n"
+                + " hd.MA_TK, \n"
+                + " hd.NGAYLAP, \n"
+                + " hd.TONGTIEN, \n"
+                + " hd.HINHTHUC_HD, \n "
+                + " hd.TRANGTHAI, \n"
+                + " hd.MA_KM, \n"
+                + " hd.SOTIEN_KHACHTRA, \n"
+                + " hd.MA_KH, \n"
+                + " kh.HOTEN, \n"
+                + " kh.DIEM_TICHLUY, \n"
+                + " hd.TICHDIEM \n"
+                + "FROM HOADON hd JOIN KHACHHANG kh ON hd.MA_KH = kh.MA_KH WHERE hd.MA_HD = ? \n";
+        try {
+            Connection connect = conn.DBConnect();
+            PreparedStatement pst = connect.prepareStatement(SQL);
+            pst.setString(1, maHD);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                // Lấy dữ liệu như trước
+                String Ma_HD = rs.getString(1);
+                String Ma_TK = rs.getString(2);
+                Date NgayLap_HD = rs.getDate(3);
+                float TongTien = rs.getFloat(4);
+                String HinhThuc_HD = rs.getString(5);
+                String TrangThai = rs.getString(6);
+                String Ma_KM = rs.getString(7);
+                float SoTienKhachTra_HD = rs.getFloat(8);
+                String Ma_KH = rs.getString(9);
+                String Ten_KH = rs.getString(10);
+                int DiemTichLuy = rs.getInt(11);
+                int TichDiem = rs.getInt(12);
+                ShowDetail_BanHang shbh = new ShowDetail_BanHang(Ma_HD, Ma_TK, NgayLap_HD, TongTien, HinhThuc_HD, TrangThai, Ma_KM, SoTienKhachTra_HD, Ma_KH, Ten_KH, DiemTichLuy, TichDiem);
+                List_ShowDetail.add(shbh);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return List_ShowDetail;
     }
 }

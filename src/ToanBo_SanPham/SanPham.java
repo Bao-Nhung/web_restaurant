@@ -14,23 +14,23 @@ public class SanPham {
     private String Ma_SP;
     private String Ten_SP;
     private String MoTa_SP;
-    private int SoLuong_SP;
     private float DonGia_SP;
     private String Ma_LSP;
     private String HinhAnh_SP;
     private Date NgayTao_SP;
+    private String TrangThai_SP;
     public SanPham() {
     }
 
-    public SanPham(String Ma_SP, String Ten_SP, String MoTa_SP, int SoLuong_SP, float DonGia_SP, String Ma_LSP, String HinhAnh_SP, Date NgayTao_SP) {
+    public SanPham(String Ma_SP, String Ten_SP, String MoTa_SP, float DonGia_SP, String Ma_LSP, String HinhAnh_SP, Date NgayTao_SP, String TrangThai_SP) {
         this.Ma_SP = Ma_SP;
         this.Ten_SP = Ten_SP;
         this.MoTa_SP = MoTa_SP;
-        this.SoLuong_SP = SoLuong_SP;
         this.DonGia_SP = DonGia_SP;
         this.Ma_LSP = Ma_LSP;
         this.HinhAnh_SP = HinhAnh_SP;
         this.NgayTao_SP = NgayTao_SP;
+        this.TrangThai_SP = TrangThai_SP;
     }
 
     public String getMa_SP() {
@@ -55,14 +55,6 @@ public class SanPham {
 
     public void setMoTa_SP(String MoTa_SP) {
         this.MoTa_SP = MoTa_SP;
-    }
-
-    public int getSoLuong_SP() {
-        return SoLuong_SP;
-    }
-
-    public void setSoLuong_SP(int SoLuong_SP) {
-        this.SoLuong_SP = SoLuong_SP;
     }
 
     public float getDonGia_SP() {
@@ -95,6 +87,14 @@ public class SanPham {
 
     public void setNgayTao_SP(Date NgayTao_SP) {
         this.NgayTao_SP = NgayTao_SP;
+    }
+
+    public String getTrangThai_SP() {
+        return TrangThai_SP;
+    }
+
+    public void setTrangThai_SP(String TrangThai_SP) {
+        this.TrangThai_SP = TrangThai_SP;
     }
     
 }

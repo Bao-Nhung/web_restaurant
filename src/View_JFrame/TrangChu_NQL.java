@@ -4,27 +4,17 @@
  */
 package View_JFrame;
 
-import ToanBo_KhachHang.QL_KhachHang_Panel;
 import ToanBo_KhuyenMai.QL_ChiTiet_KhuyenMai_Panel;
-import View_JPanel.ChucNang_PhuDoanhThu;
 import ToanBo_TaiKhoan.QL_TaiKhoan_TatCaPanel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_NhanVien_Panel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_QuanLy_Panel;
 import View_JPanel.QL_ThongKe_DoanhThu_Panel;
 import java.awt.BorderLayout;
-import ToanBo_NguyenLieu.QL_NguyenLieu_Panel;
 import ToanBo_SanPham.QL_SanPham_ChiTiet_Panel;
-import View_JPanel.ThongKe_ChucNangDoanhThu_Panel;
 import javax.swing.JOptionPane;
-import ToanBo_KhuyenMai.QL_KhuyenMai_Panel;
 import ToanBo_BanHang.QL_BanHang_Panel;
 import ToanBo_KhachHang.QL_KhachHang_TimKiem_Panel;
 import ToanBo_NguyenLieu.QL_ChiTiet_NguyenLieu;
-import ToanBo_TaiKhoan.TaiKhoan_4_O;
-import ToanBo_TaiKhoan.Tai_Khoan;
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import ToanBo_TaiKhoan.QL_Login;
 
 /**
  *
