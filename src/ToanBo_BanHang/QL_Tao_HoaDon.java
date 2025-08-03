@@ -216,40 +216,85 @@ public class QL_Tao_HoaDon {
         return List_ShowDetail;
     }
 
-    public List<SanPham_5_O> getSanPhamTheoMaHD(String maHD) {
-        List<SanPham_5_O> danhSach = new ArrayList<>();
+    public List<ChiTiet_SP_6_O> getSanPhamTheoMaHD(String maHD) {
+        List<ChiTiet_SP_6_O> danhSachChiTiet = new ArrayList<>();
+        String sql = """
+        SELECT 
+            cthd.MA_SP, 
+            sp.TENSP, 
+            sp.DONGIA, 
+            cthd.SOLUONG, 
+            cthd.THANHTIEN, 
+            cthd.GHICHU
+        FROM CTHOADON cthd
+        JOIN SANPHAM sp ON cthd.MA_SP = sp.MA_SP
+        WHERE cthd.MA_HD = ?
+    """;
 
-        String sql = "SELECT sp.MaSP, sp.TenSP, cthd.SoLuong, cthd.DonGia "
-                + "FROM ChiTietHoaDon cthd "
-                + "JOIN SanPham sp ON cthd.MaSP = sp.MaSP "
-                + "WHERE cthd.MaHD = ?";
+        try (Connection connection = conn.DBConnect(); PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, maHD);
+
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    String maSP = result.getString("MA_SP");
+                    String tenSP = result.getString("TENSP");
+                    float donGia = result.getFloat("DONGIA");
+                    int soLuong = result.getInt("SOLUONG");
+                    float thanhTien = result.getFloat("THANHTIEN");
+                    String ghiChu = result.getString("GHICHU");
+
+                    var chiTiet = new ChiTiet_SP_6_O(maSP, tenSP, donGia, soLuong, thanhTien, ghiChu);
+                    danhSachChiTiet.add(chiTiet);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Lỗi khi truy vấn chi tiết sản phẩm: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return danhSachChiTiet;
+    }
+
+    // Thah Toán Hoá Đơn
+    public boolean thanhToanHoaDon(String Ma_HD, String Ma_KH, float Thanh_Tien, float SoTien_KhachTra, float SoTien_TraLai, String Ma_KM, int SoDiem_DuocCong) {
+        String SQL_Vao_ThanhToan = "INSERT INTO THANHTOAN (MA_HD, MA_KH, THANHTIEN, KHACHTRA, TIENTRALAI, MA_KM, NGAYTT) "
+                + "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+
+        String SQL_CapNhat_HoaDon = "UPDATE HOADON SET TRANGTHAI = N'Đã Thanh Toán', TICHDIEM = ? WHERE MA_HD = ?";
+
+        String SQL_CapNhatDiem_KhachHang = "UPDATE KHACHHANG SET DIEM_TICHLUY = DIEM_TICHLUY + ? WHERE MA_KH = ?";
 
         try {
             Connection conect = conn.DBConnect();
-            PreparedStatement stmt = conect.prepareStatement(sql);
+            PreparedStatement pstmTT = conect.prepareStatement(SQL_Vao_ThanhToan);
+            PreparedStatement pstmHD = conect.prepareStatement(SQL_CapNhat_HoaDon);
+            PreparedStatement pstmKH = conect.prepareStatement(SQL_CapNhatDiem_KhachHang);
+            // Insert dữ liệu vào bảng THANHTOAN
+            pstmTT.setString(1, Ma_HD);
+            pstmTT.setString(2, Ma_KH);
+            pstmTT.setFloat(3, Thanh_Tien);
+            pstmTT.setFloat(4, SoTien_KhachTra);
+            pstmTT.setFloat(5, SoTien_TraLai);
+            pstmTT.setString(6, Ma_KM);
+            pstmTT.executeUpdate();
 
-            stmt.setString(1, maHD);
-            ResultSet rs = stmt.executeQuery();
+            // Cập nhật trạng thái hóa đơn + điểm cộng
+            pstmHD.setInt(1, SoDiem_DuocCong);
+            pstmHD.setString(2, Ma_HD);
+            pstmHD.executeUpdate();
 
-            while (rs.next()) {
-                ChiTiet_SP_5O cthd = new ChiTiet_SP_5O();
-                SanPham_5_O sp = new SanPham_5_O();
-                sp.setMa_SP(rs.getString("MaSP"));
-                sp.setTen_SP(rs.getString("TenSP"));
-                cthd.setSoLuong_SP(rs.getInt("SoLuong"));
+            // Cập nhật điểm tích lũy của khách hàng
+            pstmKH.setInt(1, SoDiem_DuocCong);
+            pstmKH.setString(2, Ma_KH);
+            pstmKH.executeUpdate();
 
-                float tongGia = rs.getFloat("DonGia"); // DonGia đã là tổng            // hiển thị như bạn muốn
-                cthd.setGiaTine_SP(tongGia);              // trùng đơn giá vì là tổng
+            return true;
 
-                danhSach.add(sp);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(QL_Tao_HoaDon.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-
-        return danhSach;
     }
-
 }

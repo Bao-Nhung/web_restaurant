@@ -9,6 +9,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -49,9 +53,51 @@ public class QL_KhachHang_JFrame extends javax.swing.JFrame {
         txt_NgayTaoKH.setText(ngayHienTai.format(dinhDang));
 
         // Điều Chỉnh Hoạt Động Của Cái Phần Loại KH
-//        rdo_KhachThuong.setEnabled(false);
-//        rdo_KhachVIP.setEnabled(false);
-//        rdo_KhachLuxury.setEnabled(false);
+        rdo_KhachThuong.setEnabled(false);
+        rdo_KhachVIP.setEnabled(false);
+        rdo_KhachLuxury.setEnabled(false);
+        // Gắn Sựu Kiện Điểm Tích Luỹ
+        txt_DiemTichLuy.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int Diem = (Integer) txt_DiemTichLuy.getValue();
+                if (Diem < 50) {
+                    rdo_KhachThuong.setSelected(true);
+                } else if (Diem < 150) {
+                    rdo_KhachVIP.setSelected(true);
+                } else {
+                    rdo_KhachLuxury.setSelected(true);
+                }
+            }
+        });
+
+        txt_Ma_KH.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                capNhatSDT();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                capNhatSDT();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                capNhatSDT();
+            }
+
+            private void capNhatSDT() {
+                String maKH = txt_Ma_KH.getText().trim();
+                String sdt = "";
+
+                for (KhachHang kh : qlkh.Get_All()) {
+                    if (kh.getMa_KH().equalsIgnoreCase(maKH)) {
+                        sdt = kh.getSDT_KH();
+                        break;
+                    }
+                }
+
+                txt_SDT_KH.setText(sdt);
+            }
+        });
     }
 
     // Tất Cả Khách Hàng
@@ -268,59 +314,56 @@ public class QL_KhachHang_JFrame extends javax.swing.JFrame {
         }
     }
 
-    public void ShowDetail() {
-        int Index = tbl_TatCa_KH.getSelectedRow();
-        if (Index >= 0) {
-            KhachHang kh = qlkh.Get_All().get(Index);
-
-            // Hiển thị thông tin lên các textfield
-            txt_Ma_KH.setText(kh.getMa_KH());
-            txt_Ten_KH.setText(kh.getTen_KH());
-            txt_SDT_KH.setText(kh.getSDT_KH());
-            txt_Email_KH.setText(kh.getEmail_KH());
-
-            // Định dạng lại ngày để hiển thị
-            DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate localDate = kh.getNgayTao_KH().toLocalDate();
-            txt_NgayTaoKH.setText(DinhDang.format(localDate));
-
-            // Gán điểm tích lũy — xử lý kiểu và phạm vi giá trị
-            SpinnerNumberModel model = (SpinnerNumberModel) txt_DiemTichLuy.getModel();
-            Object minObj = model.getMinimum();
-            Object maxObj = model.getMaximum();
-
-            int diemTichLuy = kh.getDiemTichLuy();
-
-            if (minObj != null && maxObj != null) {
-                int min = ((Integer) minObj).intValue();
-                int max = ((Integer) maxObj).intValue();
-
-                if (diemTichLuy >= min && diemTichLuy <= max) {
-                    txt_DiemTichLuy.setValue(diemTichLuy);
-                } else {
-                    txt_DiemTichLuy.setValue(min);
-                }
-            } else {
-                // Thiết lập giá trị mặc định nếu spinner chưa có min/max
-                txt_DiemTichLuy.setValue(0);
-            }
-
-            // Gán loại khách hàng qua radio button
-            switch (kh.getLoai_KH()) {
-                case "Khách Luxury":
-                    rdo_KhachLuxury.setSelected(true);
-                    break;
-                case "Khách VIP":
-                    rdo_KhachVIP.setSelected(true);
-                    break;
-                default:
-                    rdo_KhachThuong.setSelected(true);
-                    break;
-            }
-
+    private void capNhatLoaiKhachTheoDiem(int diem) {
+        if (diem < 50) {
+            rdo_KhachThuong.setSelected(true);
+        } else if (diem < 150) {
+            rdo_KhachVIP.setSelected(true);
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng khách hàng trong bảng!");
+            rdo_KhachLuxury.setSelected(true);
         }
+    }
+
+    public void ShowDetail() {
+        int index = tbl_TatCa_KH.getSelectedRow();
+
+        if (index < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng khách hàng trong bảng!");
+            return;
+        }
+
+        // Lấy khách hàng tại dòng đã chọn
+        KhachHang kh = qlkh.Get_All().get(index);
+
+        // Gán thông tin cơ bản
+        txt_Ma_KH.setText(kh.getMa_KH());
+        txt_Ten_KH.setText(kh.getTen_KH());
+        txt_SDT_KH.setText(kh.getSDT_KH());
+        txt_Email_KH.setText(kh.getEmail_KH());
+
+        // Định dạng ngày tạo
+        DateTimeFormatter dinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate ngayTao = kh.getNgayTao_KH().toLocalDate();
+        txt_NgayTaoKH.setText(dinhDang.format(ngayTao));
+
+        // Gán điểm tích lũy cho spinner — kiểm tra min/max an toàn
+        int diemTichLuy = kh.getDiemTichLuy();
+        SpinnerNumberModel model = (SpinnerNumberModel) txt_DiemTichLuy.getModel();
+
+        Integer minObj = (Integer) model.getMinimum();
+        Integer maxObj = (Integer) model.getMaximum();
+
+        int min = (minObj != null) ? minObj : 0;
+        int max = (maxObj != null) ? maxObj : 1000; // gán max mặc định nếu chưa có
+
+        if (diemTichLuy >= min && diemTichLuy <= max) {
+            txt_DiemTichLuy.setValue(diemTichLuy);
+        } else {
+            txt_DiemTichLuy.setValue(min); // hoặc có thể dùng 0 tuỳ anh
+        }
+
+        // ✅ Tự động phân loại khách theo điểm tích lũy
+        capNhatLoaiKhachTheoDiem(diemTichLuy);
     }
 
     /**
