@@ -107,4 +107,39 @@ public class QL_Tao_ChiTiet_HD {
         }
         return result;
     }
+
+    
+
+    // 👉 Kiểm tra sản phẩm đã tồn tại chưa
+    public boolean DaTonTaiCTHD(String maHD, String maSP) {
+        String SQL = "SELECT * FROM CTHOADON WHERE MA_HD = ? AND MA_SP = ?";
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement pstm = conect.prepareStatement(SQL);
+            pstm.setString(1, maHD);
+            pstm.setString(2, maSP);
+            ResultSet rs = pstm.executeQuery();
+            return rs.next(); // Có kết quả → tồn tại
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public int CapNhat_CTHD(ChiTietHoaDon CTHD) {
+        String SQL = "UPDATE CTHOADON SET SOLUONG = ?, DONGIA = ? WHERE MA_HD = ? AND MA_SP = ?";
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement pstm = conect.prepareStatement(SQL);
+            pstm.setInt(1, CTHD.getSoLuong_CTHD());
+            pstm.setFloat(2, CTHD.getDonGia_CTHD());
+            pstm.setString(3, CTHD.getMa_HD());
+            pstm.setString(4, CTHD.getMa_SP());
+
+            return pstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

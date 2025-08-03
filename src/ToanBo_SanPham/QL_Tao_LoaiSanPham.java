@@ -23,6 +23,7 @@ public class QL_Tao_LoaiSanPham {
         conn = new MyConnection();
     }
 
+    // Bảng Tạo Loại Sản Phẩm Gốc
     public List<LoaiSanPham> Get_All_LSP() {
         List<LoaiSanPham> List_LSP = new ArrayList<>();
         String SQL = "SELECT * FROM LOAISANPHAM";
@@ -40,6 +41,29 @@ public class QL_Tao_LoaiSanPham {
         } catch (Exception e) {
         }
         return List_LSP;
+    }
+
+    // Bảng Tìm Kiếm Sản Phẩm Theo Mã Loại Sản Phẩm
+    // Lấy danh sách Mã Loại riêng
+    public List<String> getAllMaLoai() {
+        List<String> dsMaLoai = new ArrayList<>();
+        String sql = "SELECT MA_LOAI FROM LOAISANPHAM";
+
+        try {
+            Connection connect = conn.DBConnect();
+            PreparedStatement ps = connect.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                dsMaLoai.add(rs.getString("MA_LOAI"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(QL_Tao_LoaiSanPham.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return dsMaLoai;
     }
 
     public Object[] Get_Row_LSP(LoaiSanPham lsp) {
@@ -128,7 +152,7 @@ public class QL_Tao_LoaiSanPham {
         }
         return ds;
     }
-    
+
     public Loai_SP_2O timKHTheoMa(String Theo_Ma_LSP) {
         String sql = "SELECT MA_LOAI , TENLOAI FROM LOAISANPHAM WHERE MA_LOAI = ?";
         try {
@@ -145,7 +169,7 @@ public class QL_Tao_LoaiSanPham {
             }
         } catch (SQLException e) {
             System.err.println("Lỗi tìm KH theo mã: " + e.getMessage());
-        } catch (ClassNotFoundException ex) { 
+        } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(QL_Tao_LoaiSanPham.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

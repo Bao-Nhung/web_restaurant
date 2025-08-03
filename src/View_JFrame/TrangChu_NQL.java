@@ -25,10 +25,11 @@ public class TrangChu_NQL extends javax.swing.JFrame {
 //    private TaiKhoan_4_O taiKhoan;
 //    public static Tai_Khoan taiKhoan_NQL;
 //    QL_Login QL_Log = new QL_Login();
+
     /**
      * Creates new form TrangChu_NQL
      */
-   public TrangChu_NQL() { // TaiKhoan_4_O taiKhoan
+    public TrangChu_NQL() { // TaiKhoan_4_O taiKhoan
 //        this.taiKhoan = taiKhoan;
         initComponents();
         this.setLocationRelativeTo(this);
@@ -45,7 +46,6 @@ public class TrangChu_NQL extends javax.swing.JFrame {
 //        Image img = icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 //        lb_HienThiAnh.setIcon(new ImageIcon(img)); // lblAvatar là JLabel đã đặt trong giao diện
 //    }
-
     public void TatCa_VaiTro() {
         QL_TaiKhoan_TatCaPanel qltk_panel = new QL_TaiKhoan_TatCaPanel();
         TrangChungChuyen.removeAll();

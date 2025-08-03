@@ -162,7 +162,7 @@ public class QL_KhachHang {
         List<KhachHang_4_O> ds = new ArrayList<>();
         String SQL = "SELECT MA_KH, HOTEN, SDT, DIEM_TICHLUY FROM KHACHHANG WHERE MA_KH LIKE ? OR HOTEN LIKE ? OR SDT LIKE ?";
         try {
-                        Connection conect = conn.DBConnect();
+            Connection conect = conn.DBConnect();
             PreparedStatement ps = conect.prepareStatement(SQL);
             ps.setString(1, "%" + tuKhoa + "%");
             ps.setString(2, "%" + tuKhoa + "%");
@@ -210,4 +210,163 @@ public class QL_KhachHang {
         return null;
     }
 
+    // Lọc Khách Hàng Theo Loại KH
+    // Khách Hàng Thường
+    public List<KhachHang_6_O> Get_All_KhachThuong() {
+        List<KhachHang_6_O> List_KH = new ArrayList<>();
+        String SQL = "SELECT MA_KH , HOTEN , SDT , EMAIL , NGAYTAO , DIEM_TICHLUY FROM KHACHHANG WHERE LOAI_KH = 'Khách Thường'";
+
+        try {
+            Connection connect = conn.DBConnect();
+            Statement stm = connect.createStatement();
+            ResultSet rs = stm.executeQuery(SQL);
+
+            DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // dùng định dạng Việt Nam
+
+            while (rs.next()) {
+                String Ma_KH = rs.getString("MA_KH");
+                String Ten_KH = rs.getString("HOTEN");
+                String SDT_KH = rs.getString("SDT");
+                String Email_KH = rs.getString("EMAIL");
+
+                // Đọc ngày dưới dạng chuỗi
+                String ngayTaoStr = rs.getString("NGAYTAO");
+                Date NgayTao_KH = null;
+                try {
+                    LocalDate localDate = LocalDate.parse(ngayTaoStr, DinhDang);
+                    NgayTao_KH = Date.valueOf(localDate);
+                } catch (Exception ex) {
+                    System.out.println("⚠️ Ngày sai định dạng tại mã KH = " + Ma_KH + ": " + ngayTaoStr);
+                    NgayTao_KH = Date.valueOf(LocalDate.now());
+                }
+
+                int DiemTichLuy = rs.getInt("DIEM_TICHLUY");
+
+                KhachHang_6_O kh = new KhachHang_6_O(Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, DiemTichLuy);
+                List_KH.add(kh);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return List_KH;
+    }
+
+    public Object[] GetRow_KhachThuong(KhachHang_6_O kh) {
+        String Ma_KH = kh.getMa_KH();
+        String Ten_KH = kh.getTen_KH();
+        String SDT_KH = kh.getSDT_KH();
+        String Email_KH = kh.getEmail_KH();
+        Date NgayTao_KH = kh.getNgayTao_KH();
+        int DiemTichLuy = kh.getDiemTichLuy();
+
+        Object[] obj = new Object[]{Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, DiemTichLuy};
+        return obj;
+    }
+
+    // Khách Hàng VIP
+    public List<KhachHang_6_O> Get_All_KhachVIP() {
+        List<KhachHang_6_O> List_KH = new ArrayList<>();
+        String SQL = "SELECT MA_KH , HOTEN , SDT , EMAIL , NGAYTAO , DIEM_TICHLUY FROM KHACHHANG WHERE LOAI_KH = 'Khách VIP'";
+
+        try {
+            Connection connect = conn.DBConnect();
+            Statement stm = connect.createStatement();
+            ResultSet rs = stm.executeQuery(SQL);
+
+            DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // dùng định dạng Việt Nam
+
+            while (rs.next()) {
+                String Ma_KH = rs.getString("MA_KH");
+                String Ten_KH = rs.getString("HOTEN");
+                String SDT_KH = rs.getString("SDT");
+                String Email_KH = rs.getString("EMAIL");
+
+                // Đọc ngày dưới dạng chuỗi
+                String ngayTaoStr = rs.getString("NGAYTAO");
+                Date NgayTao_KH = null;
+                try {
+                    LocalDate localDate = LocalDate.parse(ngayTaoStr, DinhDang);
+                    NgayTao_KH = Date.valueOf(localDate);
+                } catch (Exception ex) {
+                    System.out.println("⚠️ Ngày sai định dạng tại mã KH = " + Ma_KH + ": " + ngayTaoStr);
+                    NgayTao_KH = Date.valueOf(LocalDate.now());
+                }
+
+                int DiemTichLuy = rs.getInt("DIEM_TICHLUY");
+
+                KhachHang_6_O kh = new KhachHang_6_O(Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, DiemTichLuy);
+                List_KH.add(kh);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return List_KH;
+    }
+
+    public Object[] GetRow_KhachVIP(KhachHang_6_O kh) {
+        String Ma_KH = kh.getMa_KH();
+        String Ten_KH = kh.getTen_KH();
+        String SDT_KH = kh.getSDT_KH();
+        String Email_KH = kh.getEmail_KH();
+        Date NgayTao_KH = kh.getNgayTao_KH();
+        int DiemTichLuy = kh.getDiemTichLuy();
+
+        Object[] obj = new Object[]{Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, DiemTichLuy};
+        return obj;
+    }
+
+    // Khách Hàng Luxury
+    public List<KhachHang_6_O> Get_All_KhachLuxury() {
+        List<KhachHang_6_O> List_KH = new ArrayList<>();
+        String SQL = "SELECT MA_KH , HOTEN , SDT , EMAIL , NGAYTAO , DIEM_TICHLUY FROM KHACHHANG WHERE LOAI_KH = 'Khách Luxury'";
+
+        try {
+            Connection connect = conn.DBConnect();
+            Statement stm = connect.createStatement();
+            ResultSet rs = stm.executeQuery(SQL);
+
+            DateTimeFormatter DinhDang = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // dùng định dạng Việt Nam
+
+            while (rs.next()) {
+                String Ma_KH = rs.getString("MA_KH");
+                String Ten_KH = rs.getString("HOTEN");
+                String SDT_KH = rs.getString("SDT");
+                String Email_KH = rs.getString("EMAIL");
+
+                // Đọc ngày dưới dạng chuỗi
+                String ngayTaoStr = rs.getString("NGAYTAO");
+                Date NgayTao_KH = null;
+                try {
+                    LocalDate localDate = LocalDate.parse(ngayTaoStr, DinhDang);
+                    NgayTao_KH = Date.valueOf(localDate);
+                } catch (Exception ex) {
+                    System.out.println("⚠️ Ngày sai định dạng tại mã KH = " + Ma_KH + ": " + ngayTaoStr);
+                    NgayTao_KH = Date.valueOf(LocalDate.now());
+                }
+
+                int DiemTichLuy = rs.getInt("DIEM_TICHLUY");
+
+                KhachHang_6_O kh = new KhachHang_6_O(Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, DiemTichLuy);
+                List_KH.add(kh);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return List_KH;
+    }
+
+    public Object[] GetRow_KhachLuxury(KhachHang_6_O kh) {
+        String Ma_KH = kh.getMa_KH();
+        String Ten_KH = kh.getTen_KH();
+        String SDT_KH = kh.getSDT_KH();
+        String Email_KH = kh.getEmail_KH();
+        Date NgayTao_KH = kh.getNgayTao_KH();
+        int DiemTichLuy = kh.getDiemTichLuy();
+
+        Object[] obj = new Object[]{Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, DiemTichLuy};
+        return obj;
+    }
 }

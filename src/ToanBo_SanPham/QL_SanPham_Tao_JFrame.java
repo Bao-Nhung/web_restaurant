@@ -7,6 +7,10 @@ package ToanBo_SanPham;
 import ToanBo_SanPham.SanPham;
 import javax.swing.table.DefaultTableModel;
 import ToanBo_SanPham.QL_Tao_SanPham;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 import java.sql.Date;
@@ -14,9 +18,14 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -44,6 +53,53 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
         // Hiển thị vào textField
         txt_NgayTao_SP.setText(ngayHienTai.format(dinhDang));
         txt_NgayTao_SP.setEditable(false);
+
+        // Sửa Lại Table
+        tbl_SanPham.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel header = new JLabel(value.toString());
+                header.setOpaque(true);
+                header.setBackground(new Color(255, 153, 0)); // màu cam
+                header.setForeground(Color.WHITE);            // chữ trắng
+                header.setFont(header.getFont().deriveFont(Font.BOLD)); // bôi đậm
+                header.setHorizontalAlignment(JLabel.CENTER);
+                return header;
+            }
+        });
+
+        // Hiệu Ứu Bảng
+        tbl_SanPham.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel cell = new JLabel(value != null ? value.toString() : "");
+                cell.setOpaque(true);
+                cell.setFont(cell.getFont().deriveFont(Font.PLAIN));
+                cell.setHorizontalAlignment(JLabel.CENTER);
+
+                // 👆 Hiệu ứng hover nâng dòng + màu chữ trắng
+                if (table.getSelectedRow() == row) {
+                    cell.setBackground(new Color(255, 180, 80));   // màu cam nhạt
+                    cell.setForeground(Color.WHITE);               // chữ trắng
+                    cell.setFont(cell.getFont().deriveFont(Font.BOLD)); // bôi đậm
+                    cell.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0)); // tạo hiệu ứng nâng dòng
+                } else {
+                    cell.setBackground(Color.WHITE);
+                    cell.setForeground(Color.BLACK);
+                    cell.setBorder(null);
+                }
+
+                return cell;
+            }
+        });
+
+        // Tăng Độ Cao
+        JTableHeader header = tbl_SanPham.getTableHeader();
+        header.setPreferredSize(new Dimension(header.getWidth(), 30)); // đặt chiều cao là 40px
     }
 
     public void Initable_SP() {
@@ -265,9 +321,20 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
             // Mô Tả Của Sản Phẩm
             txt_MoTa_SP.setText(sp.getMoTa_SP());
             // Mã Loại Sản Phẩm
-            txt_Ma_SP.setText(sp.getMa_LSP());
+            txt_MaLSP.setText(sp.getMa_LSP());
             // Hình Ảnh Của Sản Phẩm
-            lb_Anh_SP.setText(sp.getHinhAnh_SP());
+            String path = sp.getHinhAnh_SP(); // lấy đường dẫn ảnh từ đối tượng sản phẩm
+
+            File file = new File(path);
+            if (file.exists()) {
+                ImageIcon icon = new ImageIcon(path);
+                Image img = icon.getImage().getScaledInstance(lb_Anh_SP.getWidth(), lb_Anh_SP.getHeight(), Image.SCALE_SMOOTH);
+                lb_Anh_SP.setIcon(new ImageIcon(img));
+                lb_Anh_SP.setText(""); // xóa chữ nếu có
+            } else {
+                lb_Anh_SP.setText("Ảnh không tồn tại");
+                lb_Anh_SP.setIcon(null);
+            }
             // Ngày Tạo Sản Phẩm
             // Định dạng ngày thành chuỗi dd/MM/yyyy
             // Thay phần xử lý ngày tạo bằng đoạn này:
@@ -347,9 +414,7 @@ public class QL_SanPham_Tao_JFrame extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1110, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1116, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

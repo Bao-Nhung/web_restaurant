@@ -6,9 +6,12 @@ package ToanBo_BanHang;
 
 import DBConnect.MyConnection;
 import ToanBo_BanHang.HoaDon;
+import ToanBo_SanPham.SanPham_5_O;
 import java.util.List;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -49,6 +52,46 @@ public class QL_Tao_HoaDon {
             e.printStackTrace();
         }
         return List_HD;
+    }
+
+    public String taoMaHoaDonMoi() {
+        int soThuTu = Get_All_HoaDon().size() + 1;
+        String soTiepTheo = String.format("%02d", soThuTu); // "01", "02", ...
+        return "HD" + soTiepTheo;
+    }
+
+    public List<HoaDon_6_O> Get_ALL_HoaDon_6_O() {
+        List<HoaDon_6_O> List_HD = new ArrayList<>();
+        String SQL = "SELECT MA_HD ,MA_TK ,NGAYLAP, TONGTIEN, HINHTHUC_HD, TRANGTHAI FROM HOADON";
+        try {
+            Connection connect = conn.DBConnect();
+            Statement stm = connect.createStatement();
+            ResultSet rs = stm.executeQuery(SQL);
+            while (rs.next()) {
+                String Ma_HD = rs.getString("MA_HD");
+                String Ma_TK = rs.getString("MA_TK");
+                Date NgayLap_HD = rs.getDate("NGAYLAP");
+                float TongTien = rs.getFloat("TONGTIEN");
+                String HinhThuc_HD = rs.getString("HINHTHUC_HD");
+                String TrangThai = rs.getString("TRANGTHAI");
+                HoaDon_6_O hd = new HoaDon_6_O(Ma_HD, Ma_TK, NgayLap_HD, TongTien, HinhThuc_HD, TrangThai);
+                List_HD.add(hd);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return List_HD;
+    }
+
+    public Object[] Get_Row_HD_6_O(HoaDon_6_O hd_6_o) {
+        String Ma_HD = hd_6_o.getMa_HD();
+        String Ma_TK = hd_6_o.getMa_TK();
+        Date NgayLap_HD = hd_6_o.getNgayLap_HD();
+        float TongTien = hd_6_o.getTongTien();
+        String HinhThuc_HD = hd_6_o.getHinhThuc_HD();
+        String TrangThai = hd_6_o.getTrangThai();
+        Object[] obj = new Object[]{Ma_HD, Ma_TK, NgayLap_HD, TongTien, HinhThuc_HD, TrangThai};
+        return obj;
     }
 
     public Object[] Get_Row_HD(HoaDon hd) {
@@ -172,4 +215,41 @@ public class QL_Tao_HoaDon {
         }
         return List_ShowDetail;
     }
+
+    public List<SanPham_5_O> getSanPhamTheoMaHD(String maHD) {
+        List<SanPham_5_O> danhSach = new ArrayList<>();
+
+        String sql = "SELECT sp.MaSP, sp.TenSP, cthd.SoLuong, cthd.DonGia "
+                + "FROM ChiTietHoaDon cthd "
+                + "JOIN SanPham sp ON cthd.MaSP = sp.MaSP "
+                + "WHERE cthd.MaHD = ?";
+
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement stmt = conect.prepareStatement(sql);
+
+            stmt.setString(1, maHD);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ChiTiet_SP_5O cthd = new ChiTiet_SP_5O();
+                SanPham_5_O sp = new SanPham_5_O();
+                sp.setMa_SP(rs.getString("MaSP"));
+                sp.setTen_SP(rs.getString("TenSP"));
+                cthd.setSoLuong_SP(rs.getInt("SoLuong"));
+
+                float tongGia = rs.getFloat("DonGia"); // DonGia đã là tổng            // hiển thị như bạn muốn
+                cthd.setGiaTine_SP(tongGia);              // trùng đơn giá vì là tổng
+
+                danhSach.add(sp);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QL_Tao_HoaDon.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return danhSach;
+    }
+
 }

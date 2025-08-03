@@ -25,6 +25,7 @@ public class QL_Tao_SanPham {
         conn = new MyConnection();
     }
 
+    // Trang Sản Phẩm Chính 
     public List<SanPham> GetAll_SP() {
         List<SanPham> List_SP = new ArrayList<>(); //  Tạo một danh sách rỗng kiểu Sản Phẩm để chứa tất cả tài khoản đọc từ database.
         String SQL = "SELECT * FROM SANPHAM"; //  Lấy toàn bộ dòng dữ liệu từ bảng SANPHAM
@@ -41,7 +42,7 @@ public class QL_Tao_SanPham {
                 String HinhAnh_SP = rs.getString(6);
                 Date NgayTao_SP = rs.getDate(7);
                 String TrangThai_SP = rs.getString(8);
-                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP , TrangThai_SP);
+                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP, TrangThai_SP);
                 List_SP.add(sp);
             }
         } catch (Exception e) {
@@ -56,19 +57,65 @@ public class QL_Tao_SanPham {
         String MoTa_SP = sp.getMoTa_SP();
         float DonGia_SP = sp.getDonGia_SP();
         String Ma_LSP = sp.getMa_LSP();
+
+        // ✅ Kiểm tra ảnh null hoặc trống → gán giá trị rõ ràng
         String HinhAnh_SP = sp.getHinhAnh_SP();
+        String HinhAnhHienThi = (HinhAnh_SP == null || HinhAnh_SP.trim().isEmpty())
+                ? "NULL" : HinhAnh_SP;
 
         Date NgayTao_SP = sp.getNgayTao_SP();
         String NgayTaoStr = "NULL";
-
-        // ✅ Định dạng ngày tạo nếu có
         if (NgayTao_SP != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             NgayTaoStr = sdf.format(NgayTao_SP);
         }
+
         String TrangThai_SP = sp.getTrangThai_SP();
+
+        // ✅ Trả về đúng dữ liệu – gọn, đúng thứ tự
+        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnhHienThi, NgayTaoStr, TrangThai_SP};
+    }
+
+    // Danh Sách Sản Phẩm Trong Mục Bán Hàng
+    public List<SanPham_5_O> GetAll_SP_5_O(String maLoai) {
+        List<SanPham_5_O> List_SP = new ArrayList<>();
+
+        String SQL = "SELECT MA_SP, TENSP, MOTA, DONGIA, HINHANH "
+                + "FROM SANPHAM "
+                + "WHERE MA_LOAI = ? AND TRANGTHAI = 'Đang Bán'";
+
+        try {
+            Connection connect = conn.DBConnect();
+            PreparedStatement pst = connect.prepareStatement(SQL);
+            pst.setString(1, maLoai); // truyền mã loại sản phẩm
+
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String Ma_SP = rs.getString("MA_SP");
+                String Ten_SP = rs.getString("TENSP");
+                String MoTa_SP = rs.getString("MOTA");
+                float DonGia_SP = rs.getFloat("DONGIA");
+                String HinhAnh_SP = rs.getString("HINHANH");
+
+                SanPham_5_O sp = new SanPham_5_O(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, HinhAnh_SP);
+                List_SP.add(sp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return List_SP;
+    }
+
+    public Object[] GetRow_SP_5_O(SanPham sp) {
+        String Ma_SP = sp.getMa_SP();
+        String Ten_SP = sp.getTen_SP();
+        String MoTa_SP = sp.getMoTa_SP();
+        float DonGia_SP = sp.getDonGia_SP();
+        String HinhAnh_SP = sp.getHinhAnh_SP();
+
         // ✅ Trả về Object[] gọn gàng
-        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTaoStr , TrangThai_SP};
+        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, HinhAnh_SP};
     }
 
     public ImageIcon resizeImage(String path) {
@@ -94,10 +141,51 @@ public class QL_Tao_SanPham {
             NgayTaoStr = sdf.format(NgayTao_SP);
         }
         ImageIcon icon = resizeImage(sp.getHinhAnh_SP());
-        
+
         String TrangThai_SP = sp.getTrangThai_SP();
         // ✅ Trả về Object[] gọn gàng
-        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, icon, NgayTaoStr , TrangThai_SP};
+        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, icon, NgayTaoStr, TrangThai_SP};
+    }
+
+    // Danh Sách Tất Cả Sản Phẩm Ở Trong Mục Bán Hàng
+    public List<SanPham_6_O> GetAll_TatCa_SP() {
+        List<SanPham_6_O> List_SP = new ArrayList<>();
+        String SQL = "SELECT MA_SP, TENSP, MOTA, DONGIA, TRANGTHAI, HINHANH FROM SANPHAM WHERE TRANGTHAI = 'Đang Bán'";
+
+        try {
+            Connection connect = conn.DBConnect();
+            Statement stm = connect.createStatement();       // ✅ Dùng Statement vì không có dấu ?
+            ResultSet rs = stm.executeQuery(SQL);
+
+            while (rs.next()) {
+                String Ma_SP = rs.getString("MA_SP");
+                String Ten_SP = rs.getString("TENSP");
+                String MoTa_SP = rs.getString("MOTA");
+                float DonGia_SP = rs.getFloat("DONGIA");
+                String TrangThai_SP = rs.getString("TRANGTHAI");
+                String HinhAnh_SP = rs.getString("HINHANH");
+
+                SanPham_6_O sp = new SanPham_6_O(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, TrangThai_SP, HinhAnh_SP);
+                List_SP.add(sp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Có thể log nếu cần
+        }
+        return List_SP;
+    }
+
+    public Object[] GetRow_TatCa_SP(SanPham_6_O sp) {
+        String Ma_SP = sp.getMa_SP();
+        String Ten_SP = sp.getTen_SP();
+        String MoTa_SP = sp.getMoTa_SP();
+        float DonGia_SP = sp.getDonGia_SP();
+        // ✅ Kiểm tra ảnh null hoặc trống → gán giá trị rõ ràng
+        String HinhAnh_SP = sp.getHinhAnh_SP();
+        String HinhAnhHienThi = (HinhAnh_SP == null || HinhAnh_SP.trim().isEmpty())
+                ? "NULL" : HinhAnh_SP;
+        String TrangThai_SP = sp.getTrangThai();
+        // ✅ Trả về đúng dữ liệu – gọn, đúng thứ tự
+        return new Object[]{Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, TrangThai_SP, HinhAnhHienThi};
     }
 
     // Hàm Thêm Dữ Liệu Vào Tài Khoản
@@ -167,7 +255,7 @@ public class QL_Tao_SanPham {
             pstm.setDate(7, sqlNgayTao);
             pstm.setString(8, sp.getTrangThai_SP());
             pstm.setString(9, TheoMa);
-            
+
             if (pstm.executeUpdate() > 0) {
                 System.out.println("Sua Du Lieu San Pham. Connect");
                 return 1;
@@ -197,7 +285,40 @@ public class QL_Tao_SanPham {
                 String HinhAnh_SP = rs.getString(7);
                 Date NgayTao_SP = rs.getDate(8);
                 String TrangThai_SP = rs.getString(9);
-                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP , TrangThai_SP);
+                SanPham sp = new SanPham(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, Ma_LSP, HinhAnh_SP, NgayTao_SP, TrangThai_SP);
+                List_SP.add(sp);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return List_SP;
+    }
+
+    public List<SanPham_5_O> getSanPhamTheoLoai_5_O(String TheoMa_LSP) {
+        List<SanPham_5_O> List_SP = new ArrayList<>();
+        String sql = "SELECT   \n"
+                + "MA_SP ,  \n"
+                + "TENSP ,  \n"
+                + "MOTA ,   \n"
+                + "DONGIA , \n"
+                + "HINHANH  \n"
+                + "FROM SANPHAM WHERE MA_LOAI =   ?  AND TRANGTHAI = 'Đang Bán'";
+
+        try {
+            Connection con = conn.DBConnect();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, TheoMa_LSP); // 🔥 Gán tham số tại đây
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String Ma_SP = rs.getString("MA_SP");
+                String Ten_SP = rs.getString("TENSP");
+                String MoTa_SP = rs.getString("MOTA");
+                float DonGia_SP = rs.getFloat("DONGIA");
+                String HinhAnh_SP = rs.getString("HINHANH");
+
+                SanPham_5_O sp = new SanPham_5_O(Ma_SP, Ten_SP, MoTa_SP, DonGia_SP, HinhAnh_SP);
                 List_SP.add(sp);
             }
         } catch (Exception e) {
