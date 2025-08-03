@@ -369,4 +369,23 @@ public class QL_KhachHang {
         Object[] obj = new Object[]{Ma_KH, Ten_KH, SDT_KH, Email_KH, NgayTao_KH, DiemTichLuy};
         return obj;
     }
+
+    public int layDiemTichLuy(String maKH) {
+        String sql = "SELECT DIEM_TICHLUY FROM KHACHHANG WHERE MAKH = ?";
+        try  {
+            Connection conect = conn.DBConnect();
+            PreparedStatement stmt = conect.prepareStatement(sql);
+            stmt.setString(1, maKH);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("DIEM_TICHLUY");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi lấy điểm tích lũy: " + e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QL_KhachHang.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0; // mặc định nếu không có
+    }
 }

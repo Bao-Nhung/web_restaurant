@@ -45,6 +45,8 @@ import ToanBo_SanPham.SanPham_5_O;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.TableCellRenderer;
 import ToanBo_KhuyenMai.KhuyenMai;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -190,6 +192,71 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
                 }
             }
         });
+
+        // Lấy Điểm Tích Luỹ Của Khách Hàng Khi Đổi
+        txt_KhuyenMai.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                xuLyKhuyenMaiTuDong();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                xuLyKhuyenMaiTuDong();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                xuLyKhuyenMaiTuDong(); // chỉ dùng cho styled text
+            }
+        });
+
+    }
+
+    // Xử Lý Khuyến Mãi Tự Động
+    public void xuLyKhuyenMaiTuDong() {
+        String Ma_KM = txt_KhuyenMai.getText().trim();
+        String Ma_KH = txt_Ma_KH.getText().trim();
+
+        float tongTien = 0f;
+        int colDonGia = TableModel_SP_DaChon.findColumn("Đơn Giá");
+        int colSoLuong = TableModel_SP_DaChon.findColumn("Số Lượng");
+
+        // 🔢 Tính tổng tiền sản phẩm đang chọn
+        for (int i = 0; i < TableModel_SP_DaChon.getRowCount(); i++) {
+            try {
+                float donGia = Float.parseFloat(TableModel_SP_DaChon.getValueAt(i, colDonGia).toString());
+                int soLuong = Integer.parseInt(TableModel_SP_DaChon.getValueAt(i, colSoLuong).toString());
+                tongTien += donGia * soLuong;
+            } catch (Exception e) {
+                System.err.println("Lỗi tính tổng tiền: " + e.getMessage());
+            }
+        }
+        lb_HienTongTien_ChuaGiamGia.setText(String.format("%,.0f", tongTien));
+
+        // 🎁 Truy vấn khuyến mãi từ mã nhập
+        KhuyenMai km = QL_KM.layKhuyenMaiTheoMa(Ma_KM);
+        float tienGiam = 0f;
+
+        if (km != null && km.getTrangThai()) {
+            // Nếu khuyến mãi hợp lệ và đang hoạt động
+            if (tongTien >= km.getDiemYeuCau_KM()) { // ví dụ: ĐiểmYeuCau là ngưỡng tổng tiền
+                tienGiam = km.getGiaTri_KM(); // có thể là số tiền hoặc % tùy logic
+            }
+        }
+
+        lb_Hien_TienGiamGia.setText(String.format("%,.0f", tienGiam));
+        float thanhTien = tongTien - tienGiam;
+        lb_ThanhTien.setText(String.format("%,.0f", thanhTien));
+
+        // 🏆 Điểm cộng mới
+        int diemCong = (int) (thanhTien / 10000);
+        lb_SoDiemDuocCong.setText(diemCong + " điểm");
+
+        // 📌 Cập nhật điểm KH hiện tại nếu có mã KH
+        if (!Ma_KH.isEmpty()) {
+            int diemTL = QL_KH.layDiemTichLuy(Ma_KH);
+            lb_HienDiemTL.setText(diemTL + " Điểm");
+        } else {
+            lb_HienDiemTL.setText("Không xác định");
+        }
     }
 
     // Cột Ảnh Ở Ô Tất Cả Sản Phẩm
@@ -581,6 +648,8 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
             txt_MaHD.setText(hd.getMa_HD());
             // Mã Khách Hàng
             txt_Ma_KH.setText(hd.getMa_KH());
+            String Ma_KH = hd.getMa_KH();
+            hienThiDiemTichLuy(Ma_KH);
             // Tên Khách Hàng
             txt_Ten_KH.setText(hd.getTen_KH());
             // Điểm Tích Luỹ
@@ -608,6 +677,16 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
         } else {
             JOptionPane.showMessageDialog(this, "Vui Lòng Chọn Mã Hoá Đơn Để Show Chi Tiết.");
         }
+    }
+
+    private void hienThiDiemTichLuy(String Ma_KH) {
+        if (Ma_KH == null || Ma_KH.trim().isEmpty()) {
+            lb_HienDiemTL.setText("Không xác định");
+            return;
+        }
+
+        int DiemTichLuy = QL_KH.layDiemTichLuy(Ma_KH); // gọi DAO đã viết
+        lb_HienDiemTL.setText(DiemTichLuy + " Điểm"); // gán lên giao diện
     }
 
     // Gợi Ý Khuyến Mãi

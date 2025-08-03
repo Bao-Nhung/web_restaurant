@@ -545,7 +545,7 @@ public class QL_KhuyenMai {
             while (rs.next()) {
                 String hinhThuc = rs.getString("HINHTHUC_KM");
                 int DiemYeuCau = rs.getInt("DIEM_YEUCAU");
-                int  TienMatYeuCau = rs.getInt("DIEM_YEUCAU");
+                int TienMatYeuCau = rs.getInt("DIEM_YEUCAU");
                 float mucGiam = rs.getFloat("GIATRI"); // giả sử đây là số tiền giảm
 
                 boolean hopLe = false;
@@ -569,5 +569,71 @@ public class QL_KhuyenMai {
             e.printStackTrace();
         }
         return danhSachPhuHop;
+    }
+
+    // Cái Phần Khuyến Mãi Theo Trạng Thái 
+    public List<KhuyenMai> timKiemKhuyenMaiTheoTrangThai(boolean trangThai) {
+        List<KhuyenMai> danhSachKM = new ArrayList<>();
+        String sql = "SELECT * FROM KHUYENMAI WHERE TRANGTHAI = ?";
+// MA_KM , TENKM , MOTA , HINHTHUC_KM , DIEM_YEUCAU , GIATRI , NGAYBATDAU , NGAYKETTHUC , NGAYTRONGTHANG , DIEM_YEUCAU , TRANGTHAI
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement stmt = conect.prepareStatement(sql);
+            stmt.setBoolean(1, trangThai);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    KhuyenMai km = new KhuyenMai(
+                            rs.getString("MA_KM"),
+                            rs.getString("TENKM"),
+                            rs.getString("MOTA"),
+                            rs.getString("HINHTHUC_KM"),
+                            rs.getInt("DIEM_YEUCAU"),
+                            rs.getFloat("GIATRI"),
+                            rs.getDate("NGAYBATDAU"),
+                            rs.getDate("NGAYKETTHUC"),
+                            rs.getString("NGAYTRONGTHANG"),
+                            rs.getString("DIEUKIEN"),
+                            rs.getBoolean("TRANGTHAI")
+                    );
+                    danhSachKM.add(km);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Lỗi khi tìm kiếm khuyến mãi theo trạng thái: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return danhSachKM;
+    }
+
+    public KhuyenMai layKhuyenMaiTheoMa(String Ma_KM) {
+        String sql = "SELECT * FROM KHUYENMAI WHERE MA_KM = ?";
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement stmt = conect.prepareStatement(sql);
+            stmt.setString(1, Ma_KM);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new KhuyenMai(
+                            rs.getString("MA_KM"),
+                            rs.getString("TENKM"),
+                            rs.getString("MOTA"),
+                            rs.getString("HINHTHUC_KM"),
+                            rs.getInt("DIEM_YEUCAU"),
+                            rs.getFloat("GIATRI"),
+                            rs.getDate("NGAYBATDAU"),
+                            rs.getDate("NGAYKETTHUC"),
+                            rs.getString("NGAYTRONGTHANG"),
+                            rs.getString("DIEUKIEN"),
+                            rs.getBoolean("TRANGTHAI")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
