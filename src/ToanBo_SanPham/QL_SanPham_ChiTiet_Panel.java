@@ -38,7 +38,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
         Initable_SP();
         FillToTable_SP();
         TimKiem_LSP();
-        
+
     }
 
     public void Initable_LSP() {
@@ -58,7 +58,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
 
     public void Initable_SP() {
         TableModel = new DefaultTableModel();
-        String[] cols = {"Mã SP", "Tên SP", "Mô Tả SP" , "Đơn Giá", "Mã Loại SP", "Hình Ảnh"};
+        String[] cols = {"Mã SP", "Tên SP", "Mô Tả SP", "Đơn Giá", "Mã Loại SP", "Hình Ảnh"};
         TableModel.setColumnIdentifiers(cols);
         tbl_SanPham.setModel(TableModel);
     }
@@ -81,7 +81,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
         }
     }
 
-     public void TimKiem_LSP() {
+    public void TimKiem_LSP() {
         txt_Ma_LSP.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 String tuKhoa = txt_Ma_LSP.getText().trim();
@@ -90,7 +90,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                     return;
                 }
 
-                String[] columnNames = {"Mã Loại Sản Phẩm" , "Tên Loại Sản Phẩm"};
+                String[] columnNames = {"Mã Loại Sản Phẩm", "Tên Loại Sản Phẩm"};
                 Object[][] data = new Object[Ds_LSP.size()][columnNames.length];
 
                 for (int i = 0; i < Ds_LSP.size(); i++) {
@@ -117,11 +117,9 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                 });
             }
         });
-        
-        
+
     }
-     
-     
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -184,7 +182,7 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txt_Ma_SP, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Ô Chức Năng Của Bảng Loại Sản Phẩm"));
@@ -377,9 +375,9 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_Tao_SP, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(22, Short.MAX_VALUE))
@@ -401,16 +399,25 @@ public class QL_SanPham_ChiTiet_Panel extends javax.swing.JPanel {
     private void btn_Tao_LSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Tao_LSPActionPerformed
         // TODO add your handling code here:
         QL_Tao_LoaiSanPham_JFrame ql_Tao_LSP = new QL_Tao_LoaiSanPham_JFrame();
-        ql_Tao_LSP.setVisible(true);
-        ql_Tao_LSP.setLocationRelativeTo(null); // Căn giữa màn hình
+        ql_Tao_LSP.setLocationRelativeTo(null);     // 📍 Căn giữa màn hình
 
+        ql_Tao_LSP.setAlwaysOnTop(true);            // ⏫ Ép lên trên tất cả
+        ql_Tao_LSP.setVisible(true);                // 👀 Hiển thị
+        ql_Tao_LSP.toFront();                       // 💡 Đưa lên foreground
+        ql_Tao_LSP.requestFocus();                  // 🎯 Lấy focus người dùng
+        ql_Tao_LSP.setAlwaysOnTop(false);           // 🔁 Tắt lại để tránh che các cửa sổ khác sau đó
     }//GEN-LAST:event_btn_Tao_LSPActionPerformed
 
     private void btn_Tao_SPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_Tao_SPActionPerformed
         // TODO add your handling code here:
         QL_SanPham_Tao_JFrame QL_Tao_SP = new QL_SanPham_Tao_JFrame();
-        QL_Tao_SP.setVisible(true);
-        QL_Tao_SP.setLocationRelativeTo(null); // Căn giữa màn hình
+        QL_Tao_SP.setLocationRelativeTo(null);      // 📍 Căn giữa màn hình
+
+        QL_Tao_SP.setAlwaysOnTop(true);             // 🛗 Ưu tiên cửa sổ này lên trên
+        QL_Tao_SP.setVisible(true);                 // 👀 Hiển thị cửa sổ
+        QL_Tao_SP.toFront();                        // ⏫ Đẩy lên foreground
+        QL_Tao_SP.requestFocus();                   // 🎯 Focus bàn phím/chuột vào cửa sổ
+        QL_Tao_SP.setAlwaysOnTop(false);            // 🔄 Tắt lại để tránh ảnh hưởng cửa sổ khác
     }//GEN-LAST:event_btn_Tao_SPActionPerformed
 
     private void btn_ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ResetActionPerformed

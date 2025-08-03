@@ -445,9 +445,15 @@ public class QL_ChiTiet_NguyenLieu extends javax.swing.JPanel {
         if (taoNLFrame == null || !taoNLFrame.isDisplayable()) {
             taoNLFrame = new QL_Tao_NguyenLieu_JFrame();
             taoNLFrame.setLocationRelativeTo(this);
-            taoNLFrame.setVisible(true);
 
-            // 🧠 Khi đóng thì reset biến về null
+            // ✨ Đảm bảo hiện lên trước
+            taoNLFrame.setAlwaysOnTop(true);
+            taoNLFrame.setVisible(true);
+            taoNLFrame.toFront();
+            taoNLFrame.requestFocus();
+            taoNLFrame.setAlwaysOnTop(false);
+
+            // 🧠 Reset về null khi đóng
             taoNLFrame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -459,13 +465,13 @@ public class QL_ChiTiet_NguyenLieu extends javax.swing.JPanel {
                     taoNLFrame = null;
                 }
             });
-
         } else {
-            taoNLFrame.toFront(); // 🔁 Nếu đang mở ➜ đưa lên trước
-            JOptionPane.showMessageDialog(this,
-                    "⚠️ Cửa Số Tạo Nguyên Liệu Đã Mở.\n Vui Lòng Hoàn Tất Thao Tác Trước Khi Mở Cửa Số Tạo Nguyên Liệu Mới.");
-        }
+            taoNLFrame.toFront();
+            taoNLFrame.requestFocus(); // 👈 Thêm dòng này để lấy lại focus
 
+            JOptionPane.showMessageDialog(this,
+                    "⚠️ Cửa Sổ Tạo Nguyên Liệu Đã Mở.\nVui Lòng Hoàn Tất Thao Tác Trước Khi Mở Mới.");
+        }
     }//GEN-LAST:event_btn_TaoNLActionPerformed
 
     private void txt_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TimKiemActionPerformed
