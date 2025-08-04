@@ -8,13 +8,13 @@ import ToanBo_KhuyenMai.QL_ChiTiet_KhuyenMai_Panel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_TatCaPanel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_NhanVien_Panel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_QuanLy_Panel;
-import View_JPanel.QL_ThongKe_DoanhThu_Panel;
 import java.awt.BorderLayout;
 import ToanBo_SanPham.QL_SanPham_ChiTiet_Panel;
 import javax.swing.JOptionPane;
 import ToanBo_BanHang.QL_BanHang_Panel;
 import ToanBo_KhachHang.QL_KhachHang_TimKiem_Panel;
 import ToanBo_NguyenLieu.QL_ChiTiet_NguyenLieu;
+import ToanBo_ThongKe.QL_ThongKe_DoanhThu_Panel;
 
 /**
  *

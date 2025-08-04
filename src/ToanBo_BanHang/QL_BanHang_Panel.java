@@ -1716,10 +1716,11 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
 
 // ✅ Hiển thị kết quả
         if (ketQua) {
-            JOptionPane.showMessageDialog(null, "🎉 Thanh toán thành công!");
+            JOptionPane.showMessageDialog(this, "🎉 Thanh toán thành công!");
             // TODO: reset form, load lại hóa đơn
+            Reset();
         } else {
-            JOptionPane.showMessageDialog(null, "❌ Thanh toán thất bại. Vui lòng thử lại.");
+            JOptionPane.showMessageDialog(this, "❌ Thanh toán thất bại. Vui lòng thử lại.");
         }
 
     }//GEN-LAST:event_btn__ThanhToanActionPerformed
