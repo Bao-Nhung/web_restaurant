@@ -24,7 +24,7 @@ public class QL_Tao_ChiTiet_HD {
     }
 
     public int Them_CTHD(ChiTietHoaDon CTHD) {
-        String SQL = "INSERT INTO CTHOADON (MA_HD, MA_SP, SOLUONG, DONGIA, GHICHU) VALUES "
+        String SQL = "INSERT INTO CTHOADON (MA_HD, MA_SP, SOLUONG, THANHTIEN, GHICHU) VALUES "
                 + "(?, ?, ?, ?, ?)";
 
         try {
@@ -97,6 +97,44 @@ public class QL_Tao_ChiTiet_HD {
 
         Object[] obj = new Object[]{Ma_SP, Ten_SP, DonGia_SP, SoLuong_SP, ThanhTien, GhiChu_SP};
         return obj;
+    }
+
+    public List<ChiTiet_SP_6_O> layChiTietSanPhamTheoMaHD(String maHD) {
+        List<ChiTiet_SP_6_O> danhSachSP = new ArrayList<>();
+
+        String sql = "SELECT "
+                + "cthd.MA_SP, sp.TENSP, sp.DONGIA, cthd.SOLUONG, "
+                + "(sp.DONGIA * cthd.SOLUONG) AS THANHTIEN, cthd.GHICHU "
+                + "FROM CTHOADON cthd "
+                + "JOIN SANPHAM sp ON cthd.MA_SP = sp.MA_SP "
+                + "WHERE cthd.MA_HD = ?";
+
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement ps = conect.prepareStatement(sql);
+            ps.setString(1, maHD);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String maSP = rs.getString("MA_SP");
+                String tenSP = rs.getString("TENSP");
+                float donGia = rs.getFloat("DONGIA");
+                int soLuong = rs.getInt("SOLUONG");
+                float thanhTien = rs.getFloat("THANHTIEN");
+                String ghiChu = rs.getString("GHICHU");
+
+                ChiTiet_SP_6_O sp = new ChiTiet_SP_6_O(maSP, tenSP, donGia, soLuong, thanhTien, ghiChu);
+                danhSachSP.add(sp);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi truy vấn chi tiết sản phẩm hóa đơn: " + e.getMessage());
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QL_Tao_ChiTiet_HD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return danhSachSP;
     }
 
     public ChiTiet_SP_6_O GetSPTheoHD(String maHD, String maSP) {
@@ -186,7 +224,7 @@ public class QL_Tao_ChiTiet_HD {
     public float layDonGiaSanPham(String Ma_SP) {
         String sql = "SELECT DONGIA FROM SANPHAM WHERE MA_SP = ?";
 
-        try  {
+        try {
             Connection conect = conn.DBConnect();
             PreparedStatement stmt = conect.prepareStatement(sql);
             stmt.setString(1, Ma_SP);
@@ -309,4 +347,32 @@ public class QL_Tao_ChiTiet_HD {
             }
         }
     }
+
+    // Lấy Chi Tiết
+//    public ThanhToan layThongTinThanhToanTheoMaHD(String Ma_HD) {
+//        ThanhToan tt = null;
+//
+//        String sql = "SELECT THANHTIEN, SOTIEN_KHACHTRA, GIAMGIA, TIENTRALAI FROM THANHTOAN WHERE MA_HD = ?";
+//
+//        try  {
+//            Connection conect = conn.DBConnect();
+//            PreparedStatement ps = conect.prepareStatement(sql);
+//            ps.setString(1, Ma_HD);
+//            ResultSet rs = ps.executeQuery();
+//
+//            if (rs.next()) {
+//                float thanhTien = rs.getFloat("THANHTIEN");
+//                float khachTra = rs.getFloat("SOTIEN_KHACHTRA");
+//                float giamGia = rs.getFloat("GIAMGIA");
+//                float tienTraLai = rs.getFloat("TIENTRALAI");
+//
+//                tt = new ThanhToan_O(thanhTien, khachTra, giamGia, tienTraLai);
+//            }
+//
+//        } catch (SQLException e) {
+//            System.err.println("❌ Lỗi truy vấn THANHTOAN: " + e.getMessage());
+//        }
+//
+//        return tt;
+//    }
 }

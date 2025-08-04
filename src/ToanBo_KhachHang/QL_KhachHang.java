@@ -371,7 +371,7 @@ public class QL_KhachHang {
     }
 
     public int layDiemTichLuy(String maKH) {
-        String sql = "SELECT DIEM_TICHLUY FROM KHACHHANG WHERE MAKH = ?";
+        String sql = "SELECT DIEM_TICHLUY FROM KHACHHANG WHERE MA_KH = ?";
         try  {
             Connection conect = conn.DBConnect();
             PreparedStatement stmt = conect.prepareStatement(sql);

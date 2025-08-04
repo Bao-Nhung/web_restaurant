@@ -208,6 +208,31 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
             }
         });
 
+        // Tự Động Khoá Khi Trạng Thái Đã Thanh Toán
+    }
+
+    // Phần Tự Động Khoá Khi Mà Trạng Thái Hoá Đơn Đã Thanh Toán
+    public void lockHoaDonIfPaid(String trangThai) {
+        if (trangThai.equalsIgnoreCase("Đã Thanh Toán")) {
+            // Hiển thị cảnh báo cho người dùng
+            JOptionPane.showMessageDialog(null,
+                    "⚠️ Hoá đơn này đã được thanh toán.\nBạn không được phép chỉnh sửa hoặc xóa dữ liệu.");
+
+            // Khóa các nút chức năng
+            btn_Chon_SP.setEnabled(false);
+            btn_Sua.setEnabled(false);
+            btn_HuyChon_SP.setEnabled(false);
+            btn_Chon_SP.setEnabled(false);
+            btn__ThanhToan.setEnabled(false);
+
+            // Khóa các ô nhập liệu
+            txt_Ma_KH.setEditable(false);
+            txt_KhuyenMai.setEditable(false);
+            txt_SoTienKhachTra.setEditable(false);
+
+            // Khóa bảng chi tiết sản phẩm nếu có
+            tbl_Bang_SP_DaChon.setEnabled(false); // hoặc setEditable(false) nếu là TableModel tùy chỉnh
+        }
     }
 
     // Xử Lý Khuyến Mãi Tự Động
@@ -619,6 +644,53 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
                 });
             }
         });
+    }
+
+    // Khi Click Vào Dữ Liệu Trong Bảng Hoá Đơn Thì Phải Hiện Bảng San Phẩm Được Chọn
+    public void loadChiTietHoaDon() {
+        int row = tbl_Bang_HD.getSelectedRow();
+        if (row < 0) {
+            return; // Không có dòng nào được chọn
+        }
+
+        // 1. Lấy mã hoá đơn từ bảng hoá đơn
+        String maHD = tbl_Bang_HD.getValueAt(row, 0).toString();
+
+        // 2. Truy vấn trạng thái của hoá đơn từ DAO
+        String trangThai = QL_Tao_HD.layTrangThaiTheoMaHD(maHD); // Trả về kiểu String
+
+        // 3. Lấy danh sách sản phẩm đã chọn của hoá đơn
+        List<ChiTiet_SP_6_O> dsSP = QL_Tao_CTHD.Get_ALL_SPDC(maHD);
+
+        // 4. Xoá dữ liệu cũ trên bảng chi tiết sản phẩm
+        TableModel_SP_DaChon = (DefaultTableModel) tbl_Bang_SP_DaChon.getModel();
+        TableModel_SP_DaChon.setRowCount(0);
+
+        // 5. Đổ dữ liệu mới và tính tổng tiền
+        float tongTien = 0f;
+        for (ChiTiet_SP_6_O sp : dsSP) {
+            float donGia = sp.getDonGia();
+            int soLuong = sp.getSoLuong();
+            float thanhTien = donGia * soLuong;
+
+            TableModel_SP_DaChon.addRow(new Object[]{
+                sp.getMa_SP(),
+                sp.getTen_SP(),
+                donGia,
+                soLuong,
+                thanhTien,
+                sp.getGhiChu()
+            });
+
+            tongTien += thanhTien;
+        }
+
+        // 6. Hiển thị tổng tiền lên giao diện
+        lb_HienTongTien_ChuaGiamGia.setText(String.format("%.0f", tongTien));
+        txt_SoTienKhachTra.setText(String.format("%.0f", tongTien));
+
+        // 7. Nếu hoá đơn đã thanh toán thì khoá form
+        lockHoaDonIfPaid(trangThai); // So sánh kiểu String bên trong
     }
 
     // Show Dtail Hoá Đơn 
@@ -1527,6 +1599,7 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
 //            JOptionPane.showMessageDialog(null, "✅ Bạn đã chọn hóa đơn, có thể thêm sản phẩm.");
         }
 
+        loadChiTietHoaDon();
     }//GEN-LAST:event_tbl_Bang_HDMouseClicked
 
     private void tbtn_ApDungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtn_ApDungActionPerformed
@@ -1598,37 +1671,53 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
 
     private void btn__ThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn__ThanhToanActionPerformed
         // TODO add your handling code here:
+        // 👉 Mã hóa đơn và khách hàng
         String Ma_HD = txt_MaHD.getText();
         String Ma_KH = txt_Ma_KH.getText();
 
-// 👉 Tách số tiền từ Label có chữ "VND"
-        String thanhTienText = lb_ThanhTien.getText(); // Ví dụ: "120000 VND"
+// 👉 Tách số tiền từ Label "120000 VND"
+        String thanhTienText = lb_ThanhTien.getText();
         String thanhTienClean = thanhTienText.replaceAll("[^\\d.]", "");
-        float ThanhTien = Float.parseFloat(thanhTienClean);
+        float ThanhTienGoc = Float.parseFloat(thanhTienClean);
 
-// 👉 Tách tiền khách trả nếu có chữ "VND"
-        String khachTraText = txt_SoTienKhachTra.getText(); // Ví dụ: "130000 VND"
+// 👉 Tách tiền khách trả "130000 VND"
+        String khachTraText = txt_SoTienKhachTra.getText();
         String khachTraClean = khachTraText.replaceAll("[^\\d.]", "");
         float SoTien_KhachTra = Float.parseFloat(khachTraClean);
-
-// 👉 Tính số tiền cần trả lại
-        float SoTien_CanTra_Lai = SoTien_KhachTra - ThanhTien;
 
 // 👉 Mã khuyến mãi
         String Ma_KM = txt_KhuyenMai.getText();
 
-// 👉 Tách số điểm (label có thể là "18 điểm")
+// ✅ Lấy giá trị khuyến mãi
+        QL_KhuyenMai QLKM = new QL_KhuyenMai(); // Tạo instance
+        float giaTriKM = QLKM.layGiaTriKhuyenMai(Ma_KM); // ✅ gọi qua object
+//        float giaTriKM = QL_KhuyenMai.layGiaTriKhuyenMai(Ma_KM);
+//lb_Hien_TienGiamGia.setText(String.valueOf(giaTriKM) + "VND");
+// 👉 Tính thành tiền sau khuyến mãi
+        float ThanhTienSauKM = ThanhTienGoc - giaTriKM;
+//        lb_ThanhTien.setText(String.valueOf(ThanhTienSauKM) + "VND");
+// 👉 Tính tiền trả lại
+        float SoTien_CanTra_Lai = SoTien_KhachTra - ThanhTienSauKM;
+
+// 👉 Tách số điểm cộng từ "18 điểm"
         String diemText = lb_SoDiemDuocCong.getText();
         String diemClean = diemText.replaceAll("[^\\d]", "");
         int SoDiem_DuocCong = Integer.parseInt(diemClean);
 
-// ✅ Gọi xử lý DAO
-        boolean ketQua = QL_Tao_HD.thanhToanHoaDon(Ma_HD, Ma_KH, ThanhTien, SoTien_KhachTra, SoTien_CanTra_Lai, Ma_KM, SoDiem_DuocCong);
+// ✅ Gọi DAO xử lý thanh toán
+        boolean ketQua = QL_Tao_HD.thanhToanHoaDon(
+                Ma_HD, Ma_KH,
+                ThanhTienSauKM,
+                SoTien_KhachTra,
+                SoTien_CanTra_Lai,
+                Ma_KM,
+                SoDiem_DuocCong
+        );
 
 // ✅ Hiển thị kết quả
         if (ketQua) {
             JOptionPane.showMessageDialog(null, "🎉 Thanh toán thành công!");
-            // TODO: Reset form, load lại hóa đơn...
+            // TODO: reset form, load lại hóa đơn
         } else {
             JOptionPane.showMessageDialog(null, "❌ Thanh toán thất bại. Vui lòng thử lại.");
         }

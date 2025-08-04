@@ -5,14 +5,11 @@
 package ToanBo_BanHang;
 
 import DBConnect.MyConnection;
-import ToanBo_BanHang.HoaDon;
-import ToanBo_SanPham.SanPham_5_O;
 import java.util.List;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -143,7 +140,7 @@ public class QL_Tao_HoaDon {
                 + "			TONGTIEN  =  ? ,\n"
                 + "			HINHTHUC =  ? ,\n"
                 + "			TRANGTHAI  =  ? ,\n"
-                + "			MA_GIAM =  ? ,\n"
+                + "			MA_KM =  ? ,\n"
                 + "			SOTIENCATRA =  ? , \n"
                 + "			MA_KH  =  ? ,\n"
                 + "			TICHDIEM =  ? \n"
@@ -262,33 +259,39 @@ public class QL_Tao_HoaDon {
         String SQL_Vao_ThanhToan = "INSERT INTO THANHTOAN (MA_HD, MA_KH, THANHTIEN, KHACHTRA, TIENTRALAI, MA_KM, NGAYTT) "
                 + "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
-        String SQL_CapNhat_HoaDon = "UPDATE HOADON SET TRANGTHAI = N'Đã Thanh Toán', TICHDIEM = ? WHERE MA_HD = ?";
-
+        String SQL_CapNhat_HoaDon = "UPDATE HOADON SET "
+                + "TRANGTHAI = N'Đã Thanh Toán', "
+                + "TICHDIEM = ?, "
+                + "TONGTIEN = ?, "
+                + "SOTIEN_KHACHTRA = ? "
+                + "WHERE MA_HD = ?";
         String SQL_CapNhatDiem_KhachHang = "UPDATE KHACHHANG SET DIEM_TICHLUY = DIEM_TICHLUY + ? WHERE MA_KH = ?";
 
         try {
             Connection conect = conn.DBConnect();
-            PreparedStatement pstmTT = conect.prepareStatement(SQL_Vao_ThanhToan);
-            PreparedStatement pstmHD = conect.prepareStatement(SQL_CapNhat_HoaDon);
-            PreparedStatement pstmKH = conect.prepareStatement(SQL_CapNhatDiem_KhachHang);
+            PreparedStatement Pstm_TT = conect.prepareStatement(SQL_Vao_ThanhToan);
+            PreparedStatement Pstm_HD = conect.prepareStatement(SQL_CapNhat_HoaDon);
+            PreparedStatement Pstm_KH = conect.prepareStatement(SQL_CapNhatDiem_KhachHang);
             // Insert dữ liệu vào bảng THANHTOAN
-            pstmTT.setString(1, Ma_HD);
-            pstmTT.setString(2, Ma_KH);
-            pstmTT.setFloat(3, Thanh_Tien);
-            pstmTT.setFloat(4, SoTien_KhachTra);
-            pstmTT.setFloat(5, SoTien_TraLai);
-            pstmTT.setString(6, Ma_KM);
-            pstmTT.executeUpdate();
+            Pstm_TT.setString(1, Ma_HD);
+            Pstm_TT.setString(2, Ma_KH);
+            Pstm_TT.setFloat(3, Thanh_Tien);
+            Pstm_TT.setFloat(4, SoTien_KhachTra);
+            Pstm_TT.setFloat(5, SoTien_TraLai);
+            Pstm_TT.setString(6, Ma_KM);
+            Pstm_TT.executeUpdate();
 
             // Cập nhật trạng thái hóa đơn + điểm cộng
-            pstmHD.setInt(1, SoDiem_DuocCong);
-            pstmHD.setString(2, Ma_HD);
-            pstmHD.executeUpdate();
+            Pstm_HD.setInt(1, SoDiem_DuocCong);
+            Pstm_HD.setFloat(2, Thanh_Tien);
+            Pstm_HD.setFloat(3, SoTien_KhachTra);
+            Pstm_HD.setString(4, Ma_HD);
+            Pstm_HD.executeUpdate();
 
             // Cập nhật điểm tích lũy của khách hàng
-            pstmKH.setInt(1, SoDiem_DuocCong);
-            pstmKH.setString(2, Ma_KH);
-            pstmKH.executeUpdate();
+            Pstm_KH.setInt(1, SoDiem_DuocCong);
+            Pstm_KH.setString(2, Ma_KH);
+            Pstm_KH.executeUpdate();
 
             return true;
 
@@ -296,5 +299,27 @@ public class QL_Tao_HoaDon {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public String layTrangThaiTheoMaHD(String maHD) {
+        String trangThai = "UNKNOWN"; // Giá trị mặc định
+
+        String sql = "SELECT TRANGTHAI FROM HOADON WHERE MA_HD = ?";
+
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement ps = conect.prepareStatement(sql);
+            ps.setString(1, maHD);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                trangThai = rs.getString("TRANGTHAI"); // Đọc chuỗi trạng thái
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println("❌ Lỗi truy vấn trạng thái hóa đơn: " + e.getMessage());
+        }
+
+        return trangThai;
     }
 }

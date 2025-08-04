@@ -636,4 +636,29 @@ public class QL_KhuyenMai {
         }
         return null;
     }
+    // Lấy Giá Trị Khuyến Mãi Qua Hàm
+    public float layGiaTriKhuyenMai(String maKM) {
+        float giaTri = 0f; // Mặc định nếu không tìm thấy mã
+
+        String sql = "SELECT GIATRI FROM KHUYENMAI WHERE MA_KM = ?";
+
+        try  {
+            Connection conect = conn.DBConnect();
+            PreparedStatement ps = conect.prepareStatement(sql);
+            ps.setString(1, maKM);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                giaTri = rs.getFloat("GIATRI");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Lỗi lấy giá trị khuyến mãi: " + e.getMessage());
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QL_KhuyenMai.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return giaTri;
+    }
 }
