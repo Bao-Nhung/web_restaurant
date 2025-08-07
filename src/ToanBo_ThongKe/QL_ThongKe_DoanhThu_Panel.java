@@ -4,11 +4,13 @@
  */
 package ToanBo_ThongKe;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.beans.PropertyChangeListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jfree.chart.ChartFactory;
@@ -16,7 +18,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import java.text.DecimalFormat;
-import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.*;
 import javax.swing.BorderFactory;
@@ -25,6 +26,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
 
 /**
  *
@@ -40,7 +44,6 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
      */
     public QL_ThongKe_DoanhThu_Panel() {
         initComponents();
-        veBieuDoDoanhThu();
         hienThiDoanhThuHomNay();
         Initable_SPBC();
         txt_Tong_SP_BanDuoc_TheoNgay.getDateEditor().addPropertyChangeListener(evt -> {
@@ -78,9 +81,41 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
                 return label;
             }
         });
-        
+
         // Cập Nhật Lợi Nhuận
         capNhatLoiNhuan();
+
+        ganSuKienKiemTraNgay();
+    }
+
+    // Cái Sự Kiện Của Doanh Thu
+    public void ganSuKienKiemTraNgay() {
+        PropertyChangeListener listener = evt -> {
+            java.util.Date Ngay_BD = txt_NgayBatDau_BieuDo.getDate();
+            java.util.Date Ngay_KT = txt_Ngay_KT_BieuDo.getDate();
+
+            if (Ngay_BD == null || Ngay_KT == null) {
+                return;
+            }
+
+            if (Ngay_BD.after(Ngay_KT)) {
+                JOptionPane.showMessageDialog(null, "❌ Ngày bắt đầu không được sau ngày kết thúc!");
+                txt_NgayBatDau_BieuDo.setDate(null); // hoặc set lại ngày hợp lệ
+                return;
+            }
+
+            long millisPerDay = 1000L * 60 * 60 * 24;
+            long soNgay = (Ngay_KT.getTime() - Ngay_BD.getTime()) / millisPerDay;
+
+            if (soNgay > 31) {
+                JOptionPane.showMessageDialog(null, "❌ Khoảng thời gian không được vượt quá 1 tháng!");
+                txt_Ngay_KT_BieuDo.setDate(null); // hoặc set lại ngày hợp lệ
+            }
+        };
+
+        txt_NgayBatDau_BieuDo.getDateEditor().addPropertyChangeListener(listener);
+        txt_Ngay_KT_BieuDo.getDateEditor().addPropertyChangeListener(listener);
+
     }
 
     // Cái Lợi Nhuận
@@ -103,7 +138,6 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
 
         // Kiểm tra nếu chưa chọn ngày
         if (ngayBatDau == null || ngayKetThuc == null) {
-            JOptionPane.showMessageDialog(null, "⚠️ Vui lòng chọn đầy đủ thời gian bắt đầu và kết thúc.");
             return;
         }
 
@@ -186,6 +220,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         }
     }
 
+    // Doanh Thu Hôm Nay
     private void hienThiDoanhThuHomNay() {
         float doanhThuHomNay = qldt.layTongDoanhThuHomNay();
 
@@ -195,37 +230,50 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         lb_HienDoanhThu.setText(doanhThuStr + " VND"); // Hiển thị ra label đẹp mắt
     }
 
-    public void veBieuDoDoanhThu() {
-        // 1. Tạo dữ liệu mẫu
-        Map<String, Double> dataMap = new LinkedHashMap<>();
-        dataMap.put("01-07", 1000000.0);
-        dataMap.put("02-07", 1350000.0);
-        dataMap.put("03-07", 980000.0);
-        dataMap.put("04-07", 1600000.0);
-        dataMap.put("05-07", 1800000.0);
-
-        // 2. Tạo dataset
+    // Biểu Đồ Doanh Thu
+    public void veBieuDoDoanhThu(List<BieuDo_3_O> danhSach) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Map.Entry<String, Double> entry : dataMap.entrySet()) {
-            dataset.addValue(entry.getValue(), "Doanh thu", entry.getKey());
+
+        double maxGiaTri = 0;
+
+        for (BieuDo_3_O item : danhSach) {
+            double doanhThu = item.getDoanh_Thu();
+            double loiNhuan = item.getLoi_Nhuan();
+            String ngay = item.getNgay();
+
+            dataset.addValue(doanhThu, "Doanh thu", ngay);
+            dataset.addValue(loiNhuan, "Lợi nhuận", ngay);
+
+            // Xác định giá trị lớn nhất để set trục tung
+            if (doanhThu > maxGiaTri) {
+                maxGiaTri = doanhThu;
+            }
         }
 
-        // 3. Tạo biểu đồ cột
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Thống kê doanh thu theo ngày",
+                "Thống Kê Doanh Thu và Lợi Nhuận Theo Ngày",
                 "Ngày",
-                "Doanh thu (VNĐ)",
+                "Số tiền (VNĐ)",
                 dataset
         );
 
-        // 4. Gắn biểu đồ vào JPanel đã tạo
-        ChartPanel chartPanel = new ChartPanel(barChart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(604, 345));
+        // Tùy chỉnh màu cột
+        CategoryPlot plot = barChart.getCategoryPlot();
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, Color.RED);    // Doanh thu
+        renderer.setSeriesPaint(1, Color.GREEN);  // Lợi nhuận
 
-        BieuDo_Panel.removeAll(); // Xóa nội dung cũ (nếu có)
-        BieuDo_Panel.setLayout(new java.awt.BorderLayout());
-        BieuDo_Panel.add(chartPanel, java.awt.BorderLayout.CENTER);
-        BieuDo_Panel.validate(); // Cập nhật lại giao diện
+        // ✅ Cài đặt giới hạn trục tung cao hơn doanh thu lớn nhất 50,000 VNĐ
+        NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+        yAxis.setRange(0, maxGiaTri + 50000);
+
+        // Gắn vào panel
+        ChartPanel chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new Dimension(604, 345));
+        BieuDo_Panel.removeAll();
+        BieuDo_Panel.setLayout(new BorderLayout());
+        BieuDo_Panel.add(chartPanel, BorderLayout.CENTER);
+        BieuDo_Panel.validate();
     }
 
     /**
@@ -250,6 +298,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         txt_NgayBatDau_BieuDo = new com.toedter.calendar.JDateChooser();
         txt_Ngay_KT_BieuDo = new com.toedter.calendar.JDateChooser();
+        btn_Loc = new javax.swing.JButton();
         Tong_SP_BanDuoc = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -333,7 +382,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         BieuDo_Panel.setLayout(BieuDo_PanelLayout);
         BieuDo_PanelLayout.setHorizontalGroup(
             BieuDo_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 596, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         BieuDo_PanelLayout.setVerticalGroup(
             BieuDo_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,6 +395,17 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
 
         jLabel14.setText("Thời Gian Kết Thúc :");
 
+        txt_NgayBatDau_BieuDo.setDateFormatString("yyyy-MM-dd");
+
+        txt_Ngay_KT_BieuDo.setDateFormatString("yyyy-MM-dd");
+
+        btn_Loc.setText("Lọc");
+        btn_Loc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_LocActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -354,24 +414,29 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_NgayBatDau_BieuDo, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                    .addComponent(txt_NgayBatDau_BieuDo, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_Ngay_KT_BieuDo, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15))
+                    .addComponent(txt_Ngay_KT_BieuDo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(btn_Loc, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(8, Short.MAX_VALUE)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel14))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_NgayBatDau_BieuDo, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-                    .addComponent(txt_Ngay_KT_BieuDo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_Loc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_NgayBatDau_BieuDo, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                            .addComponent(txt_Ngay_KT_BieuDo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -379,13 +444,11 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         Trang_Chung_Chuyen.setLayout(Trang_Chung_ChuyenLayout);
         Trang_Chung_ChuyenLayout.setHorizontalGroup(
             Trang_Chung_ChuyenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Trang_Chung_ChuyenLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
             .addGroup(Trang_Chung_ChuyenLayout.createSequentialGroup()
-                .addComponent(BieuDo_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
+            .addComponent(BieuDo_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         Trang_Chung_ChuyenLayout.setVerticalGroup(
             Trang_Chung_ChuyenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -526,7 +589,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(Trang_Chung_Chuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 608, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Trang_Chung_Chuyen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(SanPham_BanChay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -551,6 +614,27 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_LocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LocActionPerformed
+        // TODO add your handling code here:
+        java.util.Date util_NgayBD = txt_NgayBatDau_BieuDo.getDate();
+        java.util.Date util_NgayKT = txt_Ngay_KT_BieuDo.getDate();
+
+        if (util_NgayBD == null || util_NgayKT == null) {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn đầy đủ ngày bắt đầu và ngày kết thúc!");
+            return;
+        }
+
+// Chuyển đổi sang java.sql.Date
+        java.sql.Date sql_NgayBD = new java.sql.Date(util_NgayBD.getTime());
+        java.sql.Date sql_NgayKT = new java.sql.Date(util_NgayKT.getTime());
+
+        QL_DoanhThu thongKeDAO = new QL_DoanhThu();
+        List<BieuDo_3_O> danhSach = thongKeDAO.layThongKeTheoNgay(sql_NgayBD, sql_NgayKT);
+        veBieuDoDoanhThu(danhSach);
+
+
+    }//GEN-LAST:event_btn_LocActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BieuDo_Panel;
@@ -559,6 +643,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
     private javax.swing.JPanel SanPham_BanChay;
     private javax.swing.JPanel Tong_SP_BanDuoc;
     private javax.swing.JPanel Trang_Chung_Chuyen;
+    private javax.swing.JButton btn_Loc;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

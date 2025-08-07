@@ -135,4 +135,43 @@ public class QL_DoanhThu {
 
         return tongLoiNhuan;
     }
+
+    public List<BieuDo_3_O> layThongKeTheoNgay(Date Ngay_BD,Date Ngay_KT) {
+        List<BieuDo_3_O> danhSach = new ArrayList<>();
+        String sql = """
+        SELECT 
+            FORMAT(hd.NGAYLAP, 'dd-MM') AS NGAY,
+            SUM(hd.TONGTIEN) AS DOANHTHU,
+            SUM(cthd.SOLUONG * (sp.DONGIA * 0.2)) AS LOINHUAN
+        FROM HOADON hd
+        JOIN CTHOADON cthd ON hd.MA_HD = cthd.MA_HD
+        JOIN SANPHAM sp ON cthd.MA_SP = sp.MA_SP
+        WHERE hd.NGAYLAP BETWEEN  ?  AND  ?
+        GROUP BY FORMAT(hd.NGAYLAP, 'dd-MM')
+        ORDER BY MIN(hd.NGAYLAP) ASC
+    """;
+
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement ps = conect.prepareStatement(sql);
+            ps.setDate(1, new java.sql.Date(Ngay_BD.getTime()));
+            ps.setDate(2, new java.sql.Date(Ngay_KT.getTime()));
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String Ngay = rs.getString("NGAY");
+                double Doanh_Thu = rs.getDouble("DOANHTHU");
+                double Loi_Nhuan = rs.getDouble("LOINHUAN");
+
+                danhSach.add(new BieuDo_3_O(Ngay, Doanh_Thu, Loi_Nhuan));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QL_DoanhThu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return danhSach;
+    }
 }
