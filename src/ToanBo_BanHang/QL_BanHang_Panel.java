@@ -47,6 +47,7 @@ import javax.swing.table.TableCellRenderer;
 import ToanBo_KhuyenMai.KhuyenMai;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -209,6 +210,8 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
         });
 
         // Tự Động Khoá Khi Trạng Thái Đã Thanh Toán
+        // Khoá In Hoá Đơn
+        btn_InHoaDon.setEnabled(false);
     }
 
     // Phần Tự Động Khoá Khi Mà Trạng Thái Hoá Đơn Đã Thanh Toán
@@ -866,10 +869,27 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
         int soLuong;
         try {
             soLuong = (Integer) txt_SoLuong.getValue();
+
             if (soLuong <= 0) {
                 JOptionPane.showMessageDialog(this, "❌ Số lượng phải lớn hơn 0!");
                 return;
             }
+
+            if (soLuong > 200) {
+                JOptionPane.showMessageDialog(this, "❌ Giới hạn là 200 sản phẩm. Không thể chọn nhiều hơn!");
+                return;
+            }
+
+            // Cảnh báo theo từng mốc
+            if (soLuong == 50) {
+                JOptionPane.showMessageDialog(this, "⚠️ Sản phẩm này đã vượt mức 50.");
+            } else if (soLuong == 75) {
+                JOptionPane.showMessageDialog(this, "⚠️ Sản phẩm này đã vượt mức 75.");
+            } else if (soLuong == 100) {
+                JOptionPane.showMessageDialog(this, "⚠️ Sản phẩm này đã vượt mức 100.");
+            }
+
+            // Tiếp tục xử lý thêm nếu cần...
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "❌ Số lượng không hợp lệ!");
             return;
@@ -1031,6 +1051,21 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
             return;
         }
 
+        if (soLuongMoi > 200) {
+            JOptionPane.showMessageDialog(null, "❌ Giới hạn là 200 sản phẩm. Không thể chọn nhiều hơn!");
+            return;
+        }
+
+// Cảnh báo theo từng mốc
+        if (soLuongMoi == 50) {
+            JOptionPane.showMessageDialog(null, "⚠️ Sản phẩm này đã vượt mức 50.");
+        } else if (soLuongMoi == 75) {
+            JOptionPane.showMessageDialog(null, "⚠️ Sản phẩm này đã vượt mức 75.");
+        } else if (soLuongMoi == 100) {
+            JOptionPane.showMessageDialog(null, "⚠️ Sản phẩm này đã vượt mức 100.");
+        }
+
+// Có thể xử lý tiếp sau đoạn này...
         // 🧮 Lấy đơn giá từ bảng hiện tại
         float donGia = Float.parseFloat(TableModel_SP_DaChon.getValueAt(selectedRow, 2).toString());
         float thanhTienMoi = donGia * soLuongMoi;
@@ -1090,7 +1125,7 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
         tbtn_ApDung = new javax.swing.JToggleButton();
         tbtn_HuyBo = new javax.swing.JToggleButton();
         btn_ReSet = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btn_InHoaDon = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txt_MaHD = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
@@ -1195,7 +1230,12 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
             }
         });
 
-        jButton2.setText("In Hoá Đơn");
+        btn_InHoaDon.setText("In Hoá Đơn");
+        btn_InHoaDon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_InHoaDonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout ThongTin_HDLayout = new javax.swing.GroupLayout(ThongTin_HD);
         ThongTin_HD.setLayout(ThongTin_HDLayout);
@@ -1262,7 +1302,7 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
                                             .addGap(19, 19, 19))))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(ThongTin_HDLayout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_InHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_ReSet)))
                 .addContainerGap())
@@ -1328,7 +1368,7 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(ThongTin_HDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_ReSet, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btn_InHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -1714,14 +1754,79 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
                 SoDiem_DuocCong
         );
 
-// ✅ Hiển thị kết quả
+//        if (ketQua) {
+//            JOptionPane.showMessageDialog(this, "🎉 Thanh toán thành công!");
+//
+//            String noiDungThanhToan = "Thanh toan hoa don " + Ma_HD;
+//
+//            // ✅ Chỉ tạo QR nếu chọn Chuyển Khoản
+//            if (rdo_ChuyenKhoan.isSelected()) {
+//                try {
+//                    BufferedImage qrImage = Tao_Ma_QR_Core.generateQRImage(
+//                            ThanhTienSauKM,
+//                            noiDungThanhToan
+//                    );
+//
+//                    JFrame qrFrame = new JFrame("Mã QR Thanh Toán");
+//                    qrFrame.setSize(300, 300);
+//                    qrFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//                    qrFrame.setLocationRelativeTo(null);
+//
+//                    JLabel qrLabel = new JLabel(new ImageIcon(qrImage));
+//                    qrFrame.add(qrLabel);
+//                    qrFrame.setVisible(true);
+//
+//                    JOptionPane.showMessageDialog(this, "✅ Mã QR thanh toán đã được tạo!");
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    JOptionPane.showMessageDialog(this, "❌ Lỗi tạo QR: " + e.getMessage());
+//                }
+//            } else {
+//                JOptionPane.showMessageDialog(this, "💵 Thanh toán tiền mặt - Không cần tạo mã QR.");
+//            }
+//
+//            Reset();
+//        } else {
+//            JOptionPane.showMessageDialog(this, "❌ Thanh toán thất bại. Vui lòng thử lại.");
+//        }
         if (ketQua) {
             JOptionPane.showMessageDialog(this, "🎉 Thanh toán thành công!");
-            // TODO: reset form, load lại hóa đơn
+
+            String noiDungThanhToan = "Thanh toan hoa don " + Ma_HD;
+
+            // ✅ Chỉ tạo QR nếu chọn Chuyển Khoản
+            if (rdo_ChuyenKhoan.isSelected()) {
+                try {
+                    // 👉 Gọi hàm chuẩn VietQR EMV
+                    BufferedImage qrImage = Tao_Ma_QR_Core_01.generateVietQR(
+                            ThanhTienSauKM, // 💰 số tiền
+                            noiDungThanhToan // 📝 nội dung chuyển khoản
+                    );
+
+                    JFrame qrFrame = new JFrame("Mã QR Thanh Toán");
+                    qrFrame.setSize(300, 300);
+                    qrFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    qrFrame.setLocationRelativeTo(null);
+
+                    JLabel qrLabel = new JLabel(new ImageIcon(qrImage));
+                    qrFrame.add(qrLabel);
+                    qrFrame.setVisible(true);
+
+                    JOptionPane.showMessageDialog(this, "✅ Mã QR thanh toán đã được tạo!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "❌ Lỗi tạo QR: " + e.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "💵 Thanh toán tiền mặt - Không cần tạo mã QR.");
+            }
+
             Reset();
         } else {
             JOptionPane.showMessageDialog(this, "❌ Thanh toán thất bại. Vui lòng thử lại.");
         }
+
 
     }//GEN-LAST:event_btn__ThanhToanActionPerformed
 
@@ -1753,6 +1858,10 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btn_HuyChon_SPActionPerformed
 
+    private void btn_InHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_InHoaDonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_InHoaDonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane Ds_LSP;
@@ -1760,10 +1869,10 @@ public class QL_BanHang_Panel extends javax.swing.JPanel {
     private javax.swing.ButtonGroup btg_HinhThuc_TT;
     private javax.swing.JButton btn_Chon_SP;
     private javax.swing.JButton btn_HuyChon_SP;
+    private javax.swing.JButton btn_InHoaDon;
     private javax.swing.JButton btn_ReSet;
     private javax.swing.JButton btn_Sua;
     private javax.swing.JButton btn__ThanhToan;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

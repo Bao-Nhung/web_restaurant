@@ -523,8 +523,6 @@ public class QL_NguyenLieu_Panel extends javax.swing.JPanel {
 
         ChuaAnh_Panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lb_HienAnh.setText("jLabel7");
-
         javax.swing.GroupLayout ChuaAnh_PanelLayout = new javax.swing.GroupLayout(ChuaAnh_Panel);
         ChuaAnh_Panel.setLayout(ChuaAnh_PanelLayout);
         ChuaAnh_PanelLayout.setHorizontalGroup(

@@ -4,6 +4,11 @@
  */
 package ToanBo_ThongKe;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jfree.chart.ChartFactory;
@@ -12,6 +17,14 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import java.text.DecimalFormat;
 import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -19,6 +32,7 @@ import java.sql.*;
  */
 public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
 
+    DefaultTableModel TableModel_SanPhamBanChay;
     QL_DoanhThu qldt = new QL_DoanhThu();
 
     /**
@@ -28,14 +42,118 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         initComponents();
         veBieuDoDoanhThu();
         hienThiDoanhThuHomNay();
-
+        Initable_SPBC();
         txt_Tong_SP_BanDuoc_TheoNgay.getDateEditor().addPropertyChangeListener(evt -> {
             if ("date".equals(evt.getPropertyName())) {
                 hienThiTongSanPhamTheoNgay(); // Gọi hàm xử lý truy vấn & hiển thị
             }
         });
+
+        // Sự Kiện Auto Tìm Kiếm Thời Gian Bắt Đầu Thời Gian Kết Thúc
+        txt_ThoiGian_BD_SPBC.getDateEditor().addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                hienThiSanPhamBanChayTheoThoiGian(txt_ThoiGian_BD_SPBC.getDate(), txt_ThoiGian_KT_SPBC.getDate());
+            }
+        });
+
+        txt_ThoiGian_KT_SPBC.getDateEditor().addPropertyChangeListener(evt -> {
+            if ("date".equals(evt.getPropertyName())) {
+                hienThiSanPhamBanChayTheoThoiGian(txt_ThoiGian_BD_SPBC.getDate(), txt_ThoiGian_KT_SPBC.getDate());
+            }
+        });
+
+        // Render Ảnh Cho Cái Table
+        tbl_Bang_SP_BanChay.setRowHeight(50);
+        tbl_Bang_SP_BanChay.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
+
+                JLabel label = (JLabel) value;
+                if (isSelected) {
+                    label.setBackground(table.getSelectionBackground());
+                } else {
+                    label.setBackground(Color.WHITE);
+                }
+                return label;
+            }
+        });
+        
+        // Cập Nhật Lợi Nhuận
+        capNhatLoiNhuan();
     }
 
+    // Cái Lợi Nhuận
+    public void capNhatLoiNhuan() {
+        float loiNhuan = qldt.tinhTongLoiNhuanTrongNgayHomNay();
+        DecimalFormat format = new DecimalFormat("#,###");
+        lb_HienLoiNhuan.setText(format.format(loiNhuan) + " VND");
+    }
+
+    // Hiển Thị Sản Phẩm Bán Chạy Theo Một Khoản Thời Gian Nhất Định
+    public void Initable_SPBC() {
+        TableModel_SanPhamBanChay = new DefaultTableModel();
+        String[] cols = {"Tên Sản Phẩm", "Số Lượng", "Thành Tiền", "Ảnh SP"};
+        TableModel_SanPhamBanChay.setColumnIdentifiers(cols);
+        tbl_Bang_SP_BanChay.setModel(TableModel_SanPhamBanChay);
+    }
+
+    public void hienThiSanPhamBanChayTheoThoiGian(java.util.Date ngayBatDau, java.util.Date ngayKetThuc) {
+        TableModel_SanPhamBanChay.setRowCount(0); // Xoá dữ liệu cũ
+
+        // Kiểm tra nếu chưa chọn ngày
+        if (ngayBatDau == null || ngayKetThuc == null) {
+            JOptionPane.showMessageDialog(null, "⚠️ Vui lòng chọn đầy đủ thời gian bắt đầu và kết thúc.");
+            return;
+        }
+
+        // Kiểm tra nếu ngày kết thúc < ngày bắt đầu
+        if (ngayKetThuc.before(ngayBatDau)) {
+            JOptionPane.showMessageDialog(null, "❌ Thời gian kết thúc không được nhỏ hơn thời gian bắt đầu.");
+            return;
+        }
+
+        // Chuyển kiểu sang java.sql.Date
+        java.sql.Date sqlNgayBatDau = new java.sql.Date(ngayBatDau.getTime());
+        java.sql.Date sqlNgayKetThuc = new java.sql.Date(ngayKetThuc.getTime());
+
+        // Truy vấn dữ liệu
+        List<SanPhamBanChay> dsSP = qldt.laySanPhamBanChayTheoThoiGian(sqlNgayBatDau, sqlNgayKetThuc);
+
+        for (SanPhamBanChay sp : dsSP) {
+            Object[] row = new Object[]{
+                sp.getTen_SP(),
+                sp.getSoLuong(),
+                String.format("%,.0f VNĐ", sp.getThanhTien()),
+                taoLabelAnhSanPhamTrongBang(sp.getAnh_SP()) // Xử lý ảnh gọn gàng
+            };
+            TableModel_SanPhamBanChay.addRow(row);
+        }
+    }
+
+    public Component taoLabelAnhSanPhamTrongBang(String duongDanAnh) {
+        JLabel label = new JLabel();
+        label.setOpaque(true); // Giúp hiện màu nền nếu cần
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        label.setPreferredSize(new Dimension(50, 55));
+        label.setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Viền xám
+
+        if (duongDanAnh == null || duongDanAnh.trim().isEmpty()) {
+            label.setText("Chưa có ảnh");
+            label.setFont(new Font("Segoe UI", Font.BOLD, 12));
+            label.setForeground(Color.RED); // Chữ đỏ
+        } else {
+            ImageIcon icon = new ImageIcon(duongDanAnh);
+            Image img = icon.getImage().getScaledInstance(50, 45, Image.SCALE_SMOOTH);
+            label.setIcon(new ImageIcon(img));
+            label.setText(""); // Không hiển thị đường dẫn
+        }
+
+        return label;
+    }
+
+    // Hiển Thị Tổng Sản Phẩm Theo Ngày
     private void hienThiTongSanPhamTheoNgay() {
         // Lấy ngày được chọn từ JDateChooser (java.util.Date)
         java.util.Date ngayChonUtil = txt_Tong_SP_BanDuoc_TheoNgay.getDate();
@@ -64,7 +182,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         if (tongSanPham > 0) {
             lb_HienTongSanPhamDaBanTheoNgay.setText(String.format("%d sản phẩm đã bán", tongSanPham));
         } else {
-            lb_HienTongSanPhamDaBanTheoNgay.setText("📭 Chưa có sản phẩm nào bán được trong ngày này.");
+            lb_HienTongSanPhamDaBanTheoNgay.setText("📭 Chưa có sản phẩm nào bán \n được trong ngày này.");
         }
     }
 
@@ -124,11 +242,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         lb_HienDoanhThu = new javax.swing.JLabel();
         LoiNhuan_Panel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        txt_ThoiGian_KT_LoiNhuan = new com.toedter.calendar.JDateChooser();
-        jLabel7 = new javax.swing.JLabel();
-        txt_ThoiGian_BD_LoiNhuan = new com.toedter.calendar.JDateChooser();
+        lb_HienLoiNhuan = new javax.swing.JLabel();
         Trang_Chung_Chuyen = new javax.swing.JPanel();
         BieuDo_Panel = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -143,12 +257,12 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         txt_Tong_SP_BanDuoc_TheoNgay = new com.toedter.calendar.JDateChooser();
         SanPham_BanChay = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbl_Bang_SP_BanChay = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jDateChooser3 = new com.toedter.calendar.JDateChooser();
+        txt_ThoiGian_BD_SPBC = new com.toedter.calendar.JDateChooser();
         jLabel15 = new javax.swing.JLabel();
-        jDateChooser4 = new com.toedter.calendar.JDateChooser();
+        txt_ThoiGian_KT_SPBC = new com.toedter.calendar.JDateChooser();
         jButton3 = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1130, 655));
@@ -188,11 +302,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Lợi Nhuận");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-
-        jLabel6.setText("Thời Gian Bắt Đầu :");
-
-        jLabel7.setText("Thời Gian Kết Thúc :");
+        lb_HienLoiNhuan.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
 
         javax.swing.GroupLayout LoiNhuan_PanelLayout = new javax.swing.GroupLayout(LoiNhuan_Panel);
         LoiNhuan_Panel.setLayout(LoiNhuan_PanelLayout);
@@ -200,42 +310,21 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
             LoiNhuan_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(LoiNhuan_PanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(LoiNhuan_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(LoiNhuan_PanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                        .addGap(199, 199, 199))
-                    .addGroup(LoiNhuan_PanelLayout.createSequentialGroup()
-                        .addGroup(LoiNhuan_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_ThoiGian_BD_LoiNhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(LoiNhuan_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_ThoiGian_KT_LoiNhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
-            .addGroup(LoiNhuan_PanelLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                .addGap(199, 199, 199))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LoiNhuan_PanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lb_HienLoiNhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43))
         );
         LoiNhuan_PanelLayout.setVerticalGroup(
             LoiNhuan_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LoiNhuan_PanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(LoiNhuan_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LoiNhuan_PanelLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_ThoiGian_KT_LoiNhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LoiNhuan_PanelLayout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_ThoiGian_BD_LoiNhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addGap(28, 28, 28)
+                .addComponent(lb_HienLoiNhuan, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         Trang_Chung_Chuyen.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Bảng Biểu Đồ Danh Thu"));
@@ -314,7 +403,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
 
         jLabel9.setText("Nhập Ngày Sản Phẩm:");
 
-        lb_HienTongSanPhamDaBanTheoNgay.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lb_HienTongSanPhamDaBanTheoNgay.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout Tong_SP_BanDuocLayout = new javax.swing.GroupLayout(Tong_SP_BanDuoc);
         Tong_SP_BanDuoc.setLayout(Tong_SP_BanDuocLayout);
@@ -348,7 +437,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
 
         SanPham_BanChay.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Bảng Sản Phẩm Bán Chạy"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_Bang_SP_BanChay.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -359,7 +448,7 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbl_Bang_SP_BanChay);
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -375,11 +464,11 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
-                    .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_ThoiGian_BD_SPBC, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel15)
-                    .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_ThoiGian_KT_SPBC, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(71, 71, 71))
         );
         jPanel7Layout.setVerticalGroup(
@@ -390,11 +479,11 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txt_ThoiGian_BD_SPBC, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txt_ThoiGian_KT_SPBC, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -471,29 +560,25 @@ public class QL_ThongKe_DoanhThu_Panel extends javax.swing.JPanel {
     private javax.swing.JPanel Tong_SP_BanDuoc;
     private javax.swing.JPanel Trang_Chung_Chuyen;
     private javax.swing.JButton jButton3;
-    private com.toedter.calendar.JDateChooser jDateChooser3;
-    private com.toedter.calendar.JDateChooser jDateChooser4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lb_HienDoanhThu;
+    private javax.swing.JLabel lb_HienLoiNhuan;
     private javax.swing.JLabel lb_HienTongSanPhamDaBanTheoNgay;
+    private javax.swing.JTable tbl_Bang_SP_BanChay;
     private com.toedter.calendar.JDateChooser txt_NgayBatDau_BieuDo;
     private com.toedter.calendar.JDateChooser txt_Ngay_KT_BieuDo;
-    private com.toedter.calendar.JDateChooser txt_ThoiGian_BD_LoiNhuan;
-    private com.toedter.calendar.JDateChooser txt_ThoiGian_KT_LoiNhuan;
+    private com.toedter.calendar.JDateChooser txt_ThoiGian_BD_SPBC;
+    private com.toedter.calendar.JDateChooser txt_ThoiGian_KT_SPBC;
     private com.toedter.calendar.JDateChooser txt_Tong_SP_BanDuoc_TheoNgay;
     // End of variables declaration//GEN-END:variables
 }

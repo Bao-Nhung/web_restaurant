@@ -516,6 +516,7 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
         btn_XoaNL = new javax.swing.JButton();
         btn_XuatExcel = new javax.swing.JButton();
         btn_NhapExcel = new javax.swing.JButton();
+        btn_DongTrang = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -763,6 +764,14 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btn_DongTrang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Dong_Trang.png"))); // NOI18N
+        btn_DongTrang.setText("Đóng Trang");
+        btn_DongTrang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_DongTrangActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -775,7 +784,9 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btn_DongTrang)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -787,6 +798,10 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_DongTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
         );
 
         pack();
@@ -874,6 +889,11 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_NhapExcelActionPerformed
 
+    private void btn_DongTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_DongTrangActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_btn_DongTrangActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -912,6 +932,7 @@ public class QL_Tao_NguyenLieu_JFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ChuaAnh_Panel;
     private javax.swing.JButton btn_ChonAnh;
+    private javax.swing.JButton btn_DongTrang;
     private javax.swing.JButton btn_LamMoi;
     private javax.swing.JButton btn_NhapExcel;
     private javax.swing.JButton btn_SuaNL;

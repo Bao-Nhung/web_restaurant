@@ -98,8 +98,8 @@
                       <Component id="btn_KhachHang" alignment="0" max="32767" attributes="0"/>
                       <Component id="btn_ThongKeDoanhThu" alignment="0" max="32767" attributes="0"/>
                       <Component id="btn_KhuyenMai" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btn_ThongKeDoanhThu1" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btn_BanHang1" max="32767" attributes="0"/>
+                      <Component id="btn_LichSu" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btn_KeHang" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               </Group>
@@ -112,7 +112,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_BanHang" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="btn_BanHang1" min="-2" pref="55" max="-2" attributes="0"/>
+                  <Component id="btn_KeHang" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_NguyenLieu" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -126,7 +126,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_ThongKeDoanhThu" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="btn_ThongKeDoanhThu1" min="-2" max="-2" attributes="0"/>
+                  <Component id="btn_LichSu" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -217,7 +217,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_KhuyenMaiActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_ThongKeDoanhThu1">
+        <Component class="javax.swing.JButton" name="btn_LichSu">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Icon/History.png"/>
@@ -225,10 +225,10 @@
             <Property name="text" type="java.lang.String" value="L&#x1ecb;ch S&#x1eed; Ho&#x1ea1;t &#x110;&#x1ed9;ng"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_ThongKeDoanhThu1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_LichSuActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_BanHang1">
+        <Component class="javax.swing.JButton" name="btn_KeHang">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Icon/Ke_Hang.png"/>
@@ -236,7 +236,7 @@
             <Property name="text" type="java.lang.String" value="K&#x1ec7; H&#xe0;ng"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_BanHang1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_KeHangActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -283,7 +283,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="btn_DangXuat" pref="107" max="32767" attributes="0"/>
-                      <Component id="jButton7" pref="0" max="32767" attributes="0"/>
+                      <Component id="btn_ThongTinCaNhap" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -293,7 +293,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jButton7" min="-2" pref="39" max="-2" attributes="0"/>
+                  <Component id="btn_ThongTinCaNhap" min="-2" pref="39" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_DangXuat" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace pref="184" max="32767" attributes="0"/>
@@ -302,7 +302,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton7">
+        <Component class="javax.swing.JButton" name="btn_ThongTinCaNhap">
           <Properties>
             <Property name="text" type="java.lang.String" value="Th&#xf4;ng Tin C&#xe1; Nh&#xe2;n"/>
           </Properties>
@@ -328,7 +328,7 @@
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                          <Component id="jToggleButton2" min="-2" pref="114" max="-2" attributes="0"/>
+                          <Component id="btn_CaiDat" min="-2" pref="114" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -341,14 +341,14 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jToggleButton2" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btn_CaiDat" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace pref="7" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JToggleButton" name="jToggleButton2">
+        <Component class="javax.swing.JToggleButton" name="btn_CaiDat">
           <Properties>
             <Property name="text" type="java.lang.String" value="C&#xe0;i &#x110;&#x1eb7;t"/>
           </Properties>

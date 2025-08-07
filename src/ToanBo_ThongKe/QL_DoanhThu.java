@@ -6,6 +6,8 @@ package ToanBo_ThongKe;
 
 import DBConnect.MyConnection;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,5 +71,68 @@ public class QL_DoanhThu {
         } finally {
         }
         return Tong_SoLuong;
+    }
+
+    public List<SanPhamBanChay> laySanPhamBanChayTheoThoiGian(Date ngayBatDau, Date ngayKetThuc) {
+        List<SanPhamBanChay> danhSachSP = new ArrayList<>();
+        String sql = "SELECT \n"
+                + "    sp.TENSP,\n"
+                + "    SUM(cthd.SOLUONG) AS SoLuong,\n"
+                + "    SUM(cthd.SOLUONG * sp.DONGIA) AS ThanhTien,\n"
+                + "    sp.HINHANH AS AnhSP\n"
+                + "FROM SANPHAM sp\n"
+                + "JOIN CTHOADON cthd ON sp.MA_SP = cthd.MA_SP\n"
+                + "JOIN HOADON hd ON cthd.MA_HD = hd.MA_HD\n"
+                + "WHERE hd.NGAYLAP BETWEEN ? AND ?\n"
+                + "GROUP BY sp.TENSP, sp.HINHANH\n"
+                + "ORDER BY SUM(cthd.SOLUONG) DESC";
+
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement pstmt = conect.prepareStatement(sql);
+            pstmt.setDate(1, new java.sql.Date(ngayBatDau.getTime()));
+            pstmt.setDate(2, new java.sql.Date(ngayKetThuc.getTime()));
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                SanPhamBanChay sp = new SanPhamBanChay();
+                sp.setTen_SP(rs.getString("TENSP"));
+                sp.setSoLuong(rs.getInt("SoLuong"));
+                sp.setThanhTien(rs.getFloat("ThanhTien"));
+                sp.setAnh_SP(rs.getString("AnhSP")); // Nếu ảnh là dạng URL/text
+                danhSachSP.add(sp);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Lỗi truy vấn: " + e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QL_DoanhThu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return danhSachSP;
+    }
+
+    public float tinhTongLoiNhuanTrongNgayHomNay() {
+        float tongLoiNhuan = 0;
+        String sql = "SELECT SUM(sp.DONGIA * 0.3) AS LoiNhuanTrongNgay\n"
+                + "FROM SANPHAM sp\n"
+                + "JOIN CTHOADON cthd ON sp.MA_SP = cthd.MA_SP\n"
+                + "JOIN HOADON hd ON cthd.MA_HD = hd.MA_HD\n"
+                + "WHERE CONVERT(DATE, hd.NGAYLAP) = CONVERT(DATE, GETDATE())";
+
+        try {
+            Connection conect = conn.DBConnect();
+            PreparedStatement stmt = conect.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                float giaBan = rs.getInt("LoiNhuanTrongNgay");
+                tongLoiNhuan += giaBan; // 20% mỗi sản phẩm
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Ghi log nếu có lỗi
+        }
+
+        return tongLoiNhuan;
     }
 }
