@@ -11,29 +11,72 @@ import javax.swing.table.DefaultTableModel;
  * @author ADMIN
  */
 public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
-    DefaultTableModel TableModel;
+
+    DefaultTableModel TableModel_TatCa;
+    DefaultTableModel TableModel_QuanLy;
+    DefaultTableModel TableModel_NhanVien;
     QL_TaiKhoan qltk = new QL_TaiKhoan();
+
     /**
      * Creates new form QL_ChiTet_TaiKhoan_Panel
      */
     public QL_ChiTet_TaiKhoan_Panel() {
         initComponents();
+        Initable_TatCa_TaiKhoan();
+        FillToTable_TatCa_TaiKhoan();
+        
+        Initable_QuanLy_TaiKhoan();
+        FillToTable_QuanLy_TaiKhoan();
+        
+        Initable_NhanVien_TaiKhoan();
+        FillToTable_NhanVien_TaiKhoan();
     }
-
-       public void Initable() {
-        TableModel = new DefaultTableModel();
+    
+    // Tất Cả Tài Khoản 
+    public void Initable_TatCa_TaiKhoan() {
+        TableModel_TatCa = new DefaultTableModel();
         String[] cols = {"Mã Tài Khoản", "Tên Tài Khoản", "SĐT", "Email", "Địa Chỉ", "Vai Trò", "Ngày Đăng Ký", "Ảnh", "Trạng Thái"};
-        TableModel.setColumnIdentifiers(cols);
-        tbl_NhanVien.setModel(TableModel);
+        TableModel_TatCa.setColumnIdentifiers(cols);
+        tbl_TatCa.setModel(TableModel_TatCa);
     }
 
 //    Hiển Thị Theo Vai Trò
-    public void FillToTableTheoVaiTro(String VaiTro) {
-        TableModel.setRowCount(0);
+    public void FillToTable_TatCa_TaiKhoan() {
+        TableModel_TatCa.setRowCount(0);
         for (Tai_Khoan tk : qltk.Get_All()) {
-            if (tk.getVaiTro_TK().equalsIgnoreCase(VaiTro)) {
-                TableModel.addRow(qltk.GetRow(tk));
-            }
+            TableModel_TatCa.addRow(qltk.GetRow(tk));
+        }
+    }
+    
+    // Tài Khoản Người Quản Lý
+    public void Initable_QuanLy_TaiKhoan() {
+        TableModel_QuanLy = new DefaultTableModel();
+        String[] cols = {"Mã Tài Khoản", "Tên Tài Khoản", "SĐT", "Email", "Địa Chỉ", "Ngày Đăng Ký", "Ảnh", "Trạng Thái"};
+        TableModel_QuanLy.setColumnIdentifiers(cols);
+        tbl_QuanLy.setModel(TableModel_QuanLy);
+    }
+
+//    Hiển Thị Theo Vai Trò
+    public void FillToTable_QuanLy_TaiKhoan() {
+        TableModel_QuanLy.setRowCount(0);
+        for (Tai_Khoan_8_O tk : qltk.Get_All_QuanLy()) {
+            TableModel_QuanLy.addRow(qltk.GetRow_QuanLy(tk));
+        }
+    }
+    
+    // Tài Khoản Người Nhân Viên
+    public void Initable_NhanVien_TaiKhoan() {
+        TableModel_NhanVien = new DefaultTableModel();
+        String[] cols = {"Mã Tài Khoản", "Tên Tài Khoản", "SĐT", "Email", "Địa Chỉ", "Ngày Đăng Ký", "Ảnh", "Trạng Thái"};
+        TableModel_NhanVien.setColumnIdentifiers(cols);
+        tbl_TatCa.setModel(TableModel_NhanVien);
+    }
+
+//    Hiển Thị Theo Vai Trò
+    public void FillToTable_NhanVien_TaiKhoan() {
+        TableModel_NhanVien.setRowCount(0);
+        for (Tai_Khoan_8_O tk : qltk.Get_All_NhanVien()) {
+            TableModel_NhanVien.addRow(qltk.GetRow_NhanVien(tk));
         }
     }
     /**
@@ -46,7 +89,12 @@ public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
     private void initComponents() {
 
         Chua_Table_Panel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbl_TatCa = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tbl_QuanLy = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
         tbl_NhanVien = new javax.swing.JTable();
         TimKiemTheoTen_Panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -55,8 +103,43 @@ public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         Chua_Table_Panel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Bảng Danh Sách Tài Khoản"));
+
+        tbl_TatCa.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tbl_TatCa);
+
+        jTabbedPane1.addTab("Tất Cả Tài Khoản", jScrollPane2);
+
+        tbl_QuanLy.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(tbl_QuanLy);
+
+        jTabbedPane1.addTab("Quản Lý", jScrollPane3);
 
         tbl_NhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -69,17 +152,19 @@ public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tbl_NhanVien);
+        jScrollPane4.setViewportView(tbl_NhanVien);
+
+        jTabbedPane1.addTab("Nhân Viên", jScrollPane4);
 
         javax.swing.GroupLayout Chua_Table_PanelLayout = new javax.swing.GroupLayout(Chua_Table_Panel);
         Chua_Table_Panel.setLayout(Chua_Table_PanelLayout);
         Chua_Table_PanelLayout.setHorizontalGroup(
             Chua_Table_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE)
         );
         Chua_Table_PanelLayout.setVerticalGroup(
             Chua_Table_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
         );
 
         TimKiemTheoTen_Panel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Tìm Kiếm Tài Khoản"));
@@ -97,7 +182,7 @@ public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
                 .addGroup(TimKiemTheoTen_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TimKiemTheoTen_PanelLayout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 156, Short.MAX_VALUE))
+                        .addGap(0, 233, Short.MAX_VALUE))
                     .addComponent(txt_TimKiem))
                 .addContainerGap())
         );
@@ -131,7 +216,7 @@ public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jRadioButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                         .addComponent(jRadioButton2)
                         .addGap(24, 24, 24))))
         );
@@ -147,32 +232,77 @@ public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Chức Năng Chính"));
+
+        jButton1.setText("Tạo Tài Khoản Tất Cả");
+
+        jButton2.setText("Tạo Tài Khoản Quản Lý");
+
+        jButton3.setText("Tạo Tài Khoản Nhân Viên");
+
+        jButton4.setText("Chi Tiết Tài Khoản");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(180, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(TimKiemTheoTen_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(Chua_Table_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(161, Short.MAX_VALUE))
+                    .addComponent(Chua_Table_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(116, 116, 116)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TimKiemTheoTen_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
-                .addComponent(Chua_Table_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TimKiemTheoTen_Panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Chua_Table_Panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -180,13 +310,23 @@ public class QL_ChiTet_TaiKhoan_Panel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Chua_Table_Panel;
     private javax.swing.JPanel TimKiemTheoTen_Panel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable tbl_NhanVien;
+    private javax.swing.JTable tbl_QuanLy;
+    private javax.swing.JTable tbl_TatCa;
     private javax.swing.JTextField txt_TimKiem;
     // End of variables declaration//GEN-END:variables
 }

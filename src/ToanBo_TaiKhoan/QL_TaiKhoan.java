@@ -229,4 +229,88 @@ public class QL_TaiKhoan {
         }
         return List_TK;
     }
+
+    // Tất Cả Tài Khoản Với Vai Trò Là Người Quán Lý
+    public List<Tai_Khoan_8_O> Get_All_QuanLy() {
+        List<Tai_Khoan_8_O> List_TK = new ArrayList<>(); //  Tạo một danh sách rỗng kiểu Tai_Khoan để chứa tất cả tài khoản đọc từ database.
+        String SQL = "SELECT MA_TK , TENTAIKHOAN , SDT , EMAIL , DIACHI , NGAYDANGKY , ANH_TK , TRANGTHAI FROM TAIKHOAN WHERE VAITRO LIKE N'Quản Lý'"; //  Lấy toàn bộ dòng dữ liệu từ bảng TAIKHOAN.
+        try {
+            Connection connect = conn.DBConnect(); // 
+            Statement stm = connect.createStatement();
+            ResultSet rs = stm.executeQuery(SQL);
+            while (rs.next()) {
+                String Ma_TK = rs.getString("MA_TK");
+                String Ten_TK = rs.getString("TENTAIKHOAN");
+                String SDT_TK = rs.getString("SDT");
+                String Email_TK = rs.getString("EMAIL");
+                String DiaChi_TK = rs.getString("DIACHI");
+                Date Ngay_DK_TK = rs.getDate("NGAYDANGKY");
+                String Anh_TK = rs.getString("ANH_TK");
+                boolean TrangThai_TK = rs.getBoolean("TRANGTHAI");
+                Tai_Khoan_8_O tk = new Tai_Khoan_8_O(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK);
+                List_TK.add(tk);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // hoặc log ra file/log view
+        }
+        return List_TK;
+    }
+
+    public Object[] GetRow_QuanLy(Tai_Khoan_8_O tk) {
+        String Ma_TK = tk.getMa_TK();
+        String Ten_TK = tk.getTen_TK();
+        String SDT_TK = tk.getSDT_TK();
+        String Email_TK = tk.getEmail_TK();
+        String DiaChi_TK = tk.getDiaChi_TK();
+        Date Ngay_DK_TK = tk.getNgay_DK_TK();
+        String Anh_TK = tk.getAnh_TK();
+
+        // Chuyển boolean sang chuỗi mô tả
+        String TrangThai_TK = tk.isTrangThai_TK() ? "Đang Hoạt Động" : "Không Hoạt Động";
+
+        Object[] obj = new Object[]{Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK};
+        return obj;
+    }
+    
+    // Tất Cả Tài Khoản Với Vai Trò Là Người Nhân Viên
+    public List<Tai_Khoan_8_O> Get_All_NhanVien() {
+        List<Tai_Khoan_8_O> List_TK = new ArrayList<>(); //  Tạo một danh sách rỗng kiểu Tai_Khoan để chứa tất cả tài khoản đọc từ database.
+        String SQL = "SELECT MA_TK , TENTAIKHOAN , SDT , EMAIL , DIACHI , NGAYDANGKY , ANH_TK , TRANGTHAI FROM TAIKHOAN WHERE VAITRO LIKE N'Nhân Viên'"; //  Lấy toàn bộ dòng dữ liệu từ bảng TAIKHOAN.
+        try {
+            Connection connect = conn.DBConnect(); // 
+            Statement stm = connect.createStatement();
+            ResultSet rs = stm.executeQuery(SQL);
+            while (rs.next()) {
+                String Ma_TK = rs.getString("MA_TK");
+                String Ten_TK = rs.getString("TENTAIKHOAN");
+                String SDT_TK = rs.getString("SDT");
+                String Email_TK = rs.getString("EMAIL");
+                String DiaChi_TK = rs.getString("DIACHI");
+                Date Ngay_DK_TK = rs.getDate("NGAYDANGKY");
+                String Anh_TK = rs.getString("ANH_TK");
+                boolean TrangThai_TK = rs.getBoolean("TRANGTHAI");
+                Tai_Khoan_8_O tk = new Tai_Khoan_8_O(Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK);
+                List_TK.add(tk);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // hoặc log ra file/log view
+        }
+        return List_TK;
+    }
+
+    public Object[] GetRow_NhanVien(Tai_Khoan_8_O tk) {
+        String Ma_TK = tk.getMa_TK();
+        String Ten_TK = tk.getTen_TK();
+        String SDT_TK = tk.getSDT_TK();
+        String Email_TK = tk.getEmail_TK();
+        String DiaChi_TK = tk.getDiaChi_TK();
+        Date Ngay_DK_TK = tk.getNgay_DK_TK();
+        String Anh_TK = tk.getAnh_TK();
+
+        // Chuyển boolean sang chuỗi mô tả
+        String TrangThai_TK = tk.isTrangThai_TK() ? "Đang Hoạt Động" : "Không Hoạt Động";
+
+        Object[] obj = new Object[]{Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK};
+        return obj;
+    }
 }
