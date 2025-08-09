@@ -9,6 +9,8 @@ import ToanBo_TaiKhoan.Tai_Khoan;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -142,6 +144,7 @@ public class QL_TaiKhoan {
         }
         return 0;
     }
+
     public int Sua_TK_NhanVien(Tai_Khoan_8_O tk, String TheoMa) {
         String SQL = "UPDATE TAIKHOAN SET MA_TK =   ?  ,\n"
                 + "                       TENTAIKHOAN =  ?  ,\n"
@@ -301,7 +304,7 @@ public class QL_TaiKhoan {
         Object[] obj = new Object[]{Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK};
         return obj;
     }
-    
+
     // Tất Cả Tài Khoản Với Vai Trò Là Người Nhân Viên
     public List<Tai_Khoan_8_O> Get_All_NhanVien() {
         List<Tai_Khoan_8_O> List_TK = new ArrayList<>(); //  Tạo một danh sách rỗng kiểu Tai_Khoan để chứa tất cả tài khoản đọc từ database.
@@ -342,5 +345,72 @@ public class QL_TaiKhoan {
 
         Object[] obj = new Object[]{Ma_TK, Ten_TK, SDT_TK, Email_TK, DiaChi_TK, Ngay_DK_TK, Anh_TK, TrangThai_TK};
         return obj;
+    }
+
+    public List<Tai_Khoan> TimKiem_TaiKhoan(String tuKhoa) {
+        List<Tai_Khoan> ketQua = new ArrayList<>();
+        String SQL = "SELECT MA_TK, TENTAIKHOAN, SDT, EMAIL, DIACHI, VAITRO, NGAYDANGKY, ANH_TK, TRANGTHAI "
+                + "FROM TAIKHOAN WHERE SDT LIKE ? OR TENTAIKHOAN LIKE ?";
+
+        try {
+            Connection connect = conn.DBConnect();
+            PreparedStatement pstm = connect.prepareStatement(SQL);
+            String keyword = "%" + tuKhoa + "%";
+            pstm.setString(1, keyword);
+            pstm.setString(2, keyword);
+
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                Tai_Khoan tk = new Tai_Khoan();
+                tk.setMa_TK(rs.getString("MA_TK"));
+                tk.setTen_TK(rs.getString("TENTAIKHOAN"));
+                tk.setSDT_TK(rs.getString("SDT"));
+                tk.setEmail_TK(rs.getString("EMAIL"));
+                tk.setDiaChi_TK(rs.getString("DIACHI"));
+                tk.setVaiTro_TK(rs.getString("VAITRO"));
+                tk.setNgay_DK_TK(rs.getDate("NGAYDANGKY"));
+                tk.setAnh_TK(rs.getString("ANH_TK"));
+                tk.setTrangThai_TK(rs.getBoolean("TRANGTHAI"));
+
+                ketQua.add(tk);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(QL_TaiKhoan.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return ketQua;
+    }
+
+    public List<Tai_Khoan> TimKiem_TheoVaiTro(String vaiTro) {
+        List<Tai_Khoan> ketQua = new ArrayList<>();
+        String SQL = "SELECT MA_TK, TENTAIKHOAN, SDT, EMAIL, DIACHI, VAITRO, NGAYDANGKY, ANH_TK, TRANGTHAI "
+                + "FROM TAIKHOAN WHERE VAITRO = ?";
+
+        try (
+                Connection connect = conn.DBConnect(); PreparedStatement pstm = connect.prepareStatement(SQL)) {
+            pstm.setString(1, vaiTro);
+            ResultSet rs = pstm.executeQuery();
+
+            while (rs.next()) {
+                Tai_Khoan tk = new Tai_Khoan();
+                tk.setMa_TK(rs.getString("MA_TK"));
+                tk.setTen_TK(rs.getString("TENTAIKHOAN"));
+                tk.setSDT_TK(rs.getString("SDT"));
+                tk.setEmail_TK(rs.getString("EMAIL"));
+                tk.setDiaChi_TK(rs.getString("DIACHI"));
+                tk.setVaiTro_TK(rs.getString("VAITRO"));
+                tk.setNgay_DK_TK(rs.getDate("NGAYDANGKY"));
+                tk.setAnh_TK(rs.getString("ANH_TK"));
+                tk.setTrangThai_TK(rs.getBoolean("TRANGTHAI"));
+
+                ketQua.add(tk);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return ketQua;
     }
 }
