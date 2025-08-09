@@ -6,6 +6,7 @@ package View_JFrame;
 
 import ToanBo_KhuyenMai.QL_ChiTiet_KhuyenMai_Panel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_TatCaPanel;
+import ToanBo_TaiKhoan.QL_ChiTet_TaiKhoan_Panel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_NhanVien_Panel;
 import ToanBo_TaiKhoan.QL_TaiKhoan_QuanLy_Panel;
 import java.awt.BorderLayout;
@@ -427,7 +428,7 @@ public class TrangChu_NQL extends javax.swing.JFrame {
         // TODO add your handling code here:
         lb_DanhMuc.setText("Quản Lý Tài Khoản");
 
-        QL_TaiKhoan_TatCaPanel QL_TK = new QL_TaiKhoan_TatCaPanel();
+        QL_ChiTet_TaiKhoan_Panel QL_TK = new QL_ChiTet_TaiKhoan_Panel();
         TrangChungChuyen.removeAll();
         TrangChungChuyen.setLayout(new BorderLayout());
         TrangChungChuyen.add(QL_TK, BorderLayout.CENTER);

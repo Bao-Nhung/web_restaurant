@@ -142,6 +142,36 @@ public class QL_TaiKhoan {
         }
         return 0;
     }
+    public int Sua_TK_NhanVien(Tai_Khoan_8_O tk, String TheoMa) {
+        String SQL = "UPDATE TAIKHOAN SET MA_TK =   ?  ,\n"
+                + "                       TENTAIKHOAN =  ?  ,\n"
+                + "			  SDT =   ?  ,\n"
+                + "			  EMAIL =   ? ,\n"
+                + "			  DIACHI =   ?  ,\n"
+                + "			  NGAYDANGKY =   ?  ,\n"
+                + "			  ANH_TK =   ?  ,\n"
+                + "			  TRANGTHAI =  ?  \n"
+                + "			  WHERE MA_TK =   ?  ";
+        try {
+            Connection Connect = conn.DBConnect();
+            PreparedStatement pstm = Connect.prepareStatement(SQL);
+            pstm.setString(1, tk.getMa_TK());
+            pstm.setString(2, tk.getTen_TK());
+            pstm.setString(3, tk.getSDT_TK());
+            pstm.setString(4, tk.getEmail_TK());
+            pstm.setString(5, tk.getDiaChi_TK());
+            pstm.setDate(6, tk.getNgay_DK_TK());
+            pstm.setString(7, tk.getAnh_TK());
+            pstm.setBoolean(8, tk.isTrangThai_TK());
+            pstm.setString(9, TheoMa);
+            if (pstm.executeUpdate() > 0) {
+                System.out.println("Sua Du Lieu Tai Khoan. Connect");
+                return 1;
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
 
     // Hàm Tìm Kiếm Tài Khoản Theo SDT
     public List<Tai_Khoan> TimKiem_Theo_SDT(String Theo_SDT) {
